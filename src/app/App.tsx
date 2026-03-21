@@ -35,11 +35,11 @@ export default function App() {
   }, [hydrate, hydrateSettings]);
 
   useEffect(() => {
-    if (!game.currentQuestion && screen === 'learn' && game.roundWordIds.length > 0) {
+    if (!game.currentQuestion && !game.isLearningCard && screen === 'learn' && game.roundWordIds.length > 0) {
       setScreen('summary');
       setUsedLetterIndexes([]);
     }
-  }, [game.currentQuestion, game.roundWordIds.length, screen]);
+  }, [game.currentQuestion, game.isLearningCard, game.roundWordIds.length, screen]);
 
   useEffect(() => {
     if (screen === 'learn' && !game.result && !game.showAnswer && game.userInput.length === 0 && game.attemptCount > 0) {
@@ -117,6 +117,7 @@ export default function App() {
             onSelectOption={game.selectOption}
             onShowAnswer={game.showCorrectAnswer}
             onNext={handleNext}
+            onStartPractice={game.startPractice}
           />
         ) : null}
 

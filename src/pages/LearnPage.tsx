@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { HeaderBar } from '../components/game/HeaderBar';
+import { LearningCard } from '../components/game/LearningCard';
 import { WordCard } from '../components/game/WordCard';
 import { ChoiceOptions } from '../components/game/ChoiceOptions';
 import { LetterKeyboard } from '../components/game/LetterKeyboard';
@@ -22,6 +23,7 @@ interface LearnPageProps {
   onSelectOption: (option: string) => void;
   onShowAnswer: () => void;
   onNext: () => void;
+  onStartPractice: () => void;
 }
 
 const modeLabelMap: Record<GameMode, string> = {
@@ -47,8 +49,10 @@ export function LearnPage({
   onSelectOption,
   onShowAnswer,
   onNext,
+  onStartPractice,
 }: LearnPageProps) {
   useEffect(() => {
+    if (state.isLearningCard) return undefined;
     if (state.result === 'correct') {
       playSuccessTone(soundEnabled);
       if (autoPlaySound && state.currentWord?.english) {
@@ -69,7 +73,7 @@ export function LearnPage({
     }
   }, [soundEnabled, state.attemptCount, state.feedbackMessage, state.result, state.showAnswer]);
 
-  if (!state.currentQuestion || !state.currentWord) return null;
+  if (!state.currentWord) return null;
 
   const question = state.currentQuestion;
   const showNext = Boolean(state.result || state.showAnswer);
@@ -95,44 +99,56 @@ export function LearnPage({
       </div>
       <AnimatePresence mode="wait">
         <motion.div
-          key={`${state.roundIndex}-${question.id}`}
+          key={state.isLearningCard ? `card-${state.roundIndex}-${state.currentWord.id}` : `${state.roundIndex}-${question?.id}`}
           initial={{ opacity: 0, y: 12, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -8, scale: 0.98 }}
           transition={{ duration: 0.24 }}
           style={styles.stage}
         >
-          <WordCard title={question.prompt} subtitle={answerText} status={state.result}>
-            {question.mode === 'e2c' ? null : (
-              <InputSlots
-                text={state.userInput}
-                answerLength={question.mode === 'c2e' ? question.answer.length : undefined}
-                pattern={question.mode === 'spell_blank' ? question.pattern : undefined}
-                missingIndexes={question.mode === 'spell_blank' ? question.missingIndexes : undefined}
-              />
-            )}
-          </WordCard>
+          {state.isLearningCard ? (
+            <LearningCard
+              english={state.currentWord.english}
+              chinese={state.currentWord.chinese}
+              soundEnabled={soundEnabled}
+              onSpeak={() => speakWord(state.currentWord?.english ?? '', soundEnabled)}
+              onStart={onStartPractice}
+            />
+          ) : question ? (
+            <>
+              <WordCard title={question.prompt} subtitle={answerText} status={state.result}>
+                {question.mode === 'e2c' ? null : (
+                  <InputSlots
+                    text={state.userInput}
+                    answerLength={question.mode === 'c2e' ? question.answer.length : undefined}
+                    pattern={question.mode === 'spell_blank' ? question.pattern : undefined}
+                    missingIndexes={question.mode === 'spell_blank' ? question.missingIndexes : undefined}
+                  />
+                )}
+              </WordCard>
 
-          {question.mode === 'e2c' ? (
-            <ChoiceOptions
-              options={question.options}
-              selected={state.selectedOption}
-              answer={question.answer}
-              lockSelection={showNext}
-              onSelect={onSelectOption}
-            />
-          ) : (
-            <LetterKeyboard
-              letters={question.letterPool}
-              disabledLetters={disabledLetterIndexes}
-              onPick={onPickLetter}
-              onDelete={onDelete}
-            />
-          )}
+              {question.mode === 'e2c' ? (
+                <ChoiceOptions
+                  options={question.options}
+                  selected={state.selectedOption}
+                  answer={question.answer}
+                  lockSelection={showNext}
+                  onSelect={onSelectOption}
+                />
+              ) : (
+                <LetterKeyboard
+                  letters={question.letterPool}
+                  disabledLetters={disabledLetterIndexes}
+                  onPick={onPickLetter}
+                  onDelete={onDelete}
+                />
+              )}
+            </>
+          ) : null}
         </motion.div>
       </AnimatePresence>
 
-      {state.feedbackMessage ? (
+      {!state.isLearningCard && state.feedbackMessage ? (
         <motion.div
           style={{
             ...styles.hint,
@@ -146,19 +162,21 @@ export function LearnPage({
         </motion.div>
       ) : null}
 
-      <div style={styles.actions}>
-        <motion.button style={styles.answer} onClick={onShowAnswer} whileTap={{ scale: 0.97 }}>
-          看答案 👀
-        </motion.button>
-        <motion.button
-          style={{ ...styles.next, opacity: showNext ? 1 : 0.5 }}
-          onClick={onNext}
-          disabled={!showNext}
-          whileTap={{ scale: showNext ? 0.97 : 1 }}
-        >
-          下一题 ➜
-        </motion.button>
-      </div>
+      {!state.isLearningCard ? (
+        <div style={styles.actions}>
+          <motion.button style={styles.answer} onClick={onShowAnswer} whileTap={{ scale: 0.97 }}>
+            看答案 👀
+          </motion.button>
+          <motion.button
+            style={{ ...styles.next, opacity: showNext ? 1 : 0.5 }}
+            onClick={onNext}
+            disabled={!showNext}
+            whileTap={{ scale: showNext ? 0.97 : 1 }}
+          >
+            下一题 ➜
+          </motion.button>
+        </div>
+      ) : null}
     </div>
   );
 }

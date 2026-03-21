@@ -23,6 +23,7 @@ describe('gameStore', () => {
       mode: 'e2c',
       currentWord: null,
       currentQuestion: null,
+      isLearningCard: false,
       userInput: '',
       selectedOption: undefined,
       stars: 0,
@@ -39,16 +40,18 @@ describe('gameStore', () => {
     });
   });
 
-  it('starts a round with a current question', () => {
+  it('starts a round with a learning card for new words', () => {
     useGameStore.getState().startRound('e2c');
     const state = useGameStore.getState();
-    expect(state.currentQuestion).toBeTruthy();
+    expect(state.currentQuestion).toBeNull();
     expect(state.currentWord).toBeTruthy();
+    expect(state.isLearningCard).toBe(true);
     expect(state.roundWordIds.length).toBe(5);
   });
 
   it('awards a star for a correct e2c answer', () => {
     useGameStore.getState().startRound('e2c', [11, 12, 13, 14, 15]);
+    useGameStore.getState().startPractice();
     const answer = useGameStore.getState().currentQuestion?.answer;
     useGameStore.getState().selectOption(answer as string);
     const state = useGameStore.getState();
@@ -58,6 +61,7 @@ describe('gameStore', () => {
 
   it('shows answer after two wrong e2c attempts', () => {
     useGameStore.getState().startRound('e2c', [11, 12, 13, 14, 15]);
+    useGameStore.getState().startPractice();
     const current = useGameStore.getState().currentQuestion;
     if (!current || current.mode !== 'e2c') throw new Error('Expected e2c question');
     const wrongOptions = current.options.filter((option) => option !== current.answer);
@@ -70,6 +74,7 @@ describe('gameStore', () => {
 
   it('shows answer after two wrong spelling attempts', () => {
     useGameStore.getState().startRound('c2e', [1, 2, 3, 4, 5]); // cat
+    useGameStore.getState().startPractice();
     const firstTry = ['x', 'y', 'z'];
     firstTry.forEach((letter) => useGameStore.getState().inputLetter(letter));
     expect(useGameStore.getState().showAnswer).toBe(false);
@@ -81,6 +86,7 @@ describe('gameStore', () => {
 
   it('moves to the next question', () => {
     useGameStore.getState().startRound('e2c', [11, 12, 13, 14, 15]);
+    useGameStore.getState().startPractice();
     const firstWordId = useGameStore.getState().currentWord?.id;
     const answer = useGameStore.getState().currentQuestion?.answer;
     useGameStore.getState().selectOption(answer as string);

@@ -11,6 +11,7 @@ export interface GameState {
   mode: GameMode;
   currentWord: Word | null;
   currentQuestion: Question | null;
+  isLearningCard: boolean;
   userInput: string;
   selectedOption?: string;
   stars: number;
