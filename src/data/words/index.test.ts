@@ -6,7 +6,7 @@ describe('word resources', () => {
     expect(allWords.every((word) => Boolean(word.emoji))).toBe(true);
   });
 
-  it('includes a sample set of real image-backed words', () => {
-    expect(allWords.filter((word) => Boolean(word.imageUrl)).length).toBeGreaterThanOrEqual(10);
+  it('includes a growing sample set of real image-backed words', () => {
+    expect(allWords.filter((word) => Boolean(word.imageUrl)).length).toBeGreaterThanOrEqual(20);
   });
 });

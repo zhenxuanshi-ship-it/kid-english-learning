@@ -1,13 +1,23 @@
 import type { Word } from '../../types/word';
 import appleImage from '../../assets/word-images/apple.svg';
+import bagImage from '../../assets/word-images/bag.svg';
 import bananaImage from '../../assets/word-images/banana.svg';
+import birdImage from '../../assets/word-images/bird.svg';
 import bookImage from '../../assets/word-images/book.svg';
 import catImage from '../../assets/word-images/cat.svg';
+import cowImage from '../../assets/word-images/cow.svg';
 import dogImage from '../../assets/word-images/dog.svg';
+import duckImage from '../../assets/word-images/duck.svg';
+import fishImage from '../../assets/word-images/fish.svg';
+import grapeImage from '../../assets/word-images/grape.svg';
 import milkImage from '../../assets/word-images/milk.svg';
 import moonImage from '../../assets/word-images/moon.svg';
+import pearImage from '../../assets/word-images/pear.svg';
+import penImage from '../../assets/word-images/pen.svg';
+import pigImage from '../../assets/word-images/pig.svg';
 import rabbitImage from '../../assets/word-images/rabbit.svg';
 import rainbowImage from '../../assets/word-images/rainbow.svg';
+import riceImage from '../../assets/word-images/rice.svg';
 import schoolImage from '../../assets/word-images/school.svg';
 import sunImage from '../../assets/word-images/sun.svg';
 import teacherImage from '../../assets/word-images/teacher.svg';
@@ -15,11 +25,11 @@ import teacherImage from '../../assets/word-images/teacher.svg';
 export const allWords: Word[] = [
   { id: 1, english: 'cat', chinese: '猫', category: 'animals', level: 1, difficulty: 1, emoji: '🐱', imageUrl: catImage },
   { id: 2, english: 'dog', chinese: '狗', category: 'animals', level: 1, difficulty: 1, emoji: '🐶', imageUrl: dogImage },
-  { id: 3, english: 'bird', chinese: '鸟', category: 'animals', level: 1, difficulty: 1, emoji: '🐦' },
-  { id: 4, english: 'fish', chinese: '鱼', category: 'animals', level: 1, difficulty: 1, emoji: '🐟' },
-  { id: 5, english: 'duck', chinese: '鸭子', category: 'animals', level: 1, difficulty: 1, emoji: '🦆' },
-  { id: 6, english: 'pig', chinese: '猪', category: 'animals', level: 1, difficulty: 1, emoji: '🐷' },
-  { id: 7, english: 'cow', chinese: '奶牛', category: 'animals', level: 1, difficulty: 1, emoji: '🐮' },
+  { id: 3, english: 'bird', chinese: '鸟', category: 'animals', level: 1, difficulty: 1, emoji: '🐦', imageUrl: birdImage },
+  { id: 4, english: 'fish', chinese: '鱼', category: 'animals', level: 1, difficulty: 1, emoji: '🐟', imageUrl: fishImage },
+  { id: 5, english: 'duck', chinese: '鸭子', category: 'animals', level: 1, difficulty: 1, emoji: '🦆', imageUrl: duckImage },
+  { id: 6, english: 'pig', chinese: '猪', category: 'animals', level: 1, difficulty: 1, emoji: '🐷', imageUrl: pigImage },
+  { id: 7, english: 'cow', chinese: '奶牛', category: 'animals', level: 1, difficulty: 1, emoji: '🐮', imageUrl: cowImage },
   { id: 8, english: 'horse', chinese: '马', category: 'animals', level: 2, difficulty: 2, emoji: '🐴' },
   { id: 9, english: 'sheep', chinese: '羊', category: 'animals', level: 2, difficulty: 2, emoji: '🐑' },
   { id: 10, english: 'rabbit', chinese: '兔子', category: 'animals', level: 2, difficulty: 2, emoji: '🐰', imageUrl: rabbitImage },
@@ -31,8 +41,8 @@ export const allWords: Word[] = [
 
   { id: 16, english: 'apple', chinese: '苹果', category: 'fruits', level: 2, difficulty: 2, emoji: '🍎', imageUrl: appleImage },
   { id: 17, english: 'banana', chinese: '香蕉', category: 'fruits', level: 2, difficulty: 2, emoji: '🍌', imageUrl: bananaImage },
-  { id: 18, english: 'pear', chinese: '梨', category: 'fruits', level: 1, difficulty: 1, emoji: '🍐' },
-  { id: 19, english: 'grape', chinese: '葡萄', category: 'fruits', level: 2, difficulty: 2, emoji: '🍇' },
+  { id: 18, english: 'pear', chinese: '梨', category: 'fruits', level: 1, difficulty: 1, emoji: '🍐', imageUrl: pearImage },
+  { id: 19, english: 'grape', chinese: '葡萄', category: 'fruits', level: 2, difficulty: 2, emoji: '🍇', imageUrl: grapeImage },
   { id: 20, english: 'peach', chinese: '桃子', category: 'fruits', level: 2, difficulty: 2, emoji: '🍑' },
   { id: 21, english: 'melon', chinese: '甜瓜', category: 'fruits', level: 2, difficulty: 2, emoji: '🍈' },
   { id: 22, english: 'orange', chinese: '橙子', category: 'fruits', level: 2, difficulty: 2, emoji: '🍊' },
@@ -74,8 +84,8 @@ export const allWords: Word[] = [
   { id: 55, english: 'family', chinese: '家庭', category: 'family', level: 3, difficulty: 4, emoji: '👨‍👩‍👧‍👦' },
 
   { id: 56, english: 'book', chinese: '书', category: 'school', level: 1, difficulty: 1, emoji: '📘', imageUrl: bookImage },
-  { id: 57, english: 'pen', chinese: '钢笔', category: 'school', level: 1, difficulty: 1, emoji: '🖊️' },
-  { id: 58, english: 'bag', chinese: '书包', category: 'school', level: 1, difficulty: 1, emoji: '🎒' },
+  { id: 57, english: 'pen', chinese: '钢笔', category: 'school', level: 1, difficulty: 1, emoji: '🖊️', imageUrl: penImage },
+  { id: 58, english: 'bag', chinese: '书包', category: 'school', level: 1, difficulty: 1, emoji: '🎒', imageUrl: bagImage },
   { id: 59, english: 'ruler', chinese: '尺子', category: 'school', level: 2, difficulty: 2, emoji: '📏' },
   { id: 60, english: 'desk', chinese: '书桌', category: 'school', level: 1, difficulty: 1, emoji: '🪑' },
   { id: 61, english: 'chair', chinese: '椅子', category: 'school', level: 2, difficulty: 2, emoji: '🪑' },
@@ -85,7 +95,7 @@ export const allWords: Word[] = [
   { id: 65, english: 'school', chinese: '学校', category: 'school', level: 2, difficulty: 2, emoji: '🏫', imageUrl: schoolImage },
   { id: 66, english: 'class', chinese: '班级/课堂', category: 'school', level: 2, difficulty: 2, emoji: '🏫' },
 
-  { id: 67, english: 'rice', chinese: '米饭', category: 'food', level: 1, difficulty: 1, emoji: '🍚' },
+  { id: 67, english: 'rice', chinese: '米饭', category: 'food', level: 1, difficulty: 1, emoji: '🍚', imageUrl: riceImage },
   { id: 68, english: 'bread', chinese: '面包', category: 'food', level: 2, difficulty: 2, emoji: '🍞' },
   { id: 69, english: 'milk', chinese: '牛奶', category: 'food', level: 1, difficulty: 1, emoji: '🥛', imageUrl: milkImage },
   { id: 70, english: 'egg', chinese: '鸡蛋', category: 'food', level: 1, difficulty: 1, emoji: '🥚' },
