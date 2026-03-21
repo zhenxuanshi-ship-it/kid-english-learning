@@ -10,6 +10,7 @@ export interface SettingsState {
   autoPlaySound: boolean;
   soundEnabled: boolean;
   completedDailyTaskKinds: string[];
+  activeDailyTaskKind?: string;
 }
 
 interface SettingsStore extends SettingsState {
@@ -18,6 +19,7 @@ interface SettingsStore extends SettingsState {
   setSelectedCategory: (category: string) => void;
   toggleAutoPlaySound: () => void;
   toggleSoundEnabled: () => void;
+  setActiveDailyTask: (kind?: string) => void;
   markDailyTaskDone: (kind: string) => void;
   resetDailyTasks: () => void;
 }
@@ -28,6 +30,7 @@ const initialState: SettingsState = {
   autoPlaySound: false,
   soundEnabled: false,
   completedDailyTaskKinds: [],
+  activeDailyTaskKind: undefined,
 };
 
 function persist(state: SettingsState) {
@@ -41,7 +44,12 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     const safeCategory = data.selectedCategory === 'all' || wordCategories.includes(data.selectedCategory)
       ? data.selectedCategory
       : 'all';
-    set({ ...data, selectedCategory: safeCategory, completedDailyTaskKinds: data.completedDailyTaskKinds ?? [] });
+    set({
+      ...data,
+      selectedCategory: safeCategory,
+      completedDailyTaskKinds: data.completedDailyTaskKinds ?? [],
+      activeDailyTaskKind: data.activeDailyTaskKind,
+    });
   },
   setRoundSize: (size) => {
     const next = { ...get(), roundSize: size };
@@ -63,15 +71,20 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     set({ soundEnabled: next.soundEnabled });
     persist(next);
   },
+  setActiveDailyTask: (kind) => {
+    const next = { ...get(), activeDailyTaskKind: kind };
+    set({ activeDailyTaskKind: kind });
+    persist(next);
+  },
   markDailyTaskDone: (kind) => {
     const completedDailyTaskKinds = Array.from(new Set([...get().completedDailyTaskKinds, kind]));
-    const next = { ...get(), completedDailyTaskKinds };
-    set({ completedDailyTaskKinds });
+    const next = { ...get(), completedDailyTaskKinds, activeDailyTaskKind: undefined };
+    set({ completedDailyTaskKinds, activeDailyTaskKind: undefined });
     persist(next);
   },
   resetDailyTasks: () => {
-    const next = { ...get(), completedDailyTaskKinds: [] };
-    set({ completedDailyTaskKinds: [] });
+    const next = { ...get(), completedDailyTaskKinds: [], activeDailyTaskKind: undefined };
+    set({ completedDailyTaskKinds: [], activeDailyTaskKind: undefined });
     persist(next);
   },
 }));

@@ -29,10 +29,12 @@ export default function App() {
   const autoPlaySound = useSettingsStore((state) => state.autoPlaySound);
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const completedDailyTaskKinds = useSettingsStore((state) => state.completedDailyTaskKinds);
+  const activeDailyTaskKind = useSettingsStore((state) => state.activeDailyTaskKind);
   const setRoundSize = useSettingsStore((state) => state.setRoundSize);
   const setSelectedCategory = useSettingsStore((state) => state.setSelectedCategory);
   const toggleAutoPlaySound = useSettingsStore((state) => state.toggleAutoPlaySound);
   const toggleSoundEnabled = useSettingsStore((state) => state.toggleSoundEnabled);
+  const setActiveDailyTask = useSettingsStore((state) => state.setActiveDailyTask);
   const markDailyTaskDone = useSettingsStore((state) => state.markDailyTaskDone);
   const resetDailyTasks = useSettingsStore((state) => state.resetDailyTasks);
   const [usedLetterIndexes, setUsedLetterIndexes] = useState<number[]>([]);
@@ -44,10 +46,13 @@ export default function App() {
 
   useEffect(() => {
     if (!game.currentQuestion && !game.isLearningCard && screen === 'learn' && game.roundWordIds.length > 0) {
+      if (activeDailyTaskKind) {
+        markDailyTaskDone(activeDailyTaskKind);
+      }
       setScreen('summary');
       setUsedLetterIndexes([]);
     }
-  }, [game.currentQuestion, game.isLearningCard, game.roundWordIds.length, screen]);
+  }, [activeDailyTaskKind, game.currentQuestion, game.isLearningCard, game.roundWordIds.length, markDailyTaskDone, screen]);
 
   useEffect(() => {
     if (screen === 'learn' && !game.result && !game.showAnswer && game.userInput.length === 0 && game.attemptCount > 0) {
@@ -71,6 +76,7 @@ export default function App() {
   const reviewQueue = useMemo(() => buildReviewQueue(allWords, wordProgressMap).slice(0, 5), [wordProgressMap]);
 
   const handleStart = (useRecommendationCategory = false) => {
+    setActiveDailyTask(undefined);
     let startMode = currentMode;
     if (useRecommendationCategory && recommendation.suggestedCategory) {
       setSelectedCategory(recommendation.suggestedCategory);
@@ -85,6 +91,7 @@ export default function App() {
   };
 
   const handleStartReview = () => {
+    setActiveDailyTask(undefined);
     const reviewWordIds = reviewQueue.map((item) => item.wordId);
     if (reviewWordIds.length === 0) return;
     game.startRound(currentMode, reviewWordIds);
@@ -94,13 +101,14 @@ export default function App() {
 
   const handleStartTask = (task: { mode: GameMode; kind: string }) => {
     setMode(task.mode);
-    markDailyTaskDone(task.kind);
+    setActiveDailyTask(task.kind);
     game.startRound(task.mode);
     setUsedLetterIndexes([]);
     setScreen('learn');
   };
 
   const handleRetryWrong = () => {
+    setActiveDailyTask(undefined);
     game.startRound(currentMode, game.wrongWordIds);
     setUsedLetterIndexes([]);
     setScreen('learn');
