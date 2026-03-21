@@ -18,6 +18,7 @@ export interface GameState {
   attemptCount: number;
   showAnswer: boolean;
   result: 'correct' | 'wrong' | null;
+  feedbackMessage?: string;
   roundIndex: number;
   roundTotal: number;
   roundWordIds: number[];

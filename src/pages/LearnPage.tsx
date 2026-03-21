@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { HeaderBar } from '../components/game/HeaderBar';
 import { WordCard } from '../components/game/WordCard';
@@ -41,6 +42,16 @@ export function LearnPage({
   onShowAnswer,
   onNext,
 }: LearnPageProps) {
+  useEffect(() => {
+    if (state.result === 'correct') {
+      const timer = window.setTimeout(() => {
+        onNext();
+      }, 900);
+      return () => window.clearTimeout(timer);
+    }
+    return undefined;
+  }, [onNext, state.result, state.roundIndex]);
+
   if (!state.currentQuestion || !state.currentWord) return null;
 
   const question = state.currentQuestion;
@@ -70,6 +81,7 @@ export function LearnPage({
           options={question.options}
           selected={state.selectedOption}
           answer={question.answer}
+          lockSelection={showNext}
           onSelect={onSelectOption}
         />
       ) : (
@@ -81,9 +93,17 @@ export function LearnPage({
         />
       )}
 
-      {state.result === 'wrong' && !state.showAnswer ? (
-        <motion.div style={styles.hint} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          差一点点，再试试看～ 或者直接看答案 👀
+      {state.feedbackMessage ? (
+        <motion.div
+          style={{
+            ...styles.hint,
+            ...(state.result === 'correct' ? styles.successHint : {}),
+            ...(state.showAnswer ? styles.answerHint : {}),
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          {state.feedbackMessage}
         </motion.div>
       ) : null}
 
@@ -133,6 +153,14 @@ const styles: Record<string, CSSProperties> = {
     background: '#fff0f0',
     borderRadius: 16,
     padding: '10px 14px',
+  },
+  successHint: {
+    color: '#13786f',
+    background: '#eafffb',
+  },
+  answerHint: {
+    color: '#7d5a00',
+    background: '#fff6d8',
   },
   actions: { display: 'flex', gap: 12 },
   answer: {

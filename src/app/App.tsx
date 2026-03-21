@@ -27,6 +27,12 @@ export default function App() {
     }
   }, [game.currentQuestion, game.roundWordIds.length, screen]);
 
+  useEffect(() => {
+    if (screen === 'learn' && !game.result && !game.showAnswer && game.userInput.length === 0 && game.attemptCount > 0) {
+      setUsedLetterIndexes([]);
+    }
+  }, [game.attemptCount, game.result, game.showAnswer, game.userInput.length, screen]);
+
   const correctCount = useMemo(
     () => game.completedWordIds.length - game.wrongWordIds.length + (game.result === 'correct' ? 1 : 0),
     [game.completedWordIds.length, game.result, game.wrongWordIds.length],

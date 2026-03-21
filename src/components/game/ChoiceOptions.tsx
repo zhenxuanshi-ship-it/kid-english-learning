@@ -5,15 +5,16 @@ interface ChoiceOptionsProps {
   options: string[];
   selected?: string;
   answer: string;
+  lockSelection?: boolean;
   onSelect: (option: string) => void;
 }
 
-export function ChoiceOptions({ options, selected, answer, onSelect }: ChoiceOptionsProps) {
+export function ChoiceOptions({ options, selected, answer, lockSelection = false, onSelect }: ChoiceOptionsProps) {
   return (
     <div style={styles.list}>
       {options.map((option, index) => {
         const isSelected = selected === option;
-        const isCorrect = selected && option === answer;
+        const isCorrect = lockSelection && option === answer;
         return (
           <motion.button
             key={option}
@@ -23,7 +24,7 @@ export function ChoiceOptions({ options, selected, answer, onSelect }: ChoiceOpt
               ...(isSelected && !isCorrect ? styles.wrong : {}),
             }}
             onClick={() => onSelect(option)}
-            disabled={Boolean(selected)}
+            disabled={lockSelection}
             whileTap={{ scale: 0.97 }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

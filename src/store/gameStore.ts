@@ -28,6 +28,7 @@ const initialState: GameState = {
   attemptCount: 0,
   showAnswer: false,
   result: null,
+  feedbackMessage: undefined,
   roundIndex: 0,
   roundTotal: 5,
   roundWordIds: [],
@@ -65,7 +66,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   inputLetter: (letter) => {
     const state = get();
-    if (!state.currentQuestion || state.result) return;
+    if (!state.currentQuestion || state.result === 'correct' || state.showAnswer) return;
     const nextInput = state.userInput + letter.toLowerCase();
     const targetLength = state.currentQuestion.mode === 'spell_blank'
       ? state.currentQuestion.missingIndexes.length
@@ -80,59 +81,133 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
       const fullWord = filled.join('');
       const shouldCheck = nextInput.length === state.currentQuestion.missingIndexes.length;
-      set({ userInput: nextInput });
+      set({ userInput: nextInput, result: null, feedbackMessage: undefined });
       if (shouldCheck) {
         const correct = isSpellingCorrect(fullWord, state.currentQuestion.answer);
-        useProgressStore.getState().recordResult(state.currentQuestion.wordId, correct);
-        if (correct) useProgressStore.getState().addStars(1);
-        set({
-          result: correct ? 'correct' : 'wrong',
-          stars: state.stars + (correct ? 1 : 0),
-          comboCount: correct ? state.comboCount + 1 : 0,
-          attemptCount: state.attemptCount + 1,
-          wrongWordIds: correct ? state.wrongWordIds : Array.from(new Set([...state.wrongWordIds, state.currentQuestion.wordId])),
-        });
+        const nextAttemptCount = state.attemptCount + 1;
+        if (correct) {
+          useProgressStore.getState().recordResult(state.currentQuestion.wordId, true);
+          useProgressStore.getState().addStars(1);
+          set({
+            result: 'correct',
+            stars: state.stars + 1,
+            comboCount: state.comboCount + 1,
+            attemptCount: nextAttemptCount,
+            feedbackMessage: nextAttemptCount >= 3 ? '连对 3 题，超棒！' : '答对啦，真厉害！',
+          });
+        } else if (nextAttemptCount >= 2) {
+          useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+          set({
+            result: 'wrong',
+            showAnswer: true,
+            comboCount: 0,
+            attemptCount: nextAttemptCount,
+            feedbackMessage: `答案是 ${state.currentQuestion.answer.toUpperCase()}`,
+            wrongWordIds: Array.from(new Set([...state.wrongWordIds, state.currentQuestion.wordId])),
+          });
+        } else {
+          set({
+            userInput: '',
+            result: null,
+            comboCount: 0,
+            attemptCount: nextAttemptCount,
+            feedbackMessage: '差一点点，再试一次～',
+          });
+        }
       }
       return;
     }
 
-    set({ userInput: nextInput });
+    set({ userInput: nextInput, result: null, feedbackMessage: undefined });
     if (nextInput.length === state.currentQuestion.answer.length) {
       const correct = isSpellingCorrect(nextInput, state.currentQuestion.answer);
-      useProgressStore.getState().recordResult(state.currentQuestion.wordId, correct);
-      if (correct) useProgressStore.getState().addStars(1);
-      set({
-        result: correct ? 'correct' : 'wrong',
-        stars: state.stars + (correct ? 1 : 0),
-        comboCount: correct ? state.comboCount + 1 : 0,
-        attemptCount: state.attemptCount + 1,
-        wrongWordIds: correct ? state.wrongWordIds : Array.from(new Set([...state.wrongWordIds, state.currentQuestion.wordId])),
-      });
+      const nextAttemptCount = state.attemptCount + 1;
+      if (correct) {
+        useProgressStore.getState().recordResult(state.currentQuestion.wordId, true);
+        useProgressStore.getState().addStars(1);
+        set({
+          result: 'correct',
+          stars: state.stars + 1,
+          comboCount: state.comboCount + 1,
+          attemptCount: nextAttemptCount,
+          feedbackMessage: state.comboCount + 1 >= 3 ? '连对 3 题，超棒！' : '答对啦，继续前进！',
+        });
+      } else if (nextAttemptCount >= 2) {
+        useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+        set({
+          result: 'wrong',
+          showAnswer: true,
+          comboCount: 0,
+          attemptCount: nextAttemptCount,
+          feedbackMessage: `答案是 ${state.currentQuestion.answer.toUpperCase()}`,
+          wrongWordIds: Array.from(new Set([...state.wrongWordIds, state.currentQuestion.wordId])),
+        });
+      } else {
+        set({
+          userInput: '',
+          result: null,
+          comboCount: 0,
+          attemptCount: nextAttemptCount,
+          feedbackMessage: '差一点点，再试一次～',
+        });
+      }
     }
   },
   removeLastLetter: () => {
     const state = get();
-    if (state.result) return;
-    set({ userInput: state.userInput.slice(0, -1) });
+    if (state.result === 'correct' || state.showAnswer) return;
+    set({ userInput: state.userInput.slice(0, -1), feedbackMessage: undefined });
   },
   selectOption: (option) => {
     const state = get();
-    if (!state.currentQuestion || state.currentQuestion.mode !== 'e2c' || state.result) return;
+    if (!state.currentQuestion || state.currentQuestion.mode !== 'e2c' || state.result === 'correct' || state.showAnswer) return;
     const correct = option === state.currentQuestion.answer;
-    useProgressStore.getState().recordResult(state.currentQuestion.wordId, correct);
-    if (correct) useProgressStore.getState().addStars(1);
+    const nextAttemptCount = state.attemptCount + 1;
+
+    if (correct) {
+      useProgressStore.getState().recordResult(state.currentQuestion.wordId, true);
+      useProgressStore.getState().addStars(1);
+      set({
+        selectedOption: option,
+        result: 'correct',
+        stars: state.stars + 1,
+        comboCount: state.comboCount + 1,
+        attemptCount: nextAttemptCount,
+        feedbackMessage: state.comboCount + 1 >= 3 ? '连对 3 题，超棒！' : '选对啦！',
+      });
+      return;
+    }
+
+    if (nextAttemptCount >= 2) {
+      useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+      set({
+        selectedOption: option,
+        result: 'wrong',
+        showAnswer: true,
+        comboCount: 0,
+        attemptCount: nextAttemptCount,
+        feedbackMessage: `正确答案是：${state.currentQuestion.answer}`,
+        wrongWordIds: Array.from(new Set([...state.wrongWordIds, state.currentQuestion.wordId])),
+      });
+      return;
+    }
+
     set({
       selectedOption: option,
-      result: correct ? 'correct' : 'wrong',
-      stars: state.stars + (correct ? 1 : 0),
-      comboCount: correct ? state.comboCount + 1 : 0,
-      attemptCount: state.attemptCount + 1,
-      wrongWordIds: correct ? state.wrongWordIds : Array.from(new Set([...state.wrongWordIds, state.currentQuestion.wordId])),
+      result: null,
+      comboCount: 0,
+      attemptCount: nextAttemptCount,
+      feedbackMessage: '这个不对哦，再选一次～',
     });
   },
   showCorrectAnswer: () => {
     const state = get();
-    set({ showAnswer: true, comboCount: 0, result: state.result ?? 'wrong' });
+    set({
+      showAnswer: true,
+      comboCount: 0,
+      result: state.result ?? 'wrong',
+      feedbackMessage: state.currentQuestion ? `答案是 ${state.currentQuestion.answer.toUpperCase()}` : undefined,
+    });
     if (state.currentQuestion) {
       useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
     }
@@ -161,6 +236,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedOption: undefined,
       showAnswer: false,
       result: null,
+      feedbackMessage: undefined,
       attemptCount: 0,
       completedWordIds,
     });
