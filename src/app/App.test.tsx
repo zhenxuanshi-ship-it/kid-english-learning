@@ -58,11 +58,11 @@ describe('App task flow integration', () => {
     seedSettingsState();
   });
 
-  it('shows daily summary and next task based on persisted state', () => {
+  it('shows compressed home summary and next task based on persisted state', () => {
     render(<App />);
 
-    expect(screen.getByText('✅ 今日完成总结')).toBeInTheDocument();
-    expect(screen.getAllByText('任务进度').length).toBeGreaterThan(0);
+    expect(screen.getByText(/今天先完成一件最重要的事/)).toBeInTheDocument();
+    expect(screen.getByText('今日进度')).toBeInTheDocument();
     expect(screen.getByText(/下一步建议/)).toBeInTheDocument();
   });
 

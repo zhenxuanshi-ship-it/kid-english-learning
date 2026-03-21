@@ -1,9 +1,7 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { DailyPlanCard } from '../components/common/DailyPlanCard';
-import { DailySummaryCard } from '../components/common/DailySummaryCard';
 import { NextTaskBanner } from '../components/common/NextTaskBanner';
-import { RecommendationCard } from '../components/common/RecommendationCard';
 import type { CategoryGalleryItem } from '../lib/categoryGallery';
 import type { DailyPlan } from '../lib/dailyPlan';
 import type { DailySummary } from '../lib/dailySummary';
@@ -59,23 +57,22 @@ export function HomePage({
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.heroCard}>
-        <div style={styles.sparkles}>☁️ ⭐ ☁️</div>
-        <div style={styles.hero}>今天继续学一点点</div>
-        <div style={styles.sub}>把任务做清楚，比把页面堆很长更重要。</div>
-        <div style={styles.starPanel}>🌟 已收集 <strong>{totalStars}</strong> 颗星星</div>
-        <div style={styles.pathTip}>推荐方式：{modeLabelMap[mode]} · 新词 {stats.stageCounts.new} 个</div>
+        <div style={styles.topRow}>
+          <div style={styles.sparkles}>☁️ ⭐ ☁️</div>
+          <div style={styles.starPanel}>🌟 {totalStars} 星星</div>
+        </div>
+        <div style={styles.hero}>今天先完成一件最重要的事</div>
+        <div style={styles.sub}>{recommendation.title}</div>
+        <button style={styles.primaryButton} onClick={() => onStart(Boolean(recommendation.suggestedCategory))}>继续今日任务</button>
+        <div style={styles.pathTip}>推荐方式：{modeLabelMap[mode]} · 新词 {stats.stageCounts.new} 个 · 复习 {stats.stageCounts.review} 个</div>
       </div>
 
-      <div style={styles.primaryCard}>
-        <div style={styles.primaryHeader}>
-          <div>
-            <div style={styles.sectionKicker}>今日主线</div>
-            <div style={styles.primaryTitle}>继续今日任务</div>
-            <div style={styles.primaryDesc}>{recommendation.title}</div>
-          </div>
-          <button style={styles.primaryButton} onClick={() => onStart(Boolean(recommendation.suggestedCategory))}>继续</button>
-        </div>
-        <NextTaskBanner recommendation={nextTaskRecommendation} highlight={Boolean(newlyCompletedTaskKind)} />
+      <NextTaskBanner recommendation={nextTaskRecommendation} highlight={Boolean(newlyCompletedTaskKind)} />
+
+      <div style={styles.summaryStrip}>
+        <div style={styles.summaryItem}><strong>{dailySummary.completedTaskCount}/{dailySummary.totalTaskCount}</strong><span>今日进度</span></div>
+        <div style={styles.summaryItem}><strong>{dailySummary.learnedWords}</strong><span>已学词</span></div>
+        <div style={styles.summaryItem}><strong>{dailySummary.reviewWords}</strong><span>待复习</span></div>
       </div>
 
       <div style={styles.quickGrid}>
@@ -98,70 +95,91 @@ export function HomePage({
         onStartTask={onStartTask}
         onReset={onResetDailyTasks}
       />
-      <DailySummaryCard summary={dailySummary} />
-      <RecommendationCard recommendation={recommendation} />
+
+      <div style={styles.helperCard}>
+        <div style={styles.helperTitle}>📌 学习提醒</div>
+        <div style={styles.helperText}>{recommendation.description}</div>
+      </div>
     </motion.div>
   );
 }
 
 const styles: Record<string, CSSProperties> = {
-  wrap: { display: 'grid', gap: 14 },
+  wrap: { display: 'grid', gap: 12 },
   heroCard: {
     background: 'linear-gradient(180deg, #fff8f5 0%, #ffffff 100%)',
     borderRadius: 28,
-    padding: '22px 18px',
+    padding: '18px 18px 20px',
     boxShadow: '0 14px 30px rgba(255, 107, 107, 0.10)',
-    textAlign: 'center',
+    display: 'grid',
+    gap: 10,
   },
-  sparkles: { fontSize: 22, marginBottom: 10 },
-  hero: { fontSize: 30, fontWeight: 900, lineHeight: 1.15 },
-  sub: { color: '#6a767b', fontSize: 15, marginTop: 8, fontWeight: 700 },
+  topRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 },
+  sparkles: { fontSize: 18 },
+  hero: { fontSize: 28, fontWeight: 900, lineHeight: 1.15 },
+  sub: { color: '#6a767b', fontSize: 15, fontWeight: 700 },
   starPanel: {
-    marginTop: 16,
-    display: 'inline-block',
-    padding: '10px 16px',
+    padding: '8px 12px',
     borderRadius: 999,
     background: '#fff2b8',
     color: '#7d5a00',
     fontWeight: 800,
+    fontSize: 13,
   },
-  pathTip: { marginTop: 12, color: '#6b7a80', fontWeight: 800, fontSize: 14 },
-  primaryCard: {
-    background: '#fff',
-    borderRadius: 24,
-    padding: 18,
-    display: 'grid',
-    gap: 10,
-    boxShadow: '0 14px 28px rgba(0,0,0,0.08)',
-    border: '1px solid rgba(255, 107, 107, 0.08)',
-  },
-  primaryHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
-  sectionKicker: { fontSize: 12, fontWeight: 900, color: '#ff8e7b' },
-  primaryTitle: { fontSize: 24, fontWeight: 900 },
-  primaryDesc: { marginTop: 4, fontSize: 13, fontWeight: 700, color: '#6b7a80' },
+  pathTip: { color: '#6b7a80', fontWeight: 700, fontSize: 13 },
   primaryButton: {
-    minWidth: 96,
-    minHeight: 48,
+    minHeight: 54,
     border: 'none',
-    borderRadius: 16,
+    borderRadius: 18,
     background: 'linear-gradient(135deg, #ff6b6b, #ff8e7b)',
     color: '#fff',
     fontWeight: 900,
-    fontSize: 18,
+    fontSize: 20,
+    boxShadow: '0 14px 24px rgba(255, 107, 107, 0.22)',
+  },
+  summaryStrip: {
+    background: '#fff',
+    borderRadius: 20,
+    padding: 12,
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+    gap: 8,
+    boxShadow: '0 10px 22px rgba(0,0,0,0.06)',
+  },
+  summaryItem: {
+    display: 'grid',
+    gap: 2,
+    textAlign: 'center',
+    background: '#f8fafb',
+    borderRadius: 14,
+    padding: '10px 8px',
+    fontSize: 12,
+    color: '#66757b',
+    fontWeight: 700,
   },
   quickGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 },
   quickCard: {
-    minHeight: 112,
+    minHeight: 104,
     border: 'none',
-    borderRadius: 22,
+    borderRadius: 20,
     background: '#fff',
-    boxShadow: '0 12px 28px rgba(0,0,0,0.08)',
-    padding: 16,
+    boxShadow: '0 10px 24px rgba(0,0,0,0.07)',
+    padding: 14,
     textAlign: 'left',
+    display: 'grid',
+    gap: 4,
+  },
+  quickEmoji: { fontSize: 24 },
+  quickTitle: { fontSize: 17, fontWeight: 900 },
+  quickDesc: { fontSize: 12, fontWeight: 700, color: '#6b7a80' },
+  helperCard: {
+    background: '#fff',
+    borderRadius: 18,
+    padding: 14,
+    boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
     display: 'grid',
     gap: 6,
   },
-  quickEmoji: { fontSize: 28 },
-  quickTitle: { fontSize: 18, fontWeight: 900 },
-  quickDesc: { fontSize: 13, fontWeight: 700, color: '#6b7a80' },
+  helperTitle: { fontWeight: 900, fontSize: 14 },
+  helperText: { color: '#6b7a80', fontWeight: 700, fontSize: 13 },
 };
