@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
+import { SettingsPanel } from '../components/common/SettingsPanel';
 import type { GameMode } from '../types/question';
 
 interface HomePageProps {
@@ -7,6 +8,15 @@ interface HomePageProps {
   onModeChange: (mode: GameMode) => void;
   onStart: () => void;
   totalStars: number;
+  roundSize: number;
+  selectedCategory: string;
+  categories: string[];
+  autoPlaySound: boolean;
+  soundEnabled: boolean;
+  onRoundSizeChange: (size: number) => void;
+  onCategoryChange: (category: string) => void;
+  onToggleAutoPlaySound: () => void;
+  onToggleSoundEnabled: () => void;
 }
 
 const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
@@ -15,7 +25,21 @@ const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string
   { value: 'spell_blank', label: '留空补全', emoji: '🧩', desc: '补上缺失字母', color: '#FFE66D' },
 ];
 
-export function HomePage({ mode, onModeChange, onStart, totalStars }: HomePageProps) {
+export function HomePage({
+  mode,
+  onModeChange,
+  onStart,
+  totalStars,
+  roundSize,
+  selectedCategory,
+  categories,
+  autoPlaySound,
+  soundEnabled,
+  onRoundSizeChange,
+  onCategoryChange,
+  onToggleAutoPlaySound,
+  onToggleSoundEnabled,
+}: HomePageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.heroCard}>
@@ -49,6 +73,18 @@ export function HomePage({ mode, onModeChange, onStart, totalStars }: HomePagePr
       <motion.button style={styles.start} onClick={onStart} whileTap={{ scale: 0.97 }} whileHover={{ y: -2 }}>
         开始学习 🚀
       </motion.button>
+
+      <SettingsPanel
+        roundSize={roundSize}
+        selectedCategory={selectedCategory}
+        categories={categories}
+        autoPlaySound={autoPlaySound}
+        soundEnabled={soundEnabled}
+        onRoundSizeChange={onRoundSizeChange}
+        onCategoryChange={onCategoryChange}
+        onToggleAutoPlaySound={onToggleAutoPlaySound}
+        onToggleSoundEnabled={onToggleSoundEnabled}
+      />
     </motion.div>
   );
 }

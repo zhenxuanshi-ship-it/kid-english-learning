@@ -5,6 +5,8 @@ import { LearnPage } from '../pages/LearnPage';
 import { RoundSummary } from '../components/summary/RoundSummary';
 import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
+import { useSettingsStore } from '../store/settingsStore';
+import { wordCategories } from '../data/words';
 import type { GameMode } from '../types/question';
 
 export default function App() {
@@ -14,11 +16,21 @@ export default function App() {
   const hydrate = useProgressStore((state) => state.hydrate);
   const setMode = useProgressStore((state) => state.setMode);
   const game = useGameStore();
+  const hydrateSettings = useSettingsStore((state) => state.hydrate);
+  const roundSize = useSettingsStore((state) => state.roundSize);
+  const selectedCategory = useSettingsStore((state) => state.selectedCategory);
+  const autoPlaySound = useSettingsStore((state) => state.autoPlaySound);
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const setRoundSize = useSettingsStore((state) => state.setRoundSize);
+  const setSelectedCategory = useSettingsStore((state) => state.setSelectedCategory);
+  const toggleAutoPlaySound = useSettingsStore((state) => state.toggleAutoPlaySound);
+  const toggleSoundEnabled = useSettingsStore((state) => state.toggleSoundEnabled);
   const [usedLetterIndexes, setUsedLetterIndexes] = useState<number[]>([]);
 
   useEffect(() => {
     hydrate();
-  }, [hydrate]);
+    hydrateSettings();
+  }, [hydrate, hydrateSettings]);
 
   useEffect(() => {
     if (!game.currentQuestion && screen === 'learn' && game.roundWordIds.length > 0) {
@@ -74,8 +86,17 @@ export default function App() {
           <HomePage
             mode={currentMode}
             totalStars={totalStars}
+            roundSize={roundSize}
+            selectedCategory={selectedCategory}
+            categories={wordCategories}
+            autoPlaySound={autoPlaySound}
+            soundEnabled={soundEnabled}
             onModeChange={(mode: GameMode) => setMode(mode)}
             onStart={handleStart}
+            onRoundSizeChange={setRoundSize}
+            onCategoryChange={setSelectedCategory}
+            onToggleAutoPlaySound={toggleAutoPlaySound}
+            onToggleSoundEnabled={toggleSoundEnabled}
           />
         ) : null}
 

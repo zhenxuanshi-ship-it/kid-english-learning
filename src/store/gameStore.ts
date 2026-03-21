@@ -6,6 +6,7 @@ import { isSpellingCorrect } from '../features/game/engine/validators';
 import type { GameState } from '../types/game';
 import type { GameMode } from '../types/question';
 import { useProgressStore } from './progressStore';
+import { useSettingsStore } from './settingsStore';
 
 interface GameStore extends GameState {
   startRound: (mode?: GameMode, wordIds?: number[]) => void;
@@ -47,7 +48,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   ...initialState,
   startRound: (mode, wordIds) => {
     const selectedMode = mode ?? useProgressStore.getState().currentMode;
-    const roundWordIds = wordIds ?? createRound(allWords, 5);
+    const settings = useSettingsStore.getState();
+    const roundWordIds = wordIds ?? createRound(allWords, settings.roundSize, settings.selectedCategory);
     const firstWordId = roundWordIds[0];
     const { word, question } = buildQuestion(selectedMode, firstWordId);
     if (!word || !question) return;
