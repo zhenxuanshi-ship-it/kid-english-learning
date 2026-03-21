@@ -65,9 +65,9 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, co
       </div>
       {sentencePatternSuggestion && onGoSentencePractice ? (
         <div style={styles.sentenceSuggestion}>
-          <div style={styles.sentenceSuggestionKicker}>🧩 下一步试试句子</div>
+          <div style={styles.sentenceSuggestionKicker}>🧩 结算页顺手练句子</div>
           <div style={styles.sentenceSuggestionTitle}>{sentencePatternSuggestion.title}</div>
-          <div style={styles.sentenceSuggestionText}>刚学完这轮单词，现在可以顺手把它们放进小句子里。</div>
+          <div style={styles.sentenceSuggestionText}>刚学完这轮单词，马上用这个句型串起来会更容易记住。</div>
           <button style={styles.sentenceSuggestionButton} onClick={onGoSentencePractice}>去练这个句型</button>
         </div>
       ) : null}

@@ -84,9 +84,9 @@ export function HomePage({
 
       {(sentenceContinuePattern || sentenceRecommendedPattern) ? (
         <button style={styles.sentenceCard} onClick={onOpenSentencePractice}>
-          <div style={styles.sentenceKicker}>{sentenceContinuePattern ? '🧩 继续句式练习' : '🧩 推荐句式练习'}</div>
+          <div style={styles.sentenceKicker}>{sentenceContinuePattern ? '🧩 首页继续句型' : '🧩 首页推荐句型'}</div>
           <div style={styles.sentenceTitle}>{(sentenceContinuePattern ?? sentenceRecommendedPattern)?.title}</div>
-          <div style={styles.sentenceDesc}>{sentenceContinuePattern ? '继续上次没练完的句型。' : '把单词连成句子，更像真的会用英语。'}</div>
+          <div style={styles.sentenceDesc}>{sentenceContinuePattern ? '先把上次练到一半的句型接着完成。' : '今天先练一个最该上的句型。'}</div>
         </button>
       ) : null}
 

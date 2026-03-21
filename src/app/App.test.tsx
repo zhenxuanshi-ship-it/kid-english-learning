@@ -110,7 +110,7 @@ describe('App task flow integration', () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole('button', { name: /主题学习/ }));
-    fireEvent.click(screen.getByRole('button', { name: /去练推荐句型|进入句式练习/ }));
+    fireEvent.click(screen.getByRole('button', { name: /去练推荐句型|去练主题相关句型|进入句式练习/ }));
     expect(screen.getByText('先学小句子')).toBeInTheDocument();
     expect(screen.getByText('继续上次句型')).toBeInTheDocument();
     expect(screen.getByText('推荐先练')).toBeInTheDocument();

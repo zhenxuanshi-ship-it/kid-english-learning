@@ -38,7 +38,7 @@ describe('RoundSummary', () => {
     expect(screen.getByText(/已推进今日任务：认识新词/)).toBeInTheDocument();
     expect(screen.getByText(/\+1 今日任务/)).toBeInTheDocument();
     expect(screen.getByText(/太棒啦/)).toBeInTheDocument();
-    expect(screen.getByText(/下一步试试句子/)).toBeInTheDocument();
+    expect(screen.getByText(/结算页顺手练句子/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /去练这个句型/ })).toBeInTheDocument();
     expect(screen.getByText(/下一步去哪/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /继续下一项：先复习旧词/ })).toBeInTheDocument();

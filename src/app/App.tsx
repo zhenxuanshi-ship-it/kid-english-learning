@@ -24,7 +24,7 @@ import { getHomeRecommendation } from '../lib/recommendation';
 import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
 import { getSentencePattern } from '../lib/sentencePractice';
-import { getSentenceRecommendation } from '../lib/sentenceRecommendation';
+import { getHomeSentenceSpotlight, getSentenceRecommendation, getSummarySentenceSpotlight, getTopicSentenceSpotlight } from '../lib/sentenceRecommendation';
 import { getSentencePatternIdsForCategory } from '../lib/sentenceCategoryLink';
 import { useSentenceGameStore } from '../store/sentenceGameStore';
 import { useSentenceProgressStore } from '../store/sentenceProgressStore';
@@ -147,16 +147,23 @@ export default function App() {
     () => getSentenceRecommendation(sentenceProgressMap, sentencePreferredPatternIds),
     [sentencePreferredPatternIds, sentenceProgressMap],
   );
+  const homeSentenceSpotlight = useMemo(
+    () => getHomeSentenceSpotlight(sentenceProgressMap, sentencePreferredPatternIds),
+    [sentencePreferredPatternIds, sentenceProgressMap],
+  );
+  const topicSentenceSpotlight = useMemo(
+    () => getTopicSentenceSpotlight(sentenceProgressMap, sentencePreferredPatternIds),
+    [sentencePreferredPatternIds, sentenceProgressMap],
+  );
   const nextSentencePattern = useMemo(() => {
     if (!sentenceGame.currentPatternId) return undefined;
     const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);
     return currentIndex >= 0 ? sentencePatterns[currentIndex + 1] : undefined;
   }, [sentenceGame.currentPatternId]);
-  const summarySentenceSuggestion = useMemo(() => {
-    const topicCategory = selectedCategory === 'all' ? recommendation.suggestedCategory : selectedCategory;
-    const linkedPatternIds = getSentencePatternIdsForCategory(topicCategory);
-    return linkedPatternIds.length > 0 ? getSentencePattern(linkedPatternIds[0]) : sentenceRecommendation.recommendedPattern;
-  }, [recommendation.suggestedCategory, selectedCategory, sentenceRecommendation.recommendedPattern]);
+  const summarySentenceSuggestion = useMemo(
+    () => getSummarySentenceSpotlight(sentenceProgressMap, sentencePreferredPatternIds),
+    [sentencePreferredPatternIds, sentenceProgressMap],
+  );
 
   const handleStart = (useRecommendationCategory = false) => {
     setCompletedTaskLabel(undefined);
@@ -334,7 +341,7 @@ export default function App() {
             dailyPlan={dailyPlan}
             dailySummary={dailySummary}
             nextTaskRecommendation={nextTaskRecommendation}
-            sentenceRecommendedPattern={sentenceRecommendation.recommendedPattern}
+            sentenceRecommendedPattern={homeSentenceSpotlight}
             sentenceContinuePattern={sentenceRecommendation.continuePattern}
             completedDailyTaskKinds={completedDailyTaskKinds}
             newlyCompletedTaskKind={newlyCompletedTaskKind}
@@ -347,7 +354,7 @@ export default function App() {
           <TopicsPage
             items={categoryItems}
             selectedCategory={selectedCategory === 'all' ? recommendation.suggestedCategory ?? categoryItems[0]?.category ?? 'animals' : selectedCategory}
-            sentenceRecommendedPattern={sentenceRecommendation.recommendedPattern}
+            sentenceRecommendedPattern={topicSentenceSpotlight}
             onSelectCategory={setSelectedCategory}
             onStartTopic={handleStartTopic}
             onOpenSentencePractice={handleOpenSentencePractice}

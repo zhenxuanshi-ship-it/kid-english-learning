@@ -21,9 +21,9 @@ export function TopicsPage({ items, selectedCategory, sentenceRecommendedPattern
       <div style={styles.switchCard}>
         <div>
           <div style={styles.switchTitle}>🧩 句式练习</div>
-          <div style={styles.switchDesc}>{sentenceRecommendedPattern ? `推荐句型：${sentenceRecommendedPattern.title}` : '先练小句子，再把单词连起来用。'}</div>
+          <div style={styles.switchDesc}>{sentenceRecommendedPattern ? `和当前主题更搭的句型：${sentenceRecommendedPattern.title}` : '先练小句子，再把单词连起来用。'}</div>
         </div>
-        <button style={styles.switchButton} onClick={onOpenSentencePractice}>{sentenceRecommendedPattern ? '去练推荐句型' : '进入句式练习'}</button>
+        <button style={styles.switchButton} onClick={onOpenSentencePractice}>{sentenceRecommendedPattern ? '去练主题相关句型' : '进入句式练习'}</button>
       </div>
       {selectedItem ? (
         <div style={styles.hero}>
