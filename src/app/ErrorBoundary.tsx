@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import { captureError, trackEvent } from '../lib/telemetry';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -17,10 +18,11 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   componentDidCatch(error: Error) {
-    console.error('[app:error-boundary]', error);
+    captureError(error, { scope: 'react-error-boundary' });
   }
 
   handleReload = () => {
+    trackEvent('error_boundary_reload_click');
     window.location.reload();
   };
 
