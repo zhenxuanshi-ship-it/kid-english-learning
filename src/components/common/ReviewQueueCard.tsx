@@ -3,9 +3,10 @@ import type { ReviewWordItem } from '../../lib/review';
 
 interface ReviewQueueCardProps {
   items: ReviewWordItem[];
+  onStartReview?: () => void;
 }
 
-export function ReviewQueueCard({ items }: ReviewQueueCardProps) {
+export function ReviewQueueCard({ items, onStartReview }: ReviewQueueCardProps) {
   if (items.length === 0) {
     return (
       <div style={styles.card}>
@@ -17,7 +18,10 @@ export function ReviewQueueCard({ items }: ReviewQueueCardProps) {
 
   return (
     <div style={styles.card}>
-      <div style={styles.title}>🔁 错题复习队列</div>
+      <div style={styles.header}>
+        <div style={styles.title}>🔁 错题复习队列</div>
+        {onStartReview ? <button style={styles.action} onClick={onStartReview}>只练错题</button> : null}
+      </div>
       <div style={styles.list}>
         {items.map((item, index) => (
           <div key={item.wordId} style={styles.row}>
@@ -42,7 +46,24 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid',
     gap: 14,
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
   title: { fontWeight: 900, fontSize: 18 },
+  action: {
+    minHeight: 38,
+    padding: '0 12px',
+    border: 'none',
+    borderRadius: 999,
+    background: '#ff7675',
+    color: '#fff',
+    fontWeight: 900,
+    cursor: 'pointer',
+  },
   empty: {
     background: '#f7f9fc',
     borderRadius: 18,

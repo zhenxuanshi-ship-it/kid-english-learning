@@ -64,6 +64,14 @@ export default function App() {
     setScreen('learn');
   };
 
+  const handleStartReview = () => {
+    const reviewWordIds = reviewQueue.map((item) => item.wordId);
+    if (reviewWordIds.length === 0) return;
+    game.startRound(currentMode, reviewWordIds);
+    setUsedLetterIndexes([]);
+    setScreen('learn');
+  };
+
   const handleRetryWrong = () => {
     game.startRound(currentMode, game.wrongWordIds);
     setUsedLetterIndexes([]);
@@ -108,6 +116,7 @@ export default function App() {
             stats={stats}
             recommendation={recommendation}
             reviewQueue={reviewQueue}
+            onStartReview={handleStartReview}
           />
         ) : null}
 

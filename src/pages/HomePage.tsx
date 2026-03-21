@@ -26,6 +26,7 @@ interface HomePageProps {
   stats: LearningStats;
   recommendation: HomeRecommendation;
   reviewQueue: ReviewWordItem[];
+  onStartReview: () => void;
 }
 
 const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
@@ -51,6 +52,7 @@ export function HomePage({
   stats,
   recommendation,
   reviewQueue,
+  onStartReview,
 }: HomePageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -90,7 +92,7 @@ export function HomePage({
       </motion.button>
 
       <StatsPanel stats={stats} />
-      <ReviewQueueCard items={reviewQueue} />
+      <ReviewQueueCard items={reviewQueue} onStartReview={onStartReview} />
 
       <SettingsPanel
         roundSize={roundSize}
