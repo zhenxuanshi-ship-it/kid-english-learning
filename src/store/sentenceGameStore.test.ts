@@ -5,7 +5,7 @@ import { useSentenceProgressStore } from './sentenceProgressStore';
 describe('sentenceGameStore', () => {
   beforeEach(() => {
     localStorage.clear();
-    useSentenceProgressStore.setState({ progressMap: {} as Partial<Record<'this_is' | 'i_like', import('../types/sentence').SentenceProgress>> });
+    useSentenceProgressStore.setState({ progressMap: {} as Partial<Record<import('../types/sentence').SentencePatternId, import('../types/sentence').SentenceProgress>> });
     useSentenceGameStore.setState({
       currentPatternId: undefined,
       round: [],

@@ -13,4 +13,11 @@ describe('sentencePractice', () => {
     expect(exercises.length).toBeGreaterThanOrEqual(2);
     expect(round).toHaveLength(2);
   });
+
+  it('supports newly added sentence patterns', () => {
+    const pattern = getSentencePattern('what_is_this');
+    const exercises = getSentenceExercises('what_is_this');
+    expect(pattern?.title).toBe('What is this?');
+    expect(exercises).toHaveLength(3);
+  });
 });
