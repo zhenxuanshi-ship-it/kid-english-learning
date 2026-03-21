@@ -7,6 +7,7 @@ import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { allWords, wordCategories } from '../data/words';
+import { getHomeRecommendation } from '../lib/recommendation';
 import { buildLearningStats } from '../lib/stats';
 import type { GameMode } from '../types/question';
 
@@ -53,6 +54,7 @@ export default function App() {
   );
 
   const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
+  const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
 
   const handleStart = () => {
     game.startRound(currentMode);
@@ -102,6 +104,7 @@ export default function App() {
             onToggleAutoPlaySound={toggleAutoPlaySound}
             onToggleSoundEnabled={toggleSoundEnabled}
             stats={stats}
+            recommendation={recommendation}
           />
         ) : null}
 

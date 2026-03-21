@@ -1,7 +1,9 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
+import { RecommendationCard } from '../components/common/RecommendationCard';
 import { SettingsPanel } from '../components/common/SettingsPanel';
 import { StatsPanel } from '../components/common/StatsPanel';
+import type { HomeRecommendation } from '../lib/recommendation';
 import type { LearningStats } from '../lib/stats';
 import type { GameMode } from '../types/question';
 
@@ -20,6 +22,7 @@ interface HomePageProps {
   onToggleAutoPlaySound: () => void;
   onToggleSoundEnabled: () => void;
   stats: LearningStats;
+  recommendation: HomeRecommendation;
 }
 
 const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
@@ -43,6 +46,7 @@ export function HomePage({
   onToggleAutoPlaySound,
   onToggleSoundEnabled,
   stats,
+  recommendation,
 }: HomePageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -53,6 +57,8 @@ export function HomePage({
         <div style={styles.starPanel}>🌟 已经收集了 <strong>{totalStars}</strong> 颗星星</div>
         <div style={styles.pathTip}>今天有 {stats.stageCounts.new} 个新词、{stats.stageCounts.review} 个待复习词</div>
       </div>
+
+      <RecommendationCard recommendation={recommendation} />
 
       <div style={styles.sectionTitle}>选择今天的学习模式</div>
       <div style={styles.grid}>
@@ -76,7 +82,7 @@ export function HomePage({
         ))}
       </div>
       <motion.button style={styles.start} onClick={onStart} whileTap={{ scale: 0.97 }} whileHover={{ y: -2 }}>
-        开始学习 🚀
+        {recommendation.focus === 'review' ? '开始复习 🔁' : recommendation.focus === 'new' ? '学习新词 🆕' : '开始学习 🚀'}
       </motion.button>
 
       <StatsPanel stats={stats} />
