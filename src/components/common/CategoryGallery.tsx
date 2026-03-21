@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import type { CategoryGalleryItem } from '../../lib/categoryGallery';
+import { WordVisual } from './WordVisual';
 
 interface CategoryGalleryProps {
   items: CategoryGalleryItem[];
@@ -49,7 +50,7 @@ export function CategoryGallery({ items, selectedCategory, onSelect }: CategoryG
               transition={{ delay: index * 0.03 }}
             >
               <div style={styles.cover}>
-                <div style={styles.emoji}>{meta.emoji}</div>
+                {item.featuredVisual ? <WordVisual word={item.featuredVisual} size="sm" /> : <div style={styles.emoji}>{meta.emoji}</div>}
                 <div style={styles.tagline}>{item.tagline}</div>
               </div>
               <div style={styles.label}>{item.label}</div>

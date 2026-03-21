@@ -1,4 +1,5 @@
 import { allWords } from '../data/words';
+import type { Word } from '../types/word';
 import { getCategoryLabel } from './category';
 import type { LearningStats } from './stats';
 
@@ -24,6 +25,7 @@ export interface CategoryGalleryItem {
   progressPercent: number;
   featuredWord: string;
   featuredChinese: string;
+  featuredVisual?: Word;
   tagline: string;
   recommendation: string;
 }
@@ -55,6 +57,7 @@ export function buildCategoryGalleryItems(categories: string[], stats: LearningS
       progressPercent,
       featuredWord: featured?.english ?? '',
       featuredChinese: featured?.chinese ?? '',
+      featuredVisual: featured,
       tagline,
       recommendation,
     };
