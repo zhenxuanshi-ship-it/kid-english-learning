@@ -1,3 +1,4 @@
+import type { LearningStage } from '../features/progress/types';
 import type { Question, GameMode } from './question';
 import type { Word } from './word';
 
@@ -23,6 +24,7 @@ export interface GameState {
   roundIndex: number;
   roundTotal: number;
   roundWordIds: number[];
+  roundStartStages: Record<number, LearningStage | undefined>;
   wrongWordIds: number[];
   completedWordIds: number[];
 }

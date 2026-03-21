@@ -36,6 +36,7 @@ const initialState: GameState = {
   roundIndex: 0,
   roundTotal: 5,
   roundWordIds: [],
+  roundStartStages: {},
   wrongWordIds: [],
   completedWordIds: [],
 };
@@ -68,6 +69,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { word, question, resolvedMode } = buildQuestion(selectedMode, firstWordId);
     if (!word || !question) return;
 
+    const roundStartStages = Object.fromEntries(
+      roundWordIds.map((id) => [id, useProgressStore.getState().wordProgressMap[id]?.learningStage ?? 'new']),
+    );
+
     useProgressStore.getState().setMode(selectedMode);
     useProgressStore.getState().recordSeen(word.id);
     const isLearningCard = shouldShowLearningCard(word.id);
@@ -76,6 +81,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ...initialState,
       mode: resolvedMode,
       roundWordIds,
+      roundStartStages,
       roundTotal: roundWordIds.length,
       currentWord: word,
       currentQuestion: isLearningCard ? null : question,

@@ -32,6 +32,7 @@ describe('LearnPage', () => {
           roundIndex: 0,
           roundTotal: 5,
           roundWordIds: [1],
+          roundStartStages: { 1: 'new' },
           wrongWordIds: [],
           completedWordIds: [],
         }}
@@ -79,6 +80,7 @@ describe('LearnPage', () => {
           roundIndex: 0,
           roundTotal: 5,
           roundWordIds: [1],
+          roundStartStages: { 1: 'learning' },
           wrongWordIds: [],
           completedWordIds: [],
         }}

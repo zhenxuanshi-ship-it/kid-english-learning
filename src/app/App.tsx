@@ -9,6 +9,7 @@ import { useSettingsStore } from '../store/settingsStore';
 import { allWords, wordCategories } from '../data/words';
 import { buildDailyPlan } from '../lib/dailyPlan';
 import { buildDailySummary } from '../lib/dailySummary';
+import { didCompleteDailyTask } from '../lib/dailyTaskProgress';
 import { getNextTaskRecommendation } from '../lib/nextTask';
 import { getHomeRecommendation } from '../lib/recommendation';
 import { buildReviewQueue } from '../lib/review';
@@ -47,12 +48,26 @@ export default function App() {
   useEffect(() => {
     if (!game.currentQuestion && !game.isLearningCard && screen === 'learn' && game.roundWordIds.length > 0) {
       if (activeDailyTaskKind) {
-        markDailyTaskDone(activeDailyTaskKind);
+        if (didCompleteDailyTask(activeDailyTaskKind, game.completedWordIds, game.roundStartStages)) {
+          markDailyTaskDone(activeDailyTaskKind);
+        } else {
+          setActiveDailyTask(undefined);
+        }
       }
       setScreen('summary');
       setUsedLetterIndexes([]);
     }
-  }, [activeDailyTaskKind, game.currentQuestion, game.isLearningCard, game.roundWordIds.length, markDailyTaskDone, screen]);
+  }, [
+    activeDailyTaskKind,
+    game.completedWordIds,
+    game.currentQuestion,
+    game.isLearningCard,
+    game.roundStartStages,
+    game.roundWordIds.length,
+    markDailyTaskDone,
+    screen,
+    setActiveDailyTask,
+  ]);
 
   useEffect(() => {
     if (screen === 'learn' && !game.result && !game.showAnswer && game.userInput.length === 0 && game.attemptCount > 0) {
@@ -99,7 +114,7 @@ export default function App() {
     setScreen('learn');
   };
 
-  const handleStartTask = (task: { mode: GameMode; kind: string }) => {
+  const handleStartTask = (task: { mode: GameMode; kind: 'new' | 'review' | 'practice' }) => {
     setMode(task.mode);
     setActiveDailyTask(task.kind);
     game.startRound(task.mode);

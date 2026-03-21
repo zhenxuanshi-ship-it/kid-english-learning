@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { DailyTaskKind } from '../lib/dailyTaskProgress';
 import { readJson, writeJson } from '../lib/storage';
 import { wordCategories } from '../data/words';
 
@@ -9,8 +10,8 @@ export interface SettingsState {
   selectedCategory: string;
   autoPlaySound: boolean;
   soundEnabled: boolean;
-  completedDailyTaskKinds: string[];
-  activeDailyTaskKind?: string;
+  completedDailyTaskKinds: DailyTaskKind[];
+  activeDailyTaskKind?: DailyTaskKind;
 }
 
 interface SettingsStore extends SettingsState {
@@ -19,8 +20,8 @@ interface SettingsStore extends SettingsState {
   setSelectedCategory: (category: string) => void;
   toggleAutoPlaySound: () => void;
   toggleSoundEnabled: () => void;
-  setActiveDailyTask: (kind?: string) => void;
-  markDailyTaskDone: (kind: string) => void;
+  setActiveDailyTask: (kind?: DailyTaskKind) => void;
+  markDailyTaskDone: (kind: DailyTaskKind) => void;
   resetDailyTasks: () => void;
 }
 
