@@ -36,9 +36,13 @@ export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: Da
           const done = completedKinds.includes(task.kind);
           return (
             <div key={`${task.kind}-${task.mode}`} style={{ ...styles.item, ...(done ? styles.itemDone : {}) }}>
-              <div>
-                <div style={styles.itemTitle}>{kindEmojiMap[task.kind]} {task.label}</div>
+              <div style={styles.itemContent}>
+                <div style={styles.itemTitleRow}>
+                  <div style={styles.itemTitle}>{kindEmojiMap[task.kind]} {task.label}</div>
+                  {done ? <div style={styles.doneBadge}>🏅 已完成</div> : null}
+                </div>
                 <div style={styles.itemMeta}>约 {task.count} 个词 · 推荐模式 {task.mode}</div>
+                {done ? <div style={styles.rewardHint}>太棒啦，今天这项任务已经拿下啦！</div> : null}
               </div>
               <button style={{ ...styles.button, ...(done ? styles.buttonDone : {}) }} onClick={() => onStartTask(task)}>
                 {done ? '再来一轮' : '开始'}
@@ -92,11 +96,36 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: 18,
     padding: '12px 14px',
   },
+  itemContent: {
+    display: 'grid',
+    gap: 4,
+    flex: 1,
+  },
+  itemTitleRow: {
+    display: 'flex',
+    gap: 8,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
   itemDone: {
     background: '#eefbf7',
   },
   itemTitle: { fontWeight: 800 },
+  doneBadge: {
+    padding: '4px 8px',
+    borderRadius: 999,
+    background: '#fff6d8',
+    color: '#9a6b00',
+    fontSize: 12,
+    fontWeight: 900,
+  },
   itemMeta: { marginTop: 4, color: '#7b8a90', fontSize: 13, fontWeight: 700 },
+  rewardHint: {
+    marginTop: 2,
+    color: '#ff8e7b',
+    fontSize: 13,
+    fontWeight: 800,
+  },
   button: {
     minHeight: 38,
     padding: '0 12px',

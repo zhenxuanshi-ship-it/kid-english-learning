@@ -12,11 +12,13 @@ describe('DailyPlanCard', () => {
     ],
   };
 
-  it('shows progress and task labels', () => {
+  it('shows progress, task labels, and completion badge', () => {
     render(<DailyPlanCard plan={plan} completedKinds={['review']} onStartTask={vi.fn()} />);
     expect(screen.getByText('今日进度 1/2')).toBeInTheDocument();
     expect(screen.getByText(/先复习旧词/)).toBeInTheDocument();
     expect(screen.getByText(/认识新词/)).toBeInTheDocument();
+    expect(screen.getByText(/已完成/)).toBeInTheDocument();
+    expect(screen.getByText(/今天这项任务已经拿下啦/)).toBeInTheDocument();
   });
 
   it('calls onStartTask when task button is clicked', () => {
