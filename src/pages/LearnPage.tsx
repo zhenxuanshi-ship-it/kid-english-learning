@@ -110,13 +110,14 @@ export function LearnPage({
             <LearningCard
               english={state.currentWord.english}
               chinese={state.currentWord.chinese}
+              emoji={state.currentWord.emoji}
               soundEnabled={soundEnabled}
               onSpeak={() => speakWord(state.currentWord?.english ?? '', soundEnabled)}
               onStart={onStartPractice}
             />
           ) : question ? (
             <>
-              <WordCard title={question.prompt} subtitle={answerText} status={state.result}>
+              <WordCard title={question.prompt} subtitle={answerText} emoji={state.currentWord.emoji} status={state.result}>
                 {question.mode === 'e2c' ? null : (
                   <InputSlots
                     text={state.userInput}

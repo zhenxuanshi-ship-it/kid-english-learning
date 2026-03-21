@@ -5,6 +5,7 @@ export interface Word {
   category: string;
   level: 1 | 2 | 3;
   difficulty: number;
+  emoji?: string;
   imageUrl?: string;
   audioUrl?: string;
 }

@@ -4,11 +4,12 @@ import { motion } from 'framer-motion';
 interface WordCardProps {
   title: string;
   subtitle?: string;
+  emoji?: string;
   children?: ReactNode;
   status?: 'correct' | 'wrong' | null;
 }
 
-export function WordCard({ title, subtitle, children, status = null }: WordCardProps) {
+export function WordCard({ title, subtitle, emoji, children, status = null }: WordCardProps) {
   return (
     <motion.div
       style={{ ...styles.card, ...(status ? styles[status] : {}) }}
@@ -18,7 +19,7 @@ export function WordCard({ title, subtitle, children, status = null }: WordCardP
       <div style={styles.badge}>{status === 'correct' ? '太棒啦!' : status === 'wrong' ? '再试试～' : '今日单词'}</div>
       <div style={styles.emojiRow}>
         <span>🌟</span>
-        <span style={styles.icon}>{status === 'correct' ? '🐣' : status === 'wrong' ? '🐻' : '🦊'}</span>
+        <span style={styles.icon}>{emoji ?? (status === 'correct' ? '🐣' : status === 'wrong' ? '🐻' : '🦊')}</span>
         <span>☁️</span>
       </div>
       <div style={styles.title}>{title}</div>
