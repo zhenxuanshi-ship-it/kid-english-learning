@@ -36,4 +36,14 @@ describe('sentenceGameStore', () => {
     useSentenceGameStore.getState().arrangeTokens(['I', 'like', 'bananas']);
     expect(useSentenceGameStore.getState().isCorrect).toBe(true);
   });
+
+  it('can undo arranged tokens before submit', () => {
+    useSentenceGameStore.getState().startRound('i_like');
+    useSentenceGameStore.getState().nextExercise();
+    useSentenceGameStore.getState().nextExercise();
+    useSentenceGameStore.getState().arrangeTokens(['I', 'like']);
+    useSentenceGameStore.getState().undoArrangeToken();
+    expect(useSentenceGameStore.getState().arrangedTokens).toEqual(['I']);
+    expect(useSentenceGameStore.getState().isCorrect).toBeUndefined();
+  });
 });

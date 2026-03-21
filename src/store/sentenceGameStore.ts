@@ -15,6 +15,7 @@ interface SentenceGameState {
   startRound: (patternId: SentencePatternId) => void;
   selectAnswer: (answer: string) => void;
   arrangeTokens: (tokens: string[]) => void;
+  undoArrangeToken: () => void;
   nextExercise: () => void;
   reset: () => void;
 }
@@ -59,6 +60,11 @@ export const useSentenceGameStore = create<SentenceGameState>((set, get) => ({
       useSentenceProgressStore.getState().recordResult(state.currentPatternId, isCorrect);
     }
     set({ arrangedTokens: tokens, isCorrect: tokens.length === state.currentExercise.answer.length ? isCorrect : undefined });
+  },
+  undoArrangeToken: () => {
+    const state = get();
+    if (!state.currentExercise || !Array.isArray(state.currentExercise.answer) || state.arrangedTokens.length === 0 || typeof state.isCorrect === 'boolean') return;
+    set({ arrangedTokens: state.arrangedTokens.slice(0, -1), isCorrect: undefined });
   },
   nextExercise: () => {
     const state = get();

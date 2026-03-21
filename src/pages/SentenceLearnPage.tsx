@@ -11,6 +11,7 @@ interface SentenceLearnPageProps {
   isCorrect?: boolean;
   onSelectAnswer: (answer: string) => void;
   onArrangeTokens: (tokens: string[]) => void;
+  onUndoArrange: () => void;
   onNext: () => void;
 }
 
@@ -23,6 +24,7 @@ export function SentenceLearnPage({
   isCorrect,
   onSelectAnswer,
   onArrangeTokens,
+  onUndoArrange,
   onNext,
 }: SentenceLearnPageProps) {
   if (!exercise) return null;
@@ -37,6 +39,7 @@ export function SentenceLearnPage({
       </div>
 
       <div style={styles.card}>
+        <div style={styles.mascot}>🪄 跟着句子小精灵，一步步来</div>
         <div style={styles.prompt}>{exercise.prompt ?? '完成这个小句子'}</div>
         <div style={styles.chinese}>{exercise.chinese}</div>
 
@@ -70,6 +73,10 @@ export function SentenceLearnPage({
             <div style={styles.answerTray}>
               {arrangedTokens.length > 0 ? arrangedTokens.join(' ') : '把词卡按顺序点进来'}
             </div>
+            <div style={styles.reorderTools}>
+              <div style={styles.reorderHint}>先点词卡，再看看句子顺不顺。</div>
+              <button style={{ ...styles.undoButton, opacity: arrangedTokens.length > 0 && !showNext ? 1 : 0.5 }} disabled={arrangedTokens.length === 0 || showNext} onClick={onUndoArrange}>撤回上一个</button>
+            </div>
             <div style={styles.tokens}>
               {exercise.tokens.map((token) => {
                 const usedCount = arrangedTokens.filter((item) => item === token).length;
@@ -85,7 +92,7 @@ export function SentenceLearnPage({
           </>
         ) : null}
 
-        {showNext ? <div style={{ ...styles.feedback, ...(isCorrect ? styles.feedbackOk : styles.feedbackBad) }}>{isCorrect ? '答对啦！' : `再看看：${exercise.english}`}</div> : null}
+        {showNext ? <div style={{ ...styles.feedback, ...(isCorrect ? styles.feedbackOk : styles.feedbackBad) }}>{isCorrect ? '答对啦！你的小句子拼好了 🌟' : `差一点点，再看看：${exercise.english}`}</div> : null}
 
         <button style={{ ...styles.next, opacity: showNext ? 1 : 0.5 }} disabled={!showNext} onClick={onNext}>下一题 ➜</button>
       </div>
@@ -112,6 +119,7 @@ const styles: Record<string, CSSProperties> = {
     gap: 12,
     boxShadow: '0 14px 26px rgba(124, 92, 255, 0.08)',
   },
+  mascot: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
   prompt: { fontSize: 22, fontWeight: 900, color: '#374349' },
   chinese: { fontSize: 14, fontWeight: 700, color: '#66757b' },
   options: { display: 'grid', gap: 8 },
@@ -135,6 +143,17 @@ const styles: Record<string, CSSProperties> = {
     padding: '12px 14px',
     fontWeight: 800,
     color: '#5a4bcc',
+  },
+  reorderTools: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  reorderHint: { fontSize: 13, fontWeight: 700, color: '#66757b' },
+  undoButton: {
+    minHeight: 38,
+    padding: '0 12px',
+    border: '1px solid #ece8ff',
+    borderRadius: 999,
+    background: '#fff',
+    color: '#5a4bcc',
+    fontWeight: 800,
   },
   tokens: { display: 'flex', flexWrap: 'wrap', gap: 8 },
   token: {

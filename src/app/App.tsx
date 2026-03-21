@@ -24,6 +24,8 @@ import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
 import { getSentencePattern } from '../lib/sentencePractice';
 import { useSentenceGameStore } from '../store/sentenceGameStore';
+import { useSentenceProgressStore } from '../store/sentenceProgressStore';
+import { sentencePatterns } from '../data/sentences';
 import type { SentencePatternId } from '../types/sentence';
 import type { GameMode } from '../types/question';
 
@@ -41,6 +43,8 @@ export default function App() {
   const setMode = useProgressStore((state) => state.setMode);
   const game = useGameStore();
   const sentenceGame = useSentenceGameStore();
+  const sentenceProgressMap = useSentenceProgressStore((state) => state.progressMap);
+  const hydrateSentenceProgress = useSentenceProgressStore((state) => state.hydrate);
   const hydrateSettings = useSettingsStore((state) => state.hydrate);
   const roundSize = useSettingsStore((state) => state.roundSize);
   const selectedCategory = useSettingsStore((state) => state.selectedCategory);
@@ -60,7 +64,8 @@ export default function App() {
   useEffect(() => {
     hydrate();
     hydrateSettings();
-  }, [hydrate, hydrateSettings]);
+    hydrateSentenceProgress();
+  }, [hydrate, hydrateSettings, hydrateSentenceProgress]);
 
   const correctCount = useMemo(
     () => game.completedWordIds.length - game.wrongWordIds.length + (game.result === 'correct' ? 1 : 0),
@@ -121,6 +126,11 @@ export default function App() {
     () => (sentenceGame.currentPatternId ? getSentencePattern(sentenceGame.currentPatternId) : undefined),
     [sentenceGame.currentPatternId],
   );
+  const nextSentencePattern = useMemo(() => {
+    if (!sentenceGame.currentPatternId) return undefined;
+    const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);
+    return currentIndex >= 0 ? sentencePatterns[currentIndex + 1] : undefined;
+  }, [sentenceGame.currentPatternId]);
 
   const handleStart = (useRecommendationCategory = false) => {
     setCompletedTaskLabel(undefined);
@@ -339,7 +349,7 @@ export default function App() {
           />
         ) : null}
 
-        {screen === 'sentenceHub' ? <SentenceHubPage onStartPattern={handleStartSentencePattern} /> : null}
+        {screen === 'sentenceHub' ? <SentenceHubPage progressMap={sentenceProgressMap} onStartPattern={handleStartSentencePattern} /> : null}
 
         {screen === 'sentenceLearn' ? (
           <SentenceLearnPage
@@ -351,6 +361,7 @@ export default function App() {
             isCorrect={sentenceGame.isCorrect}
             onSelectAnswer={handleSentenceAnswer}
             onArrangeTokens={handleSentenceArrange}
+            onUndoArrange={sentenceGame.undoArrangeToken}
             onNext={handleSentenceNext}
           />
         ) : null}
@@ -385,7 +396,9 @@ export default function App() {
             pattern={currentSentencePattern}
             correctCount={sentenceCorrectCount}
             roundTotal={sentenceGame.round.length}
+            nextPatternTitle={nextSentencePattern?.title}
             onRestart={() => sentenceGame.currentPatternId ? handleStartSentencePattern(sentenceGame.currentPatternId) : handleOpenSentencePractice()}
+            onGoNextPattern={nextSentencePattern ? () => handleStartSentencePattern(nextSentencePattern.id) : undefined}
             onGoTopics={handleGoTopics}
           />
         ) : null}
