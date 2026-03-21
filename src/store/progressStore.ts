@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { readJson, writeJson } from '../lib/storage';
-import type { UserProgress } from '../features/progress/types';
+import type { UserProgress, WordProgress } from '../features/progress/types';
 import type { GameMode } from '../types/question';
+import { getInitialLearningStage, getNextLearningStage } from '../features/game/engine/learningRules';
 
 const STORAGE_KEY = 'kids-english-progress';
 
@@ -12,11 +13,39 @@ const initialProgress: UserProgress = {
   wordProgressMap: {},
 };
 
+function createDefaultWordProgress(wordId: number): WordProgress {
+  return {
+    wordId,
+    seenCount: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    mastered: false,
+    learningStage: getInitialLearningStage(),
+    seenLearningCard: false,
+  };
+}
+
+function normalizeWordProgressMap(map: Record<number, WordProgress>): Record<number, WordProgress> {
+  return Object.fromEntries(
+    Object.entries(map).map(([key, value]) => {
+      const base = createDefaultWordProgress(Number(key));
+      return [
+        key,
+        {
+          ...base,
+          ...value,
+          learningStage: value.learningStage ?? (value.mastered ? 'mastered' : value.seenCount > 0 ? 'learning' : 'new'),
+        },
+      ];
+    }),
+  );
+}
+
 interface ProgressStore extends UserProgress {
   addStars: (count: number) => void;
   setMode: (mode: GameMode) => void;
   recordSeen: (wordId: number) => void;
-  recordResult: (wordId: number, isCorrect: boolean) => void;
+  recordResult: (wordId: number, isCorrect: boolean, mode?: GameMode) => void;
   hydrate: () => void;
 }
 
@@ -44,13 +73,7 @@ export const useProgressStore = create<ProgressStore>((set, get) => ({
     });
   },
   recordSeen: (wordId) => {
-    const current = get().wordProgressMap[wordId] ?? {
-      wordId,
-      seenCount: 0,
-      correctCount: 0,
-      wrongCount: 0,
-      mastered: false,
-    };
+    const current = get().wordProgressMap[wordId] ?? createDefaultWordProgress(wordId);
     const wordProgressMap = {
       ...get().wordProgressMap,
       [wordId]: {
@@ -69,25 +92,26 @@ export const useProgressStore = create<ProgressStore>((set, get) => ({
       lastStudyDate: new Date().toISOString(),
     });
   },
-  recordResult: (wordId, isCorrect) => {
-    const current = get().wordProgressMap[wordId] ?? {
-      wordId,
-      seenCount: 0,
-      correctCount: 0,
-      wrongCount: 0,
-      mastered: false,
-    };
+  recordResult: (wordId, isCorrect, mode) => {
+    const current = get().wordProgressMap[wordId] ?? createDefaultWordProgress(wordId);
     const correctCount = current.correctCount + (isCorrect ? 1 : 0);
     const wrongCount = current.wrongCount + (isCorrect ? 0 : 1);
+    const nextProgress: WordProgress = {
+      ...current,
+      correctCount,
+      wrongCount,
+      mastered: correctCount >= 3 && wrongCount <= 1,
+      learningStage: getNextLearningStage(current, isCorrect),
+      lastMode: mode,
+      lastResult: isCorrect ? 'correct' : 'wrong',
+      lastReviewedAt: Date.now(),
+    };
+    if (nextProgress.mastered) {
+      nextProgress.learningStage = 'mastered';
+    }
     const wordProgressMap = {
       ...get().wordProgressMap,
-      [wordId]: {
-        ...current,
-        correctCount,
-        wrongCount,
-        mastered: correctCount >= 3 && wrongCount <= 1,
-        lastReviewedAt: Date.now(),
-      },
+      [wordId]: nextProgress,
     };
     set({ wordProgressMap });
     writeJson(STORAGE_KEY, {
@@ -100,6 +124,9 @@ export const useProgressStore = create<ProgressStore>((set, get) => ({
   },
   hydrate: () => {
     const data = readJson<UserProgress>(STORAGE_KEY, initialProgress);
-    set({ ...data });
+    set({
+      ...data,
+      wordProgressMap: normalizeWordProgressMap(data.wordProgressMap ?? {}),
+    });
   },
 }));

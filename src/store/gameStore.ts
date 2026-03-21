@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { allWords } from '../data/words';
 import { generateQuestion } from '../features/game/engine/questionGenerator';
-import { createRound } from '../features/game/engine/roundEngine';
+import { createPriorityRound } from '../features/game/engine/roundEngine';
 import { isSpellingCorrect } from '../features/game/engine/validators';
 import type { GameState } from '../types/game';
 import type { GameMode } from '../types/question';
@@ -49,7 +49,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   startRound: (mode, wordIds) => {
     const selectedMode = mode ?? useProgressStore.getState().currentMode;
     const settings = useSettingsStore.getState();
-    const roundWordIds = wordIds ?? createRound(allWords, settings.roundSize, settings.selectedCategory);
+    const roundWordIds = wordIds ?? createPriorityRound(
+      allWords,
+      useProgressStore.getState().wordProgressMap,
+      settings.roundSize,
+      settings.selectedCategory,
+    );
     const firstWordId = roundWordIds[0];
     const { word, question } = buildQuestion(selectedMode, firstWordId);
     if (!word || !question) return;
@@ -88,7 +93,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const correct = isSpellingCorrect(fullWord, state.currentQuestion.answer);
         const nextAttemptCount = state.attemptCount + 1;
         if (correct) {
-          useProgressStore.getState().recordResult(state.currentQuestion.wordId, true);
+          useProgressStore.getState().recordResult(state.currentQuestion.wordId, true, state.mode);
           useProgressStore.getState().addStars(1);
           set({
             result: 'correct',
@@ -98,7 +103,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
             feedbackMessage: nextAttemptCount >= 3 ? '连对 3 题，超棒！' : '答对啦，真厉害！',
           });
         } else if (nextAttemptCount >= 2) {
-          useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+          useProgressStore.getState().recordResult(state.currentQuestion.wordId, false, state.mode);
           set({
             result: 'wrong',
             showAnswer: true,
@@ -125,7 +130,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const correct = isSpellingCorrect(nextInput, state.currentQuestion.answer);
       const nextAttemptCount = state.attemptCount + 1;
       if (correct) {
-        useProgressStore.getState().recordResult(state.currentQuestion.wordId, true);
+        useProgressStore.getState().recordResult(state.currentQuestion.wordId, true, state.mode);
         useProgressStore.getState().addStars(1);
         set({
           result: 'correct',
@@ -135,7 +140,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           feedbackMessage: state.comboCount + 1 >= 3 ? '连对 3 题，超棒！' : '答对啦，继续前进！',
         });
       } else if (nextAttemptCount >= 2) {
-        useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+        useProgressStore.getState().recordResult(state.currentQuestion.wordId, false, state.mode);
         set({
           result: 'wrong',
           showAnswer: true,
@@ -167,7 +172,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const nextAttemptCount = state.attemptCount + 1;
 
     if (correct) {
-      useProgressStore.getState().recordResult(state.currentQuestion.wordId, true);
+      useProgressStore.getState().recordResult(state.currentQuestion.wordId, true, state.mode);
       useProgressStore.getState().addStars(1);
       set({
         selectedOption: option,
@@ -181,7 +186,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (nextAttemptCount >= 2) {
-      useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+      useProgressStore.getState().recordResult(state.currentQuestion.wordId, false, state.mode);
       set({
         selectedOption: option,
         result: 'wrong',
@@ -211,7 +216,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       feedbackMessage: state.currentQuestion ? `答案是 ${state.currentQuestion.answer.toUpperCase()}` : undefined,
     });
     if (state.currentQuestion) {
-      useProgressStore.getState().recordResult(state.currentQuestion.wordId, false);
+      useProgressStore.getState().recordResult(state.currentQuestion.wordId, false, state.mode);
     }
   },
   nextQuestion: () => {

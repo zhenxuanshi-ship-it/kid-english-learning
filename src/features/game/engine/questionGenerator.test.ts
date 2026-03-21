@@ -7,6 +7,7 @@ describe('generateQuestion', () => {
     const word = allWords.find((item) => item.english === 'apple')!;
     const question = generateQuestion(word, 'e2c', allWords);
     expect(question.mode).toBe('e2c');
+    if (question.mode !== 'e2c') throw new Error('Expected e2c question');
     expect(question.answer).toBe('苹果');
     expect(question.options).toHaveLength(4);
   });
@@ -15,6 +16,7 @@ describe('generateQuestion', () => {
     const word = allWords.find((item) => item.english === 'cat')!;
     const question = generateQuestion(word, 'c2e', allWords);
     expect(question.mode).toBe('c2e');
+    if (question.mode !== 'c2e') throw new Error('Expected c2e question');
     expect(question.answer).toBe('cat');
     expect(question.letterPool).toEqual(expect.arrayContaining(['c', 'a', 't']));
   });
@@ -23,6 +25,7 @@ describe('generateQuestion', () => {
     const word = allWords.find((item) => item.english === 'apple')!;
     const question = generateQuestion(word, 'spell_blank', allWords);
     expect(question.mode).toBe('spell_blank');
+    if (question.mode !== 'spell_blank') throw new Error('Expected spell_blank question');
     expect(question.pattern[0]).toBe('a');
     expect(question.missingIndexes.length).toBe(2);
   });
