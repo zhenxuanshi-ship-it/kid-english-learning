@@ -24,6 +24,7 @@ import { getHomeRecommendation } from '../lib/recommendation';
 import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
 import { getSentencePattern } from '../lib/sentencePractice';
+import { getSentenceRecommendation } from '../lib/sentenceRecommendation';
 import { useSentenceGameStore } from '../store/sentenceGameStore';
 import { useSentenceProgressStore } from '../store/sentenceProgressStore';
 import { sentencePatterns } from '../data/sentences';
@@ -132,6 +133,7 @@ export default function App() {
     () => (pendingSentencePatternId ? getSentencePattern(pendingSentencePatternId) : undefined),
     [pendingSentencePatternId],
   );
+  const sentenceRecommendation = useMemo(() => getSentenceRecommendation(sentenceProgressMap), [sentenceProgressMap]);
   const nextSentencePattern = useMemo(() => {
     if (!sentenceGame.currentPatternId) return undefined;
     const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);
@@ -365,7 +367,15 @@ export default function App() {
           />
         ) : null}
 
-        {screen === 'sentenceHub' ? <SentenceHubPage progressMap={sentenceProgressMap} onStartPattern={handleStartSentencePattern} /> : null}
+        {screen === 'sentenceHub' ? (
+          <SentenceHubPage
+            progressMap={sentenceProgressMap}
+            orderedPatterns={sentenceRecommendation.orderedPatterns}
+            recommendedPattern={sentenceRecommendation.recommendedPattern}
+            continuePattern={sentenceRecommendation.continuePattern}
+            onStartPattern={handleStartSentencePattern}
+          />
+        ) : null}
 
         {screen === 'sentenceCard' ? (
           <SentencePatternCardPage

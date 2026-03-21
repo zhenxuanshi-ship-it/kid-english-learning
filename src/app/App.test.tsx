@@ -51,11 +51,36 @@ function seedSettingsState() {
   );
 }
 
+function seedSentenceProgressState() {
+  localStorage.setItem(
+    'kids-english-sentence-progress',
+    JSON.stringify({
+      i_like: {
+        patternId: 'i_like',
+        seenCount: 2,
+        correctCount: 1,
+        wrongCount: 2,
+        mastered: false,
+        lastPracticedAt: 200,
+      },
+      this_is: {
+        patternId: 'this_is',
+        seenCount: 1,
+        correctCount: 3,
+        wrongCount: 0,
+        mastered: true,
+        lastPracticedAt: 100,
+      },
+    }),
+  );
+}
+
 describe('App task flow integration', () => {
   beforeEach(() => {
     localStorage.clear();
     seedProgressState();
     seedSettingsState();
+    seedSentenceProgressState();
   });
 
   it('shows compressed home summary and next task based on persisted state', () => {
@@ -87,7 +112,9 @@ describe('App task flow integration', () => {
     fireEvent.click(screen.getByRole('button', { name: /主题学习/ }));
     fireEvent.click(screen.getByRole('button', { name: '进入句式练习' }));
     expect(screen.getByText('先学小句子')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /This is/ }));
+    expect(screen.getByText('继续上次句型')).toBeInTheDocument();
+    expect(screen.getByText('推荐先练')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /I like/ }));
     expect(screen.getByText(/先认识这个句型/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '开始练这个句型' }));
     expect(screen.getByText(/第 1 \/ 3 题/)).toBeInTheDocument();

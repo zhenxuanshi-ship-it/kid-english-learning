@@ -1,14 +1,16 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { sentencePatterns } from '../data/sentences';
-import type { SentencePatternId, SentenceProgress } from '../types/sentence';
+import type { SentencePattern, SentencePatternId, SentenceProgress } from '../types/sentence';
 
 interface SentenceHubPageProps {
   progressMap: Partial<Record<SentencePatternId, SentenceProgress>>;
+  orderedPatterns: SentencePattern[];
+  recommendedPattern?: SentencePattern;
+  continuePattern?: SentencePattern;
   onStartPattern: (patternId: SentencePatternId) => void;
 }
 
-export function SentenceHubPage({ progressMap, onStartPattern }: SentenceHubPageProps) {
+export function SentenceHubPage({ progressMap, orderedPatterns, recommendedPattern, continuePattern, onStartPattern }: SentenceHubPageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.hero}>
@@ -17,8 +19,24 @@ export function SentenceHubPage({ progressMap, onStartPattern }: SentenceHubPage
         <div style={styles.desc}>像搭积木一样，把学过的单词连成完整句子。</div>
       </div>
 
+      {continuePattern ? (
+        <div style={styles.recommendCard}>
+          <div style={styles.recommendKicker}>继续上次句型</div>
+          <div style={styles.recommendTitle}>{continuePattern.title}</div>
+          <button style={styles.recommendButton} onClick={() => onStartPattern(continuePattern.id)}>继续练习</button>
+        </div>
+      ) : null}
+
+      {recommendedPattern ? (
+        <div style={styles.recommendCardSoft}>
+          <div style={styles.recommendKicker}>推荐先练</div>
+          <div style={styles.recommendTitle}>{recommendedPattern.title}</div>
+          <div style={styles.recommendDesc}>优先把还没掌握的句型练熟。</div>
+        </div>
+      ) : null}
+
       <div style={styles.list}>
-        {sentencePatterns.map((pattern) => {
+        {orderedPatterns.map((pattern) => {
           const progress = progressMap[pattern.id];
           return (
             <button key={pattern.id} style={styles.card} onClick={() => onStartPattern(pattern.id)}>
@@ -51,6 +69,32 @@ const styles: Record<string, CSSProperties> = {
   kicker: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
   title: { fontSize: 26, fontWeight: 900 },
   desc: { fontSize: 14, fontWeight: 700, color: '#66757b' },
+  recommendCard: {
+    background: 'linear-gradient(135deg, #7c5cff, #9b83ff)',
+    borderRadius: 22,
+    padding: 16,
+    display: 'grid',
+    gap: 8,
+    color: '#fff',
+  },
+  recommendCardSoft: {
+    background: '#f4f1ff',
+    borderRadius: 20,
+    padding: 14,
+    display: 'grid',
+    gap: 6,
+  },
+  recommendKicker: { fontSize: 12, fontWeight: 900, opacity: 0.9 },
+  recommendTitle: { fontSize: 20, fontWeight: 900 },
+  recommendDesc: { fontSize: 13, fontWeight: 700, color: '#5a4bcc' },
+  recommendButton: {
+    minHeight: 44,
+    border: 'none',
+    borderRadius: 16,
+    background: '#fff',
+    color: '#5a4bcc',
+    fontWeight: 900,
+  },
   list: { display: 'grid', gap: 10 },
   card: {
     border: 'none',
