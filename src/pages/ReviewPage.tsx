@@ -37,14 +37,15 @@ export function ReviewPage({ items, onStartReview }: ReviewPageProps) {
 }
 
 const styles: Record<string, CSSProperties> = {
-  wrap: { display: 'grid', gap: 16 },
+  wrap: { display: 'grid', gap: 14 },
   hero: {
     background: 'linear-gradient(135deg, #fff8f8, #ffffff)',
     borderRadius: 28,
     padding: 20,
     display: 'grid',
     gap: 10,
-    boxShadow: '0 16px 30px rgba(255,118,117,0.12)',
+    boxShadow: '0 14px 28px rgba(255,118,117,0.10)',
+    border: '1px solid rgba(255, 118, 117, 0.08)',
   },
   kicker: { fontSize: 13, fontWeight: 900, color: '#ff8e7b' },
   title: { fontSize: 28, fontWeight: 900 },

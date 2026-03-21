@@ -141,7 +141,7 @@ const styles: Record<string, CSSProperties> = {
   },
   text: { fontSize: 18, margin: '18px 0 8px', textAlign: 'center' },
   footer: { textAlign: 'center', color: '#7c8a90', marginTop: 16, fontWeight: 700 },
-  actions: { display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 20 },
+  actions: { display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginTop: 20 },
   navBlock: {
     marginTop: 18,
     display: 'grid',
@@ -152,10 +152,10 @@ const styles: Record<string, CSSProperties> = {
     boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
   },
   navTitle: { fontWeight: 900, fontSize: 16 },
-  navGrid: { display: 'grid', gap: 10 },
+  navGrid: { display: 'grid', gap: 8 },
   navButton: {
-    minHeight: 48,
-    border: 'none',
+    minHeight: 46,
+    border: '1px solid #edf1f3',
     borderRadius: 16,
     background: '#f7f9fc',
     fontWeight: 800,

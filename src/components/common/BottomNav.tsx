@@ -39,9 +39,10 @@ const styles: Record<string, CSSProperties> = {
     gap: 8,
     background: 'rgba(255,255,255,0.96)',
     backdropFilter: 'blur(12px)',
-    borderRadius: 20,
-    padding: 10,
-    boxShadow: '0 12px 30px rgba(0,0,0,0.10)',
+    borderRadius: 18,
+    padding: 8,
+    boxShadow: '0 10px 24px rgba(0,0,0,0.08)',
+    border: '1px solid rgba(0,0,0,0.04)',
   },
   tab: {
     minHeight: 58,

@@ -105,17 +105,17 @@ export function HomePage({
 }
 
 const styles: Record<string, CSSProperties> = {
-  wrap: { display: 'grid', gap: 16 },
+  wrap: { display: 'grid', gap: 14 },
   heroCard: {
-    background: 'linear-gradient(180deg, #fff7f3 0%, #ffffff 100%)',
-    borderRadius: 30,
-    padding: '24px 20px',
-    boxShadow: '0 20px 40px rgba(255, 107, 107, 0.12)',
+    background: 'linear-gradient(180deg, #fff8f5 0%, #ffffff 100%)',
+    borderRadius: 28,
+    padding: '22px 18px',
+    boxShadow: '0 14px 30px rgba(255, 107, 107, 0.10)',
     textAlign: 'center',
   },
   sparkles: { fontSize: 22, marginBottom: 10 },
-  hero: { fontSize: 34, fontWeight: 900, lineHeight: 1.15 },
-  sub: { color: '#636e72', fontSize: 16, marginTop: 8, fontWeight: 700 },
+  hero: { fontSize: 30, fontWeight: 900, lineHeight: 1.15 },
+  sub: { color: '#6a767b', fontSize: 15, marginTop: 8, fontWeight: 700 },
   starPanel: {
     marginTop: 16,
     display: 'inline-block',
@@ -131,8 +131,9 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: 24,
     padding: 18,
     display: 'grid',
-    gap: 12,
-    boxShadow: '0 12px 28px rgba(0,0,0,0.08)',
+    gap: 10,
+    boxShadow: '0 14px 28px rgba(0,0,0,0.08)',
+    border: '1px solid rgba(255, 107, 107, 0.08)',
   },
   primaryHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
   sectionKicker: { fontSize: 12, fontWeight: 900, color: '#ff8e7b' },
@@ -148,9 +149,9 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 900,
     fontSize: 18,
   },
-  quickGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
+  quickGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 },
   quickCard: {
-    minHeight: 120,
+    minHeight: 112,
     border: 'none',
     borderRadius: 22,
     background: '#fff',
