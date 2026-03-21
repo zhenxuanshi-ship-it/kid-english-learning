@@ -61,6 +61,8 @@ export default function App() {
 
   return (
     <main style={styles.page}>
+      <div style={styles.bgBlobA} />
+      <div style={styles.bgBlobB} />
       <div style={styles.shell}>
         {screen === 'home' ? (
           <HomePage
@@ -108,8 +110,32 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid',
     placeItems: 'center',
     padding: 16,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  bgBlobA: {
+    position: 'absolute',
+    width: 260,
+    height: 260,
+    borderRadius: '50%',
+    background: 'rgba(255, 107, 107, 0.14)',
+    top: -40,
+    left: -60,
+    filter: 'blur(8px)',
+  },
+  bgBlobB: {
+    position: 'absolute',
+    width: 280,
+    height: 280,
+    borderRadius: '50%',
+    background: 'rgba(78, 205, 196, 0.16)',
+    bottom: -60,
+    right: -80,
+    filter: 'blur(8px)',
   },
   shell: {
+    position: 'relative',
+    zIndex: 1,
     width: '100%',
     maxWidth: 560,
     display: 'grid',

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { motion } from 'framer-motion';
 import type { GameMode } from '../types/question';
 
 interface HomePageProps {
@@ -8,62 +9,112 @@ interface HomePageProps {
   totalStars: number;
 }
 
-const modes: Array<{ value: GameMode; label: string; emoji: string }> = [
-  { value: 'e2c', label: '英译中选择', emoji: '🌈' },
-  { value: 'c2e', label: '中译英拼写', emoji: '✏️' },
-  { value: 'spell_blank', label: '留空补全', emoji: '🧩' },
+const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
+  { value: 'e2c', label: '英译中选择', emoji: '🌈', desc: '看英文，选中文', color: '#4ECDC4' },
+  { value: 'c2e', label: '中译英拼写', emoji: '✏️', desc: '看中文，拼英文', color: '#FF6B6B' },
+  { value: 'spell_blank', label: '留空补全', emoji: '🧩', desc: '补上缺失字母', color: '#FFE66D' },
 ];
 
 export function HomePage({ mode, onModeChange, onStart, totalStars }: HomePageProps) {
   return (
     <div style={styles.wrap}>
-      <div style={styles.hero}>儿童英语单词学习</div>
-      <div style={styles.sub}>一轮 5 题，轻轻松松学单词 ⭐ 累计 {totalStars}</div>
+      <div style={styles.heroCard}>
+        <div style={styles.sparkles}>☁️ ⭐ ☁️</div>
+        <div style={styles.hero}>儿童英语单词学习</div>
+        <div style={styles.sub}>一轮 5 题，轻轻松松学单词</div>
+        <div style={styles.starPanel}>🌟 已经收集了 <strong>{totalStars}</strong> 颗星星</div>
+      </div>
+
+      <div style={styles.sectionTitle}>选择今天的学习模式</div>
       <div style={styles.grid}>
-        {modes.map((item) => (
-          <button
+        {modes.map((item, index) => (
+          <motion.button
             key={item.value}
-            style={{ ...styles.modeCard, ...(mode === item.value ? styles.active : {}) }}
+            style={{ ...styles.modeCard, ...(mode === item.value ? styles.active : {}), borderColor: mode === item.value ? item.color : 'transparent' }}
             onClick={() => onModeChange(item.value)}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.06 }}
           >
-            <div style={styles.emoji}>{item.emoji}</div>
-            <div>{item.label}</div>
-          </button>
+            <div style={styles.modeHead}>
+              <div style={styles.emoji}>{item.emoji}</div>
+              <div style={{ ...styles.dot, background: item.color }} />
+            </div>
+            <div style={styles.modeLabel}>{item.label}</div>
+            <div style={styles.modeDesc}>{item.desc}</div>
+          </motion.button>
         ))}
       </div>
-      <button style={styles.start} onClick={onStart}>开始学习</button>
+      <motion.button style={styles.start} onClick={onStart} whileTap={{ scale: 0.97 }} whileHover={{ y: -2 }}>
+        开始学习 🚀
+      </motion.button>
     </div>
   );
 }
 
 const styles: Record<string, CSSProperties> = {
   wrap: { display: 'grid', gap: 18 },
-  hero: { fontSize: 36, fontWeight: 900, textAlign: 'center' },
-  sub: { textAlign: 'center', color: '#636e72', fontSize: 18 },
+  heroCard: {
+    background: 'linear-gradient(180deg, #fff7f3 0%, #ffffff 100%)',
+    borderRadius: 30,
+    padding: '24px 20px',
+    boxShadow: '0 20px 40px rgba(255, 107, 107, 0.12)',
+    textAlign: 'center',
+  },
+  sparkles: { fontSize: 22, marginBottom: 10 },
+  hero: { fontSize: 38, fontWeight: 900, textAlign: 'center', lineHeight: 1.15 },
+  sub: { textAlign: 'center', color: '#636e72', fontSize: 18, marginTop: 8, fontWeight: 700 },
+  starPanel: {
+    marginTop: 16,
+    display: 'inline-block',
+    padding: '10px 16px',
+    borderRadius: 999,
+    background: '#fff2b8',
+    color: '#7d5a00',
+    fontWeight: 800,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 900,
+    color: '#5a6467',
+    marginLeft: 4,
+  },
   grid: { display: 'grid', gap: 14 },
   modeCard: {
-    minHeight: 84,
-    border: 'none',
-    borderRadius: 20,
+    minHeight: 94,
+    border: '3px solid transparent',
+    borderRadius: 24,
     background: '#fff',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+    boxShadow: '0 12px 28px rgba(0,0,0,0.08)',
     fontSize: 18,
     fontWeight: 800,
     cursor: 'pointer',
+    padding: '16px 18px',
+    textAlign: 'left',
   },
   active: {
-    outline: '3px solid #4ecdc4',
     transform: 'translateY(-2px)',
+    boxShadow: '0 16px 32px rgba(0,0,0,0.1)',
   },
-  emoji: { fontSize: 26, marginBottom: 6 },
+  modeHead: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  emoji: { fontSize: 30 },
+  dot: { width: 14, height: 14, borderRadius: 999 },
+  modeLabel: { marginTop: 8, fontSize: 19, fontWeight: 900 },
+  modeDesc: { marginTop: 4, color: '#7c8a90', fontSize: 14, fontWeight: 700 },
   start: {
-    minHeight: 58,
+    minHeight: 60,
     border: 'none',
-    borderRadius: 18,
-    background: '#ff6b6b',
+    borderRadius: 20,
+    background: 'linear-gradient(135deg, #ff6b6b, #ff8e7b)',
     color: '#fff',
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 900,
     cursor: 'pointer',
+    boxShadow: '0 16px 28px rgba(255, 107, 107, 0.3)',
   },
 };

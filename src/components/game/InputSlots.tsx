@@ -16,7 +16,9 @@ export function InputSlots({ text, answerLength = 0, pattern, missingIndexes = [
     return (
       <div style={styles.row}>
         {chars.map((char, index) => (
-          <div key={`${char}-${index}`} style={styles.slot}>{(char || '_').toUpperCase()}</div>
+          <div key={`${char}-${index}`} style={{ ...styles.slot, ...(char === '_' ? styles.blank : {}) }}>
+            {(char || '_').toUpperCase()}
+          </div>
         ))}
       </div>
     );
@@ -25,7 +27,9 @@ export function InputSlots({ text, answerLength = 0, pattern, missingIndexes = [
   return (
     <div style={styles.row}>
       {Array.from({ length: answerLength }).map((_, index) => (
-        <div key={index} style={styles.slot}>{(text[index] ?? '_').toUpperCase()}</div>
+        <div key={index} style={{ ...styles.slot, ...(text[index] ? styles.filled : styles.blank) }}>
+          {(text[index] ?? '_').toUpperCase()}
+        </div>
       ))}
     </div>
   );
@@ -40,14 +44,23 @@ const styles: Record<string, CSSProperties> = {
     marginTop: 8,
   },
   slot: {
-    width: 42,
-    height: 48,
-    borderRadius: 14,
-    background: '#f7f9fc',
-    border: '2px dashed #cfd8dc',
+    width: 44,
+    height: 52,
+    borderRadius: 16,
+    background: '#ffffff',
+    border: '3px solid #dfe8eb',
     display: 'grid',
     placeItems: 'center',
-    fontWeight: 800,
+    fontWeight: 900,
     fontSize: 20,
+    boxShadow: '0 6px 16px rgba(0,0,0,0.05)',
+  },
+  blank: {
+    background: '#f7f9fc',
+    color: '#9fb0b6',
+  },
+  filled: {
+    borderColor: '#4ecdc4',
+    background: '#f2fffd',
   },
 };
