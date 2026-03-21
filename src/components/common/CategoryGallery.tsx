@@ -48,8 +48,12 @@ export function CategoryGallery({ items, selectedCategory, onSelect }: CategoryG
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.03 }}
             >
-              <div style={styles.emoji}>{meta.emoji}</div>
+              <div style={styles.cover}>
+                <div style={styles.emoji}>{meta.emoji}</div>
+                <div style={styles.tagline}>{item.tagline}</div>
+              </div>
               <div style={styles.label}>{item.label}</div>
+              <div style={styles.recommendation}>{item.recommendation}</div>
               <div style={styles.progressText}>已学 {item.learned}/{item.total}</div>
               <div style={styles.progressTrack}>
                 <div style={{ ...styles.progressFill, width: `${item.progressPercent}%` }} />
@@ -101,19 +105,32 @@ const styles: Record<string, CSSProperties> = {
   card: {
     border: 'none',
     borderRadius: 20,
-    padding: '16px 12px',
+    padding: '12px',
     display: 'grid',
     gap: 8,
     justifyItems: 'center',
     cursor: 'pointer',
     boxShadow: '0 8px 20px rgba(0,0,0,0.05)',
+    textAlign: 'center',
   },
   activeCard: {
     outline: '3px solid #ff8e7b',
     transform: 'translateY(-1px)',
   },
+  cover: {
+    width: '100%',
+    minHeight: 78,
+    borderRadius: 16,
+    background: 'rgba(255,255,255,0.66)',
+    display: 'grid',
+    placeItems: 'center',
+    gap: 4,
+    padding: '10px 8px',
+  },
   emoji: { fontSize: 30 },
+  tagline: { fontSize: 12, fontWeight: 800, color: '#6b7a80' },
   label: { fontWeight: 800, color: '#435055' },
+  recommendation: { fontSize: 12, fontWeight: 700, color: '#5f6d73' },
   progressText: { fontSize: 12, fontWeight: 800, color: '#617076' },
   progressTrack: {
     width: '100%',

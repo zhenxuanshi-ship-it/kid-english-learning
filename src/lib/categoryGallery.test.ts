@@ -15,10 +15,12 @@ describe('buildCategoryGalleryItems', () => {
     ],
   };
 
-  it('builds gallery items with progress and featured word', () => {
+  it('builds gallery items with progress, featured word, and recommendation copy', () => {
     const items = buildCategoryGalleryItems(['animals', 'fruits'], stats);
     expect(items[0].progressPercent).toBe(40);
     expect(items[0].featuredWord).toBeTruthy();
     expect(items[0].featuredChinese).toBeTruthy();
+    expect(items[0].tagline).toBeTruthy();
+    expect(items[0].recommendation).toBeTruthy();
   });
 });

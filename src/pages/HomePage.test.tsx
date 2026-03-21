@@ -10,8 +10,8 @@ describe('HomePage', () => {
     selectedCategory: 'all',
     categories: ['animals', 'fruits'],
     categoryItems: [
-      { category: 'animals', label: '动物', total: 15, learned: 6, mastered: 1, progressPercent: 40, featuredWord: 'cat', featuredChinese: '猫' },
-      { category: 'fruits', label: '水果', total: 10, learned: 2, mastered: 0, progressPercent: 20, featuredWord: 'apple', featuredChinese: '苹果' },
+      { category: 'animals', label: '动物', total: 15, learned: 6, mastered: 1, progressPercent: 40, featuredWord: 'cat', featuredChinese: '猫', tagline: '认识可爱小动物朋友', recommendation: '已经学了 6 个，再看看 cat' },
+      { category: 'fruits', label: '水果', total: 10, learned: 2, mastered: 0, progressPercent: 20, featuredWord: 'apple', featuredChinese: '苹果', tagline: '一起逛逛水果乐园', recommendation: '已经学了 2 个，再看看 apple' },
     ],
     autoPlaySound: false,
     soundEnabled: false,
