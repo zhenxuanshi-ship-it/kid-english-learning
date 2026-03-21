@@ -15,7 +15,11 @@ describe('getHomeRecommendation', () => {
       review: 0,
       mastered: 0,
     },
-    categoryBreakdown: [],
+    categoryBreakdown: [
+      { category: 'animals', total: 15, learned: 6, mastered: 1 },
+      { category: 'fruits', total: 10, learned: 2, mastered: 0 },
+      { category: 'school', total: 11, learned: 9, mastered: 2 },
+    ],
   };
 
   it('prioritizes review words first', () => {
@@ -24,6 +28,7 @@ describe('getHomeRecommendation', () => {
       stageCounts: { ...baseStats.stageCounts, review: 3, new: 5 },
     });
     expect(recommendation.focus).toBe('review');
+    expect(recommendation.suggestedCategory).toBeTruthy();
   });
 
   it('recommends new words when there are no review words', () => {

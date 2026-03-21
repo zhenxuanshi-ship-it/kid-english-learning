@@ -65,7 +65,7 @@ export function HomePage({
         <div style={styles.pathTip}>今天有 {stats.stageCounts.new} 个新词、{stats.stageCounts.review} 个待复习词</div>
       </div>
 
-      <RecommendationCard recommendation={recommendation} />
+      <RecommendationCard recommendation={recommendation} onApplyCategory={onCategoryChange} />
 
       <div style={styles.sectionTitle}>选择今天的学习模式</div>
       <div style={styles.grid}>
