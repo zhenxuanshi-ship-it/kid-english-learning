@@ -10,6 +10,7 @@ import { TopicsPage } from '../pages/TopicsPage';
 import { SentenceHubPage } from '../pages/SentenceHubPage';
 import { SentenceLearnPage } from '../pages/SentenceLearnPage';
 import { SentenceSummaryPage } from '../pages/SentenceSummaryPage';
+import { SentencePatternCardPage } from '../pages/SentencePatternCardPage';
 import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -30,12 +31,13 @@ import type { SentencePatternId } from '../types/sentence';
 import type { GameMode } from '../types/question';
 
 export default function App() {
-  const [screen, setScreen] = useState<'home' | 'learn' | 'summary' | 'sentenceHub' | 'sentenceLearn' | 'sentenceSummary'>('home');
+  const [screen, setScreen] = useState<'home' | 'learn' | 'summary' | 'sentenceHub' | 'sentenceCard' | 'sentenceLearn' | 'sentenceSummary'>('home');
   const [navTab, setNavTab] = useState<NavTab>('home');
   const [completedTaskLabel, setCompletedTaskLabel] = useState<string | undefined>();
   const [completedTaskReward, setCompletedTaskReward] = useState<string | undefined>();
   const [newlyCompletedTaskKind, setNewlyCompletedTaskKind] = useState<string | undefined>();
   const [sentenceCorrectCount, setSentenceCorrectCount] = useState(0);
+  const [pendingSentencePatternId, setPendingSentencePatternId] = useState<SentencePatternId | undefined>();
   const totalStars = useProgressStore((state) => state.totalStars);
   const currentMode = useProgressStore((state) => state.currentMode);
   const wordProgressMap = useProgressStore((state) => state.wordProgressMap);
@@ -126,6 +128,10 @@ export default function App() {
     () => (sentenceGame.currentPatternId ? getSentencePattern(sentenceGame.currentPatternId) : undefined),
     [sentenceGame.currentPatternId],
   );
+  const pendingSentencePattern = useMemo(
+    () => (pendingSentencePatternId ? getSentencePattern(pendingSentencePatternId) : undefined),
+    [pendingSentencePatternId],
+  );
   const nextSentencePattern = useMemo(() => {
     if (!sentenceGame.currentPatternId) return undefined;
     const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);
@@ -199,11 +205,18 @@ export default function App() {
   const handleOpenSentencePractice = () => {
     sentenceGame.reset();
     setSentenceCorrectCount(0);
+    setPendingSentencePatternId(undefined);
     setScreen('sentenceHub');
   };
 
   const handleStartSentencePattern = (patternId: SentencePatternId) => {
-    sentenceGame.startRound(patternId);
+    setPendingSentencePatternId(patternId);
+    setScreen('sentenceCard');
+  };
+
+  const handleStartSentenceRound = () => {
+    if (!pendingSentencePatternId) return;
+    sentenceGame.startRound(pendingSentencePatternId);
     setSentenceCorrectCount(0);
     setScreen('sentenceLearn');
   };
@@ -236,6 +249,7 @@ export default function App() {
   const handleGoHome = () => {
     game.resetRound();
     sentenceGame.reset();
+    setPendingSentencePatternId(undefined);
     setScreen('home');
     setNavTab('home');
   };
@@ -243,6 +257,7 @@ export default function App() {
   const handleGoTopics = () => {
     game.resetRound();
     sentenceGame.reset();
+    setPendingSentencePatternId(undefined);
     setScreen('home');
     setNavTab('topics');
   };
@@ -250,6 +265,7 @@ export default function App() {
   const handleGoReview = () => {
     game.resetRound();
     sentenceGame.reset();
+    setPendingSentencePatternId(undefined);
     setScreen('home');
     setNavTab('review');
   };
@@ -350,6 +366,14 @@ export default function App() {
         ) : null}
 
         {screen === 'sentenceHub' ? <SentenceHubPage progressMap={sentenceProgressMap} onStartPattern={handleStartSentencePattern} /> : null}
+
+        {screen === 'sentenceCard' ? (
+          <SentencePatternCardPage
+            pattern={pendingSentencePattern}
+            onStart={handleStartSentenceRound}
+            onBack={handleOpenSentencePractice}
+          />
+        ) : null}
 
         {screen === 'sentenceLearn' ? (
           <SentenceLearnPage
