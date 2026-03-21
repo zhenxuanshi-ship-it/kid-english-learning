@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { getCategoryLabel } from '../../lib/category';
 import type { LearningStats } from '../../lib/stats';
 
 interface StatsPanelProps {
@@ -39,7 +40,7 @@ export function StatsPanel({ stats, compact = false }: StatsPanelProps) {
               return (
                 <div key={item.category} style={styles.row}>
                   <div style={styles.rowHead}>
-                    <span>{item.category}</span>
+                    <span>{getCategoryLabel(item.category)}</span>
                     <span>{item.learned}/{item.total}</span>
                   </div>
                   <div style={styles.barTrack}>

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { getCategoryLabel } from '../../lib/category';
 
 interface SettingsPanelProps {
   roundSize: number;
@@ -47,7 +48,7 @@ export function SettingsPanel({
         <select style={styles.select} value={selectedCategory} onChange={(event) => onCategoryChange(event.target.value)}>
           <option value="all">全部主题</option>
           {categories.map((category) => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>{getCategoryLabel(category)}</option>
           ))}
         </select>
       </div>
