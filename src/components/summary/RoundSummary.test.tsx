@@ -21,13 +21,14 @@ describe('RoundSummary', () => {
         stars={3}
         wrongWordIds={[]}
         completedTaskLabel="认识新词"
+        completedTaskReward="太棒啦！认识新词完成得很棒～"
         onRestart={vi.fn()}
         onRetryWrong={vi.fn()}
         stats={stats}
       />,
     );
 
-    expect(screen.getByText(/已推进今日任务/)).toBeInTheDocument();
-    expect(screen.getByText(/认识新词/)).toBeInTheDocument();
+    expect(screen.getByText(/已推进今日任务：认识新词/)).toBeInTheDocument();
+    expect(screen.getByText(/太棒啦/)).toBeInTheDocument();
   });
 });

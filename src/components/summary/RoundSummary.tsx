@@ -10,12 +10,13 @@ interface RoundSummaryProps {
   stars: number;
   wrongWordIds: number[];
   completedTaskLabel?: string;
+  completedTaskReward?: string;
   onRestart: () => void;
   onRetryWrong: () => void;
   stats: LearningStats;
 }
 
-export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, onRestart, onRetryWrong, stats }: RoundSummaryProps) {
+export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, completedTaskReward, onRestart, onRetryWrong, stats }: RoundSummaryProps) {
   const wrongWords = wrongWordIds
     .map((id) => allWords.find((word) => word.id === id))
     .filter(Boolean);
@@ -28,7 +29,13 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, co
         <motion.div style={styles.scoreBubble} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}><strong>{correctCount}</strong><span>答对题数</span></motion.div>
         <motion.div style={{ ...styles.scoreBubble, ...styles.starBubble }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}><strong>⭐ {stars}</strong><span>本轮星星</span></motion.div>
       </div>
-      {completedTaskLabel ? <div style={styles.taskBadge}>✅ 已推进今日任务：{completedTaskLabel}</div> : null}
+      {completedTaskLabel ? (
+        <motion.div style={styles.taskCelebrate} initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2 }}>
+          <div style={styles.confetti}>🎊 ✨ 🌟 ✨ 🎊</div>
+          <div style={styles.taskBadge}>✅ 已推进今日任务：{completedTaskLabel}</div>
+          <div style={styles.rewardText}>{completedTaskReward ?? '今日任务 +1，继续冲呀！'}</div>
+        </motion.div>
+      ) : null}
       {wrongWords.length > 0 ? (
         <div style={styles.listWrap}>
           <h3 style={styles.listTitle}>这些单词可以再练一练</h3>
@@ -73,13 +80,29 @@ const styles: Record<string, CSSProperties> = {
     background: '#fff3bd',
     color: '#7d5a00',
   },
-  taskBadge: {
+  taskCelebrate: {
     marginTop: 18,
+    display: 'grid',
+    gap: 8,
+    justifyItems: 'center',
+  },
+  confetti: {
+    fontSize: 22,
+    letterSpacing: 4,
+  },
+  taskBadge: {
+    width: '100%',
     padding: '12px 14px',
     borderRadius: 18,
     background: '#ecfff7',
     color: '#157a6e',
     fontWeight: 900,
+    textAlign: 'center',
+  },
+  rewardText: {
+    color: '#ff8e7b',
+    fontWeight: 900,
+    fontSize: 15,
     textAlign: 'center',
   },
   listWrap: { marginTop: 20, fontSize: 16 },
