@@ -1,0 +1,83 @@
+import type { SentenceExercise, SentencePattern } from '../../types/sentence';
+
+export const sentencePatterns: SentencePattern[] = [
+  {
+    id: 'this_is',
+    title: 'This is ...',
+    description: '认识“这是……”这种句子。',
+    examples: ['This is a cat.', 'This is a bag.'],
+  },
+  {
+    id: 'i_like',
+    title: 'I like ...',
+    description: '认识“我喜欢……”这种句子。',
+    examples: ['I like apples.', 'I like dogs.'],
+  },
+];
+
+export const sentenceExercises: SentenceExercise[] = [
+  {
+    id: 'this-is-choose-cat',
+    patternId: 'this_is',
+    mode: 'choose_word',
+    english: 'This is a cat.',
+    chinese: '这是一只猫。',
+    prompt: 'This is a ___ .',
+    options: ['cat', 'red', 'run'],
+    answer: 'cat',
+    imageWordId: 1,
+  },
+  {
+    id: 'this-is-match-bag',
+    patternId: 'this_is',
+    mode: 'match_sentence',
+    english: 'This is a bag.',
+    chinese: '这是一个书包。',
+    prompt: '看图选择正确句子',
+    options: ['This is a bag.', 'I like bags.', 'This is red.'],
+    answer: 'This is a bag.',
+    imageWordId: 90,
+  },
+  {
+    id: 'this-is-order-dog',
+    patternId: 'this_is',
+    mode: 'reorder_words',
+    english: 'This is a dog.',
+    chinese: '这是一只狗。',
+    tokens: ['is', 'This', 'dog', 'a'],
+    answer: ['This', 'is', 'a', 'dog'],
+    imageWordId: 2,
+  },
+  {
+    id: 'i-like-choose-apples',
+    patternId: 'i_like',
+    mode: 'choose_word',
+    english: 'I like apples.',
+    chinese: '我喜欢苹果。',
+    prompt: 'I like ___ .',
+    options: ['apples', 'blue', 'book'],
+    answer: 'apples',
+    imageWordId: 16,
+  },
+  {
+    id: 'i-like-match-dogs',
+    patternId: 'i_like',
+    mode: 'match_sentence',
+    english: 'I like dogs.',
+    chinese: '我喜欢狗。',
+    prompt: '选出意思对的句子',
+    options: ['I like dogs.', 'This is a dog.', 'I have a dog.'],
+    answer: 'I like dogs.',
+    imageWordId: 2,
+  },
+  {
+    id: 'i-like-order-bananas',
+    patternId: 'i_like',
+    mode: 'reorder_words',
+    english: 'I like bananas.',
+    chinese: '我喜欢香蕉。',
+    tokens: ['bananas', 'like', 'I'],
+    answer: ['I', 'like', 'bananas'],
+    imageWordId: 17,
+  },
+];
