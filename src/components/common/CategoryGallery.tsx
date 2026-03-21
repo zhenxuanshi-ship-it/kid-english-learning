@@ -71,11 +71,11 @@ export function CategoryGallery({ items, selectedCategory, onSelect }: CategoryG
 const styles: Record<string, CSSProperties> = {
   wrap: {
     background: '#fff',
-    borderRadius: 24,
-    padding: 18,
-    boxShadow: '0 12px 28px rgba(0,0,0,0.08)',
+    borderRadius: 22,
+    padding: 14,
+    boxShadow: '0 10px 22px rgba(0,0,0,0.08)',
     display: 'grid',
-    gap: 14,
+    gap: 12,
   },
   header: {
     display: 'flex',
@@ -100,8 +100,8 @@ const styles: Record<string, CSSProperties> = {
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-    gap: 10,
+    gridTemplateColumns: '1fr',
+    gap: 8,
   },
   card: {
     border: 'none',
