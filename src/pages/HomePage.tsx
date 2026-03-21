@@ -2,11 +2,13 @@ import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { CategoryGallery } from '../components/common/CategoryGallery';
 import { DailyPlanCard } from '../components/common/DailyPlanCard';
+import { NextTaskBanner } from '../components/common/NextTaskBanner';
 import { RecommendationCard } from '../components/common/RecommendationCard';
 import { ReviewQueueCard } from '../components/common/ReviewQueueCard';
 import { SettingsPanel } from '../components/common/SettingsPanel';
 import { StatsPanel } from '../components/common/StatsPanel';
 import type { DailyPlan } from '../lib/dailyPlan';
+import type { NextTaskRecommendation } from '../lib/nextTask';
 import type { HomeRecommendation } from '../lib/recommendation';
 import type { ReviewWordItem } from '../lib/review';
 import type { LearningStats } from '../lib/stats';
@@ -30,6 +32,7 @@ interface HomePageProps {
   recommendation: HomeRecommendation;
   reviewQueue: ReviewWordItem[];
   dailyPlan: DailyPlan;
+  nextTaskRecommendation: NextTaskRecommendation;
   completedDailyTaskKinds: string[];
   onStartReview: () => void;
   onStartTask: (task: DailyPlan['tasks'][number]) => void;
@@ -60,6 +63,7 @@ export function HomePage({
   recommendation,
   reviewQueue,
   dailyPlan,
+  nextTaskRecommendation,
   completedDailyTaskKinds,
   onStartReview,
   onStartTask,
@@ -108,6 +112,7 @@ export function HomePage({
       </motion.button>
 
       <StatsPanel stats={stats} />
+      <NextTaskBanner recommendation={nextTaskRecommendation} />
       <DailyPlanCard
         plan={dailyPlan}
         completedKinds={completedDailyTaskKinds}
