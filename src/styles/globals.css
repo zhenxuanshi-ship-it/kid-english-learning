@@ -1,0 +1,26 @@
+:root {
+  font-family: Inter, 'PingFang SC', system-ui, sans-serif;
+  color: #2d3436;
+  background: #f7f9fc;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff7f7 0%, #f7f9fc 100%);
+}
+
+button {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
