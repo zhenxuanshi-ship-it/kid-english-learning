@@ -20,4 +20,14 @@ describe('sentencePractice', () => {
     expect(pattern?.title).toBe('What is this?');
     expect(exercises).toHaveLength(3);
   });
+
+  it('surfaces imported Y2 words inside sentence exercises', () => {
+    const thisIs = getSentenceExercises('this_is').map((item) => item.english).join(' ');
+    const iLike = getSentenceExercises('i_like').map((item) => item.english).join(' ');
+    const iHave = getSentenceExercises('i_have').map((item) => item.english).join(' ');
+
+    expect(thisIs).toContain('zebra');
+    expect(iLike).toContain('watermelon');
+    expect(iHave).toContain('sticker');
+  });
 });
