@@ -14,6 +14,7 @@ describe('TopicsPage', () => {
       <TopicsPage
         items={items}
         selectedCategory="fruits"
+        sentenceRecommendedPattern={{ id: 'i_like', title: 'I like ...', description: '认识“我喜欢……”这种句子。', examples: ['I like apples.', 'I like dogs.'] }}
         onSelectCategory={vi.fn()}
         onStartTopic={onStartTopic}
         onOpenSentencePractice={vi.fn()}
