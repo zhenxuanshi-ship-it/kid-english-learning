@@ -8,6 +8,7 @@ import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { allWords, wordCategories } from '../data/words';
 import { getHomeRecommendation } from '../lib/recommendation';
+import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
 import type { GameMode } from '../types/question';
 
@@ -55,6 +56,7 @@ export default function App() {
 
   const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
   const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
+  const reviewQueue = useMemo(() => buildReviewQueue(allWords, wordProgressMap).slice(0, 5), [wordProgressMap]);
 
   const handleStart = () => {
     game.startRound(currentMode);
@@ -105,6 +107,7 @@ export default function App() {
             onToggleSoundEnabled={toggleSoundEnabled}
             stats={stats}
             recommendation={recommendation}
+            reviewQueue={reviewQueue}
           />
         ) : null}
 
