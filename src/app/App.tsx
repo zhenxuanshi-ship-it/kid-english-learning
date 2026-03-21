@@ -152,6 +152,11 @@ export default function App() {
     const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);
     return currentIndex >= 0 ? sentencePatterns[currentIndex + 1] : undefined;
   }, [sentenceGame.currentPatternId]);
+  const summarySentenceSuggestion = useMemo(() => {
+    const topicCategory = selectedCategory === 'all' ? recommendation.suggestedCategory : selectedCategory;
+    const linkedPatternIds = getSentencePatternIdsForCategory(topicCategory);
+    return linkedPatternIds.length > 0 ? getSentencePattern(linkedPatternIds[0]) : sentenceRecommendation.recommendedPattern;
+  }, [recommendation.suggestedCategory, selectedCategory, sentenceRecommendation.recommendedPattern]);
 
   const handleStart = (useRecommendationCategory = false) => {
     setCompletedTaskLabel(undefined);
@@ -426,6 +431,7 @@ export default function App() {
             completedTaskLabel={completedTaskLabel}
             completedTaskReward={completedTaskReward}
             nextTaskLabel={nextTaskRecommendation.nextLabel}
+            sentencePatternSuggestion={summarySentenceSuggestion}
             onRestart={() => {
               setCompletedTaskLabel(undefined);
               setCompletedTaskReward(undefined);
@@ -438,6 +444,7 @@ export default function App() {
             onGoTopics={handleGoTopics}
             onGoReview={handleGoReview}
             onGoNextTask={nextTaskRecommendation.nextLabel ? handleGoNextTask : undefined}
+            onGoSentencePractice={summarySentenceSuggestion ? () => handleStartSentencePattern(summarySentenceSuggestion.id) : undefined}
             stats={stats}
           />
         ) : null}

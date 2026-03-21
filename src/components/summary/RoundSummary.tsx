@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { allWords } from '../../data/words';
 import { StatsPanel } from '../common/StatsPanel';
 import type { LearningStats } from '../../lib/stats';
+import type { SentencePattern } from '../../types/sentence';
 
 interface RoundSummaryProps {
   correctCount: number;
@@ -12,16 +13,18 @@ interface RoundSummaryProps {
   completedTaskLabel?: string;
   completedTaskReward?: string;
   nextTaskLabel?: string;
+  sentencePatternSuggestion?: SentencePattern;
   onRestart: () => void;
   onRetryWrong: () => void;
   onGoHome: () => void;
   onGoTopics: () => void;
   onGoReview: () => void;
   onGoNextTask?: () => void;
+  onGoSentencePractice?: () => void;
   stats: LearningStats;
 }
 
-export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, completedTaskReward, nextTaskLabel, onRestart, onRetryWrong, onGoHome, onGoTopics, onGoReview, onGoNextTask, stats }: RoundSummaryProps) {
+export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, completedTaskReward, nextTaskLabel, sentencePatternSuggestion, onRestart, onRetryWrong, onGoHome, onGoTopics, onGoReview, onGoNextTask, onGoSentencePractice, stats }: RoundSummaryProps) {
   const wrongWords = wrongWordIds
     .map((id) => allWords.find((word) => word.id === id))
     .filter(Boolean);
@@ -60,6 +63,14 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, co
         <button style={styles.primary} onClick={onRestart}>再来一轮</button>
         {wrongWordIds.length > 0 ? <button style={styles.secondary} onClick={onRetryWrong}>复习错题</button> : null}
       </div>
+      {sentencePatternSuggestion && onGoSentencePractice ? (
+        <div style={styles.sentenceSuggestion}>
+          <div style={styles.sentenceSuggestionKicker}>🧩 下一步试试句子</div>
+          <div style={styles.sentenceSuggestionTitle}>{sentencePatternSuggestion.title}</div>
+          <div style={styles.sentenceSuggestionText}>刚学完这轮单词，现在可以顺手把它们放进小句子里。</div>
+          <button style={styles.sentenceSuggestionButton} onClick={onGoSentencePractice}>去练这个句型</button>
+        </div>
+      ) : null}
       <div style={styles.navBlock}>
         <div style={styles.navTitle}>下一步去哪？</div>
         <div style={styles.navGrid}>
@@ -142,6 +153,26 @@ const styles: Record<string, CSSProperties> = {
   text: { fontSize: 18, margin: '18px 0 8px', textAlign: 'center' },
   footer: { textAlign: 'center', color: '#7c8a90', marginTop: 16, fontWeight: 700 },
   actions: { display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginTop: 20 },
+  sentenceSuggestion: {
+    marginTop: 14,
+    display: 'grid',
+    gap: 8,
+    background: 'linear-gradient(135deg, #f4f1ff, #ffffff)',
+    borderRadius: 18,
+    padding: 14,
+    boxShadow: '0 8px 18px rgba(124,92,255,0.08)',
+  },
+  sentenceSuggestionKicker: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
+  sentenceSuggestionTitle: { fontSize: 20, fontWeight: 900, color: '#433880' },
+  sentenceSuggestionText: { fontSize: 13, fontWeight: 700, color: '#66757b' },
+  sentenceSuggestionButton: {
+    minHeight: 44,
+    border: 'none',
+    borderRadius: 16,
+    background: 'linear-gradient(135deg, #7c5cff, #9b83ff)',
+    color: '#fff',
+    fontWeight: 900,
+  },
   navBlock: {
     marginTop: 14,
     display: 'grid',
