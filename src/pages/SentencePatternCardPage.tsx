@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import type { SentencePattern } from '../types/sentence';
+import { trackEvent } from '../lib/telemetry';
 
 interface SentencePatternCardPageProps {
   pattern?: SentencePattern;
@@ -35,7 +36,18 @@ export function SentencePatternCardPage({ pattern, onStart, onBack }: SentencePa
         <div style={styles.tip}>小提醒：先大声读一遍，再开始做题，会更容易哦。</div>
 
         <div style={styles.actions}>
-          <button style={styles.primary} onClick={onStart}>开始练这个句型</button>
+          <button
+            style={styles.primary}
+            onClick={() => {
+              trackEvent('sentence_pattern_start_click', {
+                patternId: pattern.id,
+                patternTitle: pattern.title,
+              });
+              onStart();
+            }}
+          >
+            开始练这个句型
+          </button>
           <button style={styles.secondary} onClick={onBack}>回句式入口</button>
         </div>
       </div>

@@ -10,6 +10,7 @@ import type { HomeRecommendation } from '../lib/recommendation';
 import type { LearningStats } from '../lib/stats';
 import type { SentencePattern } from '../types/sentence';
 import type { GameMode } from '../types/question';
+import { trackEvent } from '../lib/telemetry';
 
 interface HomePageProps {
   mode: GameMode;
@@ -83,7 +84,17 @@ export function HomePage({
       </div>
 
       {(sentenceContinuePattern || sentenceRecommendedPattern) ? (
-        <button style={styles.sentenceCard} onClick={onOpenSentencePractice}>
+        <button
+          style={styles.sentenceCard}
+          onClick={() => {
+            trackEvent('home_sentence_card_click', {
+              patternId: (sentenceContinuePattern ?? sentenceRecommendedPattern)?.id,
+              patternTitle: (sentenceContinuePattern ?? sentenceRecommendedPattern)?.title,
+              source: sentenceContinuePattern ? 'continue' : 'recommend',
+            });
+            onOpenSentencePractice();
+          }}
+        >
           <div style={styles.sentenceKicker}>{sentenceContinuePattern ? '🧩 首页继续句型' : '🧩 首页推荐句型'}</div>
           <div style={styles.sentenceTitle}>{(sentenceContinuePattern ?? sentenceRecommendedPattern)?.title}</div>
           <div style={styles.sentenceDesc}>{sentenceContinuePattern ? '先把上次练到一半的句型接着完成。' : '今天先练一个最该上的句型。'}</div>

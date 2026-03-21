@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { CategoryGallery } from '../components/common/CategoryGallery';
 import type { CategoryGalleryItem } from '../lib/categoryGallery';
 import type { SentencePattern } from '../types/sentence';
+import { trackEvent } from '../lib/telemetry';
 
 interface TopicsPageProps {
   items: CategoryGalleryItem[];
@@ -23,7 +24,19 @@ export function TopicsPage({ items, selectedCategory, sentenceRecommendedPattern
           <div style={styles.switchTitle}>🧩 句式练习</div>
           <div style={styles.switchDesc}>{sentenceRecommendedPattern ? `和当前主题更搭的句型：${sentenceRecommendedPattern.title}` : '先练小句子，再把单词连起来用。'}</div>
         </div>
-        <button style={styles.switchButton} onClick={onOpenSentencePractice}>{sentenceRecommendedPattern ? '去练主题相关句型' : '进入句式练习'}</button>
+        <button
+          style={styles.switchButton}
+          onClick={() => {
+            trackEvent('topics_sentence_entry_click', {
+              patternId: sentenceRecommendedPattern?.id,
+              patternTitle: sentenceRecommendedPattern?.title,
+              selectedCategory,
+            });
+            onOpenSentencePractice();
+          }}
+        >
+          {sentenceRecommendedPattern ? '去练主题相关句型' : '进入句式练习'}
+        </button>
       </div>
       {selectedItem ? (
         <div style={styles.hero}>

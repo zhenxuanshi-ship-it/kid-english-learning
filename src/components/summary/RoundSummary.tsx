@@ -4,6 +4,7 @@ import { allWords } from '../../data/words';
 import { StatsPanel } from '../common/StatsPanel';
 import type { LearningStats } from '../../lib/stats';
 import type { SentencePattern } from '../../types/sentence';
+import { trackEvent } from '../../lib/telemetry';
 
 interface RoundSummaryProps {
   correctCount: number;
@@ -68,7 +69,18 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, co
           <div style={styles.sentenceSuggestionKicker}>🧩 结算页顺手练句子</div>
           <div style={styles.sentenceSuggestionTitle}>{sentencePatternSuggestion.title}</div>
           <div style={styles.sentenceSuggestionText}>刚学完这轮单词，马上用这个句型串起来会更容易记住。</div>
-          <button style={styles.sentenceSuggestionButton} onClick={onGoSentencePractice}>去练这个句型</button>
+          <button
+            style={styles.sentenceSuggestionButton}
+            onClick={() => {
+              trackEvent('summary_sentence_suggestion_click', {
+                patternId: sentencePatternSuggestion.id,
+                patternTitle: sentencePatternSuggestion.title,
+              });
+              onGoSentencePractice();
+            }}
+          >
+            去练这个句型
+          </button>
         </div>
       ) : null}
       <div style={styles.navBlock}>
