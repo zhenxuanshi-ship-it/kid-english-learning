@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
+import { CategoryGallery } from '../components/common/CategoryGallery';
 import { RecommendationCard } from '../components/common/RecommendationCard';
 import { ReviewQueueCard } from '../components/common/ReviewQueueCard';
 import { SettingsPanel } from '../components/common/SettingsPanel';
@@ -92,6 +93,7 @@ export function HomePage({
       </motion.button>
 
       <StatsPanel stats={stats} />
+      <CategoryGallery categories={categories} selectedCategory={selectedCategory} onSelect={onCategoryChange} />
       <ReviewQueueCard items={reviewQueue} onStartReview={onStartReview} />
 
       <SettingsPanel
