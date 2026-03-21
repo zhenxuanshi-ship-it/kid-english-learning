@@ -3,9 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "VITE_APP_VERSION=$npm_package_version tsc -b && VITE_APP_VERSION=$npm_package_version vite build",
     "preview": "vite preview",
     "test": "vitest run"
   },
