@@ -17,7 +17,7 @@ const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string
 
 export function HomePage({ mode, onModeChange, onStart, totalStars }: HomePageProps) {
   return (
-    <div style={styles.wrap}>
+    <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.heroCard}>
         <div style={styles.sparkles}>☁️ ⭐ ☁️</div>
         <div style={styles.hero}>儿童英语单词学习</div>
@@ -49,7 +49,7 @@ export function HomePage({ mode, onModeChange, onStart, totalStars }: HomePagePr
       <motion.button style={styles.start} onClick={onStart} whileTap={{ scale: 0.97 }} whileHover={{ y: -2 }}>
         开始学习 🚀
       </motion.button>
-    </div>
+    </motion.div>
   );
 }
 

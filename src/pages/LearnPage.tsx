@@ -1,11 +1,12 @@
 import type { CSSProperties } from 'react';
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { HeaderBar } from '../components/game/HeaderBar';
 import { WordCard } from '../components/game/WordCard';
 import { ChoiceOptions } from '../components/game/ChoiceOptions';
 import { LetterKeyboard } from '../components/game/LetterKeyboard';
 import { InputSlots } from '../components/game/InputSlots';
+import { CelebrationOverlay } from '../components/game/CelebrationOverlay';
 import type { GameMode } from '../types/question';
 import type { GameState } from '../types/game';
 
@@ -57,41 +58,54 @@ export function LearnPage({
   const question = state.currentQuestion;
   const showNext = Boolean(state.result || state.showAnswer);
   const answerText = state.showAnswer ? `答案：${state.currentWord.english}` : undefined;
+  const showCelebrate = state.result === 'correct';
 
   return (
     <div style={styles.wrap}>
+      <CelebrationOverlay show={showCelebrate} comboCount={state.comboCount} />
       <HeaderBar stars={state.stars} modeLabel={modeLabelMap[state.mode]} totalStars={totalStars} />
       <div style={styles.progressRow}>
         <div style={styles.progressText}>第 {Math.min(state.roundIndex + 1, state.roundTotal)} / {state.roundTotal} 题</div>
         <div style={styles.modeChip}>{mascotMap[state.mode]} {modeLabelMap[state.mode]}</div>
       </div>
-      <WordCard title={question.prompt} subtitle={answerText} status={state.result}>
-        {question.mode === 'e2c' ? null : (
-          <InputSlots
-            text={state.userInput}
-            answerLength={question.mode === 'c2e' ? question.answer.length : undefined}
-            pattern={question.mode === 'spell_blank' ? question.pattern : undefined}
-            missingIndexes={question.mode === 'spell_blank' ? question.missingIndexes : undefined}
-          />
-        )}
-      </WordCard>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${state.roundIndex}-${question.id}`}
+          initial={{ opacity: 0, y: 12, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -8, scale: 0.98 }}
+          transition={{ duration: 0.24 }}
+          style={styles.stage}
+        >
+          <WordCard title={question.prompt} subtitle={answerText} status={state.result}>
+            {question.mode === 'e2c' ? null : (
+              <InputSlots
+                text={state.userInput}
+                answerLength={question.mode === 'c2e' ? question.answer.length : undefined}
+                pattern={question.mode === 'spell_blank' ? question.pattern : undefined}
+                missingIndexes={question.mode === 'spell_blank' ? question.missingIndexes : undefined}
+              />
+            )}
+          </WordCard>
 
-      {question.mode === 'e2c' ? (
-        <ChoiceOptions
-          options={question.options}
-          selected={state.selectedOption}
-          answer={question.answer}
-          lockSelection={showNext}
-          onSelect={onSelectOption}
-        />
-      ) : (
-        <LetterKeyboard
-          letters={question.letterPool}
-          disabledLetters={disabledLetterIndexes}
-          onPick={onPickLetter}
-          onDelete={onDelete}
-        />
-      )}
+          {question.mode === 'e2c' ? (
+            <ChoiceOptions
+              options={question.options}
+              selected={state.selectedOption}
+              answer={question.answer}
+              lockSelection={showNext}
+              onSelect={onSelectOption}
+            />
+          ) : (
+            <LetterKeyboard
+              letters={question.letterPool}
+              disabledLetters={disabledLetterIndexes}
+              onPick={onPickLetter}
+              onDelete={onDelete}
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
 
       {state.feedbackMessage ? (
         <motion.div
@@ -125,7 +139,8 @@ export function LearnPage({
 }
 
 const styles: Record<string, CSSProperties> = {
-  wrap: { display: 'grid', gap: 18 },
+  wrap: { display: 'grid', gap: 18, position: 'relative' },
+  stage: { display: 'grid', gap: 18 },
   progressRow: {
     display: 'flex',
     justifyContent: 'space-between',

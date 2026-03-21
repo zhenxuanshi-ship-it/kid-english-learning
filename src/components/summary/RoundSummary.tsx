@@ -21,8 +21,8 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, on
       <div style={styles.hero}>🎉</div>
       <h1 style={styles.title}>本轮完成啦</h1>
       <div style={styles.scoreRow}>
-        <div style={styles.scoreBubble}><strong>{correctCount}</strong><span>答对题数</span></div>
-        <div style={{ ...styles.scoreBubble, ...styles.starBubble }}><strong>⭐ {stars}</strong><span>本轮星星</span></div>
+        <motion.div style={styles.scoreBubble} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}><strong>{correctCount}</strong><span>答对题数</span></motion.div>
+        <motion.div style={{ ...styles.scoreBubble, ...styles.starBubble }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}><strong>⭐ {stars}</strong><span>本轮星星</span></motion.div>
       </div>
       {wrongWords.length > 0 ? (
         <div style={styles.listWrap}>
