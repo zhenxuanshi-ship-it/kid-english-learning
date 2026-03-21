@@ -3,7 +3,9 @@ import type { DailyPlan } from '../../lib/dailyPlan';
 
 interface DailyPlanCardProps {
   plan: DailyPlan;
-  onStartTask: (mode: DailyPlan['tasks'][number]['mode']) => void;
+  completedKinds: string[];
+  onStartTask: (task: DailyPlan['tasks'][number]) => void;
+  onReset?: () => void;
 }
 
 const kindEmojiMap = {
@@ -12,21 +14,38 @@ const kindEmojiMap = {
   practice: '✏️',
 } as const;
 
-export function DailyPlanCard({ plan, onStartTask }: DailyPlanCardProps) {
+export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: DailyPlanCardProps) {
+  const completedCount = plan.tasks.filter((task) => completedKinds.includes(task.kind)).length;
+  const progressPercent = plan.tasks.length > 0 ? Math.round((completedCount / plan.tasks.length) * 100) : 0;
+
   return (
     <div style={styles.card}>
-      <div style={styles.title}>{plan.title}</div>
-      <div style={styles.summary}>{plan.summary}</div>
+      <div style={styles.header}>
+        <div>
+          <div style={styles.title}>{plan.title}</div>
+          <div style={styles.summary}>{plan.summary}</div>
+        </div>
+        {onReset ? <button style={styles.reset} onClick={onReset}>重置任务</button> : null}
+      </div>
+      <div style={styles.progressWrap}>
+        <div style={styles.progressText}>今日进度 {completedCount}/{plan.tasks.length}</div>
+        <div style={styles.progressTrack}><div style={{ ...styles.progressFill, width: `${progressPercent}%` }} /></div>
+      </div>
       <div style={styles.list}>
-        {plan.tasks.map((task) => (
-          <div key={`${task.kind}-${task.mode}`} style={styles.item}>
-            <div>
-              <div style={styles.itemTitle}>{kindEmojiMap[task.kind]} {task.label}</div>
-              <div style={styles.itemMeta}>约 {task.count} 个词 · 推荐模式 {task.mode}</div>
+        {plan.tasks.map((task) => {
+          const done = completedKinds.includes(task.kind);
+          return (
+            <div key={`${task.kind}-${task.mode}`} style={{ ...styles.item, ...(done ? styles.itemDone : {}) }}>
+              <div>
+                <div style={styles.itemTitle}>{kindEmojiMap[task.kind]} {task.label}</div>
+                <div style={styles.itemMeta}>约 {task.count} 个词 · 推荐模式 {task.mode}</div>
+              </div>
+              <button style={{ ...styles.button, ...(done ? styles.buttonDone : {}) }} onClick={() => onStartTask(task)}>
+                {done ? '再来一轮' : '开始'}
+              </button>
             </div>
-            <button style={styles.button} onClick={() => onStartTask(task.mode)}>开始</button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -41,8 +60,28 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid',
     gap: 14,
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
   title: { fontWeight: 900, fontSize: 18 },
   summary: { color: '#6b7a80', fontWeight: 700, fontSize: 14 },
+  reset: {
+    minHeight: 34,
+    padding: '0 12px',
+    border: 'none',
+    borderRadius: 999,
+    background: '#f3f7f8',
+    fontWeight: 800,
+    cursor: 'pointer',
+  },
+  progressWrap: { display: 'grid', gap: 8 },
+  progressText: { fontSize: 13, fontWeight: 800, color: '#617076' },
+  progressTrack: { height: 10, borderRadius: 999, background: '#eef3f5', overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 999, background: 'linear-gradient(135deg, #4ecdc4, #73ddd3)' },
   list: { display: 'grid', gap: 10 },
   item: {
     display: 'flex',
@@ -52,6 +91,9 @@ const styles: Record<string, CSSProperties> = {
     background: '#f7f9fc',
     borderRadius: 18,
     padding: '12px 14px',
+  },
+  itemDone: {
+    background: '#eefbf7',
   },
   itemTitle: { fontWeight: 800 },
   itemMeta: { marginTop: 4, color: '#7b8a90', fontSize: 13, fontWeight: 700 },
@@ -65,5 +107,8 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 900,
     cursor: 'pointer',
     flexShrink: 0,
+  },
+  buttonDone: {
+    background: '#7dcfb6',
   },
 };

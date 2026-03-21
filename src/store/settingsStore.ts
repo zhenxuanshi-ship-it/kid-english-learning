@@ -9,6 +9,7 @@ export interface SettingsState {
   selectedCategory: string;
   autoPlaySound: boolean;
   soundEnabled: boolean;
+  completedDailyTaskKinds: string[];
 }
 
 interface SettingsStore extends SettingsState {
@@ -17,6 +18,8 @@ interface SettingsStore extends SettingsState {
   setSelectedCategory: (category: string) => void;
   toggleAutoPlaySound: () => void;
   toggleSoundEnabled: () => void;
+  markDailyTaskDone: (kind: string) => void;
+  resetDailyTasks: () => void;
 }
 
 const initialState: SettingsState = {
@@ -24,6 +27,7 @@ const initialState: SettingsState = {
   selectedCategory: 'all',
   autoPlaySound: false,
   soundEnabled: false,
+  completedDailyTaskKinds: [],
 };
 
 function persist(state: SettingsState) {
@@ -37,7 +41,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     const safeCategory = data.selectedCategory === 'all' || wordCategories.includes(data.selectedCategory)
       ? data.selectedCategory
       : 'all';
-    set({ ...data, selectedCategory: safeCategory });
+    set({ ...data, selectedCategory: safeCategory, completedDailyTaskKinds: data.completedDailyTaskKinds ?? [] });
   },
   setRoundSize: (size) => {
     const next = { ...get(), roundSize: size };
@@ -57,6 +61,17 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   toggleSoundEnabled: () => {
     const next = { ...get(), soundEnabled: !get().soundEnabled };
     set({ soundEnabled: next.soundEnabled });
+    persist(next);
+  },
+  markDailyTaskDone: (kind) => {
+    const completedDailyTaskKinds = Array.from(new Set([...get().completedDailyTaskKinds, kind]));
+    const next = { ...get(), completedDailyTaskKinds };
+    set({ completedDailyTaskKinds });
+    persist(next);
+  },
+  resetDailyTasks: () => {
+    const next = { ...get(), completedDailyTaskKinds: [] };
+    set({ completedDailyTaskKinds: [] });
     persist(next);
   },
 }));

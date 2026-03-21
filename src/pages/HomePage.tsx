@@ -30,8 +30,10 @@ interface HomePageProps {
   recommendation: HomeRecommendation;
   reviewQueue: ReviewWordItem[];
   dailyPlan: DailyPlan;
+  completedDailyTaskKinds: string[];
   onStartReview: () => void;
-  onStartTask: (mode: GameMode) => void;
+  onStartTask: (task: DailyPlan['tasks'][number]) => void;
+  onResetDailyTasks: () => void;
 }
 
 const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
@@ -58,8 +60,10 @@ export function HomePage({
   recommendation,
   reviewQueue,
   dailyPlan,
+  completedDailyTaskKinds,
   onStartReview,
   onStartTask,
+  onResetDailyTasks,
 }: HomePageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -104,7 +108,12 @@ export function HomePage({
       </motion.button>
 
       <StatsPanel stats={stats} />
-      <DailyPlanCard plan={dailyPlan} onStartTask={onStartTask} />
+      <DailyPlanCard
+        plan={dailyPlan}
+        completedKinds={completedDailyTaskKinds}
+        onStartTask={onStartTask}
+        onReset={onResetDailyTasks}
+      />
       <CategoryGallery categories={categories} selectedCategory={selectedCategory} onSelect={onCategoryChange} />
       <ReviewQueueCard items={reviewQueue} onStartReview={onStartReview} />
 

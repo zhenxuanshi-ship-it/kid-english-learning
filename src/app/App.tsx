@@ -26,10 +26,13 @@ export default function App() {
   const selectedCategory = useSettingsStore((state) => state.selectedCategory);
   const autoPlaySound = useSettingsStore((state) => state.autoPlaySound);
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const completedDailyTaskKinds = useSettingsStore((state) => state.completedDailyTaskKinds);
   const setRoundSize = useSettingsStore((state) => state.setRoundSize);
   const setSelectedCategory = useSettingsStore((state) => state.setSelectedCategory);
   const toggleAutoPlaySound = useSettingsStore((state) => state.toggleAutoPlaySound);
   const toggleSoundEnabled = useSettingsStore((state) => state.toggleSoundEnabled);
+  const markDailyTaskDone = useSettingsStore((state) => state.markDailyTaskDone);
+  const resetDailyTasks = useSettingsStore((state) => state.resetDailyTasks);
   const [usedLetterIndexes, setUsedLetterIndexes] = useState<number[]>([]);
 
   useEffect(() => {
@@ -82,9 +85,10 @@ export default function App() {
     setScreen('learn');
   };
 
-  const handleStartTask = (mode: GameMode) => {
-    setMode(mode);
-    game.startRound(mode);
+  const handleStartTask = (task: { mode: GameMode; kind: string }) => {
+    setMode(task.mode);
+    markDailyTaskDone(task.kind);
+    game.startRound(task.mode);
     setUsedLetterIndexes([]);
     setScreen('learn');
   };
@@ -134,8 +138,10 @@ export default function App() {
             recommendation={recommendation}
             reviewQueue={reviewQueue}
             dailyPlan={dailyPlan}
+            completedDailyTaskKinds={completedDailyTaskKinds}
             onStartReview={handleStartReview}
             onStartTask={handleStartTask}
+            onResetDailyTasks={resetDailyTasks}
           />
         ) : null}
 
