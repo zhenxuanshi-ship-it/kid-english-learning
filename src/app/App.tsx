@@ -20,6 +20,7 @@ export default function App() {
   const [screen, setScreen] = useState<'home' | 'learn' | 'summary'>('home');
   const [completedTaskLabel, setCompletedTaskLabel] = useState<string | undefined>();
   const [completedTaskReward, setCompletedTaskReward] = useState<string | undefined>();
+  const [newlyCompletedTaskKind, setNewlyCompletedTaskKind] = useState<string | undefined>();
   const totalStars = useProgressStore((state) => state.totalStars);
   const currentMode = useProgressStore((state) => state.currentMode);
   const wordProgressMap = useProgressStore((state) => state.wordProgressMap);
@@ -64,6 +65,7 @@ export default function App() {
           markDailyTaskDone(activeDailyTaskKind);
           setCompletedTaskLabel(completedTask?.label);
           setCompletedTaskReward(`太棒啦！${completedTask?.label ?? '今日任务'}完成得很棒～`);
+          setNewlyCompletedTaskKind(activeDailyTaskKind);
         } else {
           setActiveDailyTask(undefined);
           setCompletedTaskLabel(undefined);
@@ -104,6 +106,7 @@ export default function App() {
   const handleStart = (useRecommendationCategory = false) => {
     setCompletedTaskLabel(undefined);
     setCompletedTaskReward(undefined);
+    setNewlyCompletedTaskKind(undefined);
     setActiveDailyTask(undefined);
     let startMode = currentMode;
     if (useRecommendationCategory && recommendation.suggestedCategory) {
@@ -121,6 +124,7 @@ export default function App() {
   const handleStartReview = () => {
     setCompletedTaskLabel(undefined);
     setCompletedTaskReward(undefined);
+    setNewlyCompletedTaskKind(undefined);
     setActiveDailyTask(undefined);
     const reviewWordIds = reviewQueue.map((item) => item.wordId);
     if (reviewWordIds.length === 0) return;
@@ -132,6 +136,7 @@ export default function App() {
   const handleStartTask = (task: { mode: GameMode; kind: 'new' | 'review' | 'practice' }) => {
     setCompletedTaskLabel(undefined);
     setCompletedTaskReward(undefined);
+    setNewlyCompletedTaskKind(undefined);
     setMode(task.mode);
     setActiveDailyTask(task.kind);
     game.startRound(task.mode);
@@ -142,6 +147,7 @@ export default function App() {
   const handleRetryWrong = () => {
     setCompletedTaskLabel(undefined);
     setCompletedTaskReward(undefined);
+    setNewlyCompletedTaskKind(undefined);
     setActiveDailyTask(undefined);
     game.startRound(currentMode, game.wrongWordIds);
     setUsedLetterIndexes([]);
@@ -190,6 +196,7 @@ export default function App() {
             dailySummary={dailySummary}
             nextTaskRecommendation={nextTaskRecommendation}
             completedDailyTaskKinds={completedDailyTaskKinds}
+            newlyCompletedTaskKind={newlyCompletedTaskKind}
             onStartReview={handleStartReview}
             onStartTask={handleStartTask}
             onResetDailyTasks={resetDailyTasks}
@@ -223,6 +230,7 @@ export default function App() {
             onRestart={() => {
               setCompletedTaskLabel(undefined);
               setCompletedTaskReward(undefined);
+              setNewlyCompletedTaskKind(undefined);
               game.resetRound();
               setScreen('home');
             }}

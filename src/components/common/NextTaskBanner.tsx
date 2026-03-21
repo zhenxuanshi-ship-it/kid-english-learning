@@ -3,11 +3,12 @@ import type { NextTaskRecommendation } from '../../lib/nextTask';
 
 interface NextTaskBannerProps {
   recommendation: NextTaskRecommendation;
+  highlight?: boolean;
 }
 
-export function NextTaskBanner({ recommendation }: NextTaskBannerProps) {
+export function NextTaskBanner({ recommendation, highlight = false }: NextTaskBannerProps) {
   return (
-    <div style={styles.card}>
+    <div style={{ ...styles.card, ...(highlight ? styles.cardHighlight : {}) }}>
       <div style={styles.title}>➡️ 下一项推荐</div>
       <div style={styles.message}>{recommendation.message}</div>
       {recommendation.nextLabel ? <div style={styles.tag}>{recommendation.nextLabel}</div> : null}
@@ -23,6 +24,10 @@ const styles: Record<string, CSSProperties> = {
     boxShadow: '0 10px 24px rgba(255, 107, 107, 0.08)',
     display: 'grid',
     gap: 8,
+  },
+  cardHighlight: {
+    boxShadow: '0 0 0 3px rgba(255, 230, 109, 0.35), 0 16px 30px rgba(255, 107, 107, 0.14)',
+    transform: 'translateY(-1px)',
   },
   title: { fontWeight: 900, fontSize: 16 },
   message: { color: '#5f6d73', fontWeight: 700, fontSize: 14 },

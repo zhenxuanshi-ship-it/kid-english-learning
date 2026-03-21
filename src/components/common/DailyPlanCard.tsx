@@ -5,6 +5,7 @@ import type { DailyPlan } from '../../lib/dailyPlan';
 interface DailyPlanCardProps {
   plan: DailyPlan;
   completedKinds: string[];
+  newlyCompletedKind?: string;
   onStartTask: (task: DailyPlan['tasks'][number]) => void;
   onReset?: () => void;
 }
@@ -15,7 +16,7 @@ const kindEmojiMap = {
   practice: '✏️',
 } as const;
 
-export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: DailyPlanCardProps) {
+export function DailyPlanCard({ plan, completedKinds, newlyCompletedKind, onStartTask, onReset }: DailyPlanCardProps) {
   const completedCount = plan.tasks.filter((task) => completedKinds.includes(task.kind)).length;
   const progressPercent = plan.tasks.length > 0 ? Math.round((completedCount / plan.tasks.length) * 100) : 0;
 
@@ -35,13 +36,14 @@ export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: Da
       <div style={styles.list}>
         {plan.tasks.map((task) => {
           const done = completedKinds.includes(task.kind);
+          const justCompleted = newlyCompletedKind === task.kind;
           return (
             <motion.div
               key={`${task.kind}-${task.mode}`}
-              style={{ ...styles.item, ...(done ? styles.itemDone : {}) }}
+              style={{ ...styles.item, ...(done ? styles.itemDone : {}), ...(justCompleted ? styles.itemJustDone : {}) }}
               initial={done ? { scale: 0.96, opacity: 0.88 } : false}
-              animate={done ? { scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
-              transition={{ duration: 0.22 }}
+              animate={justCompleted ? { scale: [0.96, 1.03, 1], opacity: 1 } : { scale: 1, opacity: 1 }}
+              transition={{ duration: 0.4 }}
             >
               <div style={styles.itemContent}>
                 <div style={styles.itemTitleRow}>
@@ -50,7 +52,7 @@ export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: Da
                   {done ? <div style={styles.donePlusOne}>+1 今日任务</div> : null}
                 </div>
                 <div style={styles.itemMeta}>约 {task.count} 个词 · 推荐模式 {task.mode}</div>
-                {done ? <div style={styles.rewardHint}>太棒啦，今天这项任务已经拿下啦！</div> : null}
+                {done ? <div style={styles.rewardHint}>{justCompleted ? '刚刚完成，太棒啦！继续冲呀～' : '太棒啦，今天这项任务已经拿下啦！'}</div> : null}
               </div>
               <button style={{ ...styles.button, ...(done ? styles.buttonDone : {}) }} onClick={() => onStartTask(task)}>
                 {done ? '再来一轮' : '开始'}
@@ -117,6 +119,9 @@ const styles: Record<string, CSSProperties> = {
   },
   itemDone: {
     background: '#eefbf7',
+  },
+  itemJustDone: {
+    boxShadow: '0 0 0 3px rgba(78, 205, 196, 0.22), 0 14px 28px rgba(78, 205, 196, 0.18)',
   },
   itemTitle: { fontWeight: 800 },
   doneBadge: {

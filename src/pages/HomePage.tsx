@@ -37,6 +37,7 @@ interface HomePageProps {
   dailySummary: DailySummary;
   nextTaskRecommendation: NextTaskRecommendation;
   completedDailyTaskKinds: string[];
+  newlyCompletedTaskKind?: string;
   onStartReview: () => void;
   onStartTask: (task: DailyPlan['tasks'][number]) => void;
   onResetDailyTasks: () => void;
@@ -69,6 +70,7 @@ export function HomePage({
   dailySummary,
   nextTaskRecommendation,
   completedDailyTaskKinds,
+  newlyCompletedTaskKind,
   onStartReview,
   onStartTask,
   onResetDailyTasks,
@@ -117,10 +119,11 @@ export function HomePage({
 
       <StatsPanel stats={stats} />
       <DailySummaryCard summary={dailySummary} />
-      <NextTaskBanner recommendation={nextTaskRecommendation} />
+      <NextTaskBanner recommendation={nextTaskRecommendation} highlight={Boolean(newlyCompletedTaskKind)} />
       <DailyPlanCard
         plan={dailyPlan}
         completedKinds={completedDailyTaskKinds}
+        newlyCompletedKind={newlyCompletedTaskKind}
         onStartTask={onStartTask}
         onReset={onResetDailyTasks}
       />
