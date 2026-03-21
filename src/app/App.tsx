@@ -59,10 +59,15 @@ export default function App() {
   const reviewQueue = useMemo(() => buildReviewQueue(allWords, wordProgressMap).slice(0, 5), [wordProgressMap]);
 
   const handleStart = (useRecommendationCategory = false) => {
+    let startMode = currentMode;
     if (useRecommendationCategory && recommendation.suggestedCategory) {
       setSelectedCategory(recommendation.suggestedCategory);
     }
-    game.startRound(currentMode);
+    if (recommendation.suggestedMode) {
+      setMode(recommendation.suggestedMode);
+      startMode = recommendation.suggestedMode;
+    }
+    game.startRound(startMode);
     setUsedLetterIndexes([]);
     setScreen('learn');
   };

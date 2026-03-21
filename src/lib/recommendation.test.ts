@@ -29,6 +29,7 @@ describe('getHomeRecommendation', () => {
     });
     expect(recommendation.focus).toBe('review');
     expect(recommendation.suggestedCategory).toBeTruthy();
+    expect(recommendation.suggestedMode).toBe('e2c');
   });
 
   it('recommends new words when there are no review words', () => {
@@ -37,6 +38,7 @@ describe('getHomeRecommendation', () => {
       stageCounts: { ...baseStats.stageCounts, new: 4 },
     });
     expect(recommendation.focus).toBe('new');
+    expect(recommendation.suggestedMode).toBe('e2c');
   });
 
   it('falls back to mixed practice when there is no obvious priority', () => {

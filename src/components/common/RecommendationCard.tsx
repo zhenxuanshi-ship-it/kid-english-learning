@@ -2,6 +2,12 @@ import type { CSSProperties } from 'react';
 import { getCategoryLabel } from '../../lib/category';
 import type { HomeRecommendation } from '../../lib/recommendation';
 
+const modeLabelMap = {
+  e2c: '英译中选择',
+  c2e: '中译英拼写',
+  spell_blank: '留空补全',
+} as const;
+
 interface RecommendationCardProps {
   recommendation: HomeRecommendation;
   onApplyCategory?: (category: string) => void;
@@ -24,10 +30,11 @@ export function RecommendationCard({ recommendation, onApplyCategory }: Recommen
         <div style={styles.content}>
           <div style={styles.title}>{recommendation.title}</div>
           <div style={styles.desc}>{recommendation.description}</div>
-          {recommendation.suggestedCategory ? (
+          {recommendation.suggestedCategory || recommendation.suggestedMode ? (
             <div style={styles.tagRow}>
-              <span style={styles.tag}>推荐主题：{getCategoryLabel(recommendation.suggestedCategory)}</span>
-              {onApplyCategory ? (
+              {recommendation.suggestedCategory ? <span style={styles.tag}>推荐主题：{getCategoryLabel(recommendation.suggestedCategory)}</span> : null}
+              {recommendation.suggestedMode ? <span style={styles.tag}>推荐方式：{modeLabelMap[recommendation.suggestedMode]}</span> : null}
+              {recommendation.suggestedCategory && onApplyCategory ? (
                 <button style={styles.action} onClick={() => onApplyCategory(recommendation.suggestedCategory!)}>
                   切到这个主题
                 </button>

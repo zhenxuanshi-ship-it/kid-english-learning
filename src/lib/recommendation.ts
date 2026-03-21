@@ -1,3 +1,4 @@
+import type { GameMode } from '../types/question';
 import type { LearningStats } from './stats';
 
 export interface HomeRecommendation {
@@ -5,6 +6,7 @@ export interface HomeRecommendation {
   description: string;
   focus: 'new' | 'review' | 'practice' | 'mixed';
   suggestedCategory?: string;
+  suggestedMode?: GameMode;
 }
 
 function getSuggestedCategory(stats: LearningStats, focus: HomeRecommendation['focus']): string | undefined {
@@ -28,6 +30,7 @@ export function getHomeRecommendation(stats: LearningStats): HomeRecommendation 
       description: `你有 ${stats.stageCounts.review} 个待复习词，先把容易忘的词捡回来。`,
       focus: 'review',
       suggestedCategory: getSuggestedCategory(stats, 'review'),
+      suggestedMode: 'e2c',
     };
   }
 
@@ -37,6 +40,7 @@ export function getHomeRecommendation(stats: LearningStats): HomeRecommendation 
       description: `还有 ${stats.stageCounts.new} 个新词没学，先从新内容开始。`,
       focus: 'new',
       suggestedCategory: getSuggestedCategory(stats, 'new'),
+      suggestedMode: 'e2c',
     };
   }
 
@@ -46,6 +50,7 @@ export function getHomeRecommendation(stats: LearningStats): HomeRecommendation 
       description: '有一些词还在学习中，继续练一下会更稳。',
       focus: 'practice',
       suggestedCategory: getSuggestedCategory(stats, 'practice'),
+      suggestedMode: 'c2e',
     };
   }
 
@@ -54,5 +59,6 @@ export function getHomeRecommendation(stats: LearningStats): HomeRecommendation 
     description: '当前没有明显积压内容，适合做一轮轻松复习。',
     focus: 'mixed',
     suggestedCategory: getSuggestedCategory(stats, 'mixed'),
+    suggestedMode: 'c2e',
   };
 }
