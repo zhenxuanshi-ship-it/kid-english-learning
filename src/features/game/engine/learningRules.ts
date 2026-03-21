@@ -60,3 +60,10 @@ export function getStagePriority(stage: LearningStage): number {
       return 99;
   }
 }
+
+export function resolveModeForStage(requestedMode: GameMode, progress?: WordProgress): GameMode {
+  if (!progress) return requestedMode === 'spell_blank' ? 'e2c' : requestedMode;
+  const allowedModes = getAllowedModes(progress);
+  if (allowedModes.includes(requestedMode)) return requestedMode;
+  return allowedModes[0] ?? 'e2c';
+}

@@ -73,8 +73,21 @@ describe('gameStore', () => {
   });
 
   it('shows answer after two wrong spelling attempts', () => {
+    useProgressStore.setState({
+      ...useProgressStore.getState(),
+      currentMode: 'c2e',
+      wordProgressMap: {
+        1: {
+          wordId: 1,
+          seenCount: 2,
+          correctCount: 2,
+          wrongCount: 0,
+          mastered: false,
+          learningStage: 'practicing',
+        },
+      },
+    });
     useGameStore.getState().startRound('c2e', [1, 2, 3, 4, 5]); // cat
-    useGameStore.getState().startPractice();
     const firstTry = ['x', 'y', 'z'];
     firstTry.forEach((letter) => useGameStore.getState().inputLetter(letter));
     expect(useGameStore.getState().showAnswer).toBe(false);
@@ -94,5 +107,15 @@ describe('gameStore', () => {
     const state = useGameStore.getState();
     expect(state.roundIndex).toBe(1);
     expect(state.currentWord?.id).not.toBe(firstWordId);
+  });
+
+  it('falls back to an allowed mode for new words when preferred mode is too hard', () => {
+    useProgressStore.getState().setMode('spell_blank');
+    useGameStore.getState().startRound('spell_blank', [1, 2, 3, 4, 5]);
+    expect(useGameStore.getState().isLearningCard).toBe(true);
+    useGameStore.getState().startPractice();
+    const state = useGameStore.getState();
+    expect(state.mode).toBe('e2c');
+    expect(state.currentQuestion?.mode).toBe('e2c');
   });
 });

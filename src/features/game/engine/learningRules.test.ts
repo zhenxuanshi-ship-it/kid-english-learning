@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getAllowedModes, getInitialLearningStage, getNextLearningStage, getStagePriority } from './learningRules';
+import { getAllowedModes, getInitialLearningStage, getNextLearningStage, getStagePriority, resolveModeForStage } from './learningRules';
 
 describe('learningRules', () => {
   it('returns new as initial stage', () => {
@@ -38,5 +38,17 @@ describe('learningRules', () => {
   it('defines review as highest priority and mastered as lowest', () => {
     expect(getStagePriority('review')).toBeLessThan(getStagePriority('learning'));
     expect(getStagePriority('mastered')).toBeGreaterThan(getStagePriority('practicing'));
+  });
+
+  it('falls back to an allowed mode when requested mode is not allowed', () => {
+    const mode = resolveModeForStage('spell_blank', {
+      wordId: 1,
+      seenCount: 0,
+      correctCount: 0,
+      wrongCount: 0,
+      mastered: false,
+      learningStage: 'new',
+    });
+    expect(mode).toBe('e2c');
   });
 });

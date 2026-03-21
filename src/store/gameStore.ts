@@ -3,6 +3,7 @@ import { allWords } from '../data/words';
 import { generateQuestion } from '../features/game/engine/questionGenerator';
 import { createPriorityRound } from '../features/game/engine/roundEngine';
 import { isSpellingCorrect } from '../features/game/engine/validators';
+import { resolveModeForStage } from '../features/game/engine/learningRules';
 import type { GameState } from '../types/game';
 import type { GameMode } from '../types/question';
 import { useProgressStore } from './progressStore';
@@ -41,9 +42,10 @@ const initialState: GameState = {
 
 function buildQuestion(mode: GameMode, wordId: number) {
   const word = allWords.find((item) => item.id === wordId) ?? null;
-  return word
-    ? { word, question: generateQuestion(word, mode, allWords) }
-    : { word: null, question: null };
+  if (!word) return { word: null, question: null, resolvedMode: mode };
+  const progress = useProgressStore.getState().wordProgressMap[wordId];
+  const resolvedMode = resolveModeForStage(mode, progress);
+  return { word, question: generateQuestion(word, resolvedMode, allWords), resolvedMode };
 }
 
 function shouldShowLearningCard(wordId: number): boolean {
@@ -63,7 +65,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       settings.selectedCategory,
     );
     const firstWordId = roundWordIds[0];
-    const { word, question } = buildQuestion(selectedMode, firstWordId);
+    const { word, question, resolvedMode } = buildQuestion(selectedMode, firstWordId);
     if (!word || !question) return;
 
     useProgressStore.getState().setMode(selectedMode);
@@ -72,7 +74,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       ...initialState,
-      mode: selectedMode,
+      mode: resolvedMode,
       roundWordIds,
       roundTotal: roundWordIds.length,
       currentWord: word,
@@ -83,9 +85,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   startPractice: () => {
     const state = get();
     if (!state.currentWord) return;
-    const { question } = buildQuestion(state.mode, state.currentWord.id);
+    const preferredMode = useProgressStore.getState().currentMode;
+    const { question, resolvedMode } = buildQuestion(preferredMode, state.currentWord.id);
     if (!question) return;
     set({
+      mode: resolvedMode,
       currentQuestion: question,
       isLearningCard: false,
       feedbackMessage: undefined,
@@ -257,11 +261,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const nextWordId = state.roundWordIds[nextIndex];
-    const { word, question } = buildQuestion(state.mode, nextWordId);
+    const preferredMode = useProgressStore.getState().currentMode;
+    const { word, question, resolvedMode } = buildQuestion(preferredMode, nextWordId);
     if (!word || !question) return;
     useProgressStore.getState().recordSeen(word.id);
     const isLearningCard = shouldShowLearningCard(word.id);
     set({
+      mode: resolvedMode,
       currentWord: word,
       currentQuestion: isLearningCard ? null : question,
       isLearningCard,
