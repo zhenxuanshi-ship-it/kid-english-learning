@@ -13,7 +13,7 @@ import type { GameMode } from '../types/question';
 interface HomePageProps {
   mode: GameMode;
   onModeChange: (mode: GameMode) => void;
-  onStart: () => void;
+  onStart: (useRecommendationCategory?: boolean) => void;
   totalStars: number;
   roundSize: number;
   selectedCategory: string;
@@ -88,7 +88,12 @@ export function HomePage({
           </motion.button>
         ))}
       </div>
-      <motion.button style={styles.start} onClick={onStart} whileTap={{ scale: 0.97 }} whileHover={{ y: -2 }}>
+      <motion.button
+        style={styles.start}
+        onClick={() => onStart(Boolean(recommendation.suggestedCategory && selectedCategory === 'all'))}
+        whileTap={{ scale: 0.97 }}
+        whileHover={{ y: -2 }}
+      >
         {recommendation.focus === 'review' ? '开始复习 🔁' : recommendation.focus === 'new' ? '学习新词 🆕' : '开始学习 🚀'}
       </motion.button>
 
