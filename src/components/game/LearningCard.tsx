@@ -1,22 +1,22 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
+import { WordVisual } from '../common/WordVisual';
+import type { Word } from '../../types/word';
 
 interface LearningCardProps {
-  english: string;
-  chinese: string;
-  emoji?: string;
+  word: Word;
   soundEnabled: boolean;
   onSpeak: () => void;
   onStart: () => void;
 }
 
-export function LearningCard({ english, chinese, emoji, soundEnabled, onSpeak, onStart }: LearningCardProps) {
+export function LearningCard({ word, soundEnabled, onSpeak, onStart }: LearningCardProps) {
   return (
     <motion.div style={styles.card} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.badge}>新单词先认识一下</div>
-      <div style={styles.hero}>{emoji ?? '📚'}</div>
-      <div style={styles.english}>{english}</div>
-      <div style={styles.chinese}>{chinese}</div>
+      <div style={styles.visualWrap}><WordVisual word={word} size="lg" /></div>
+      <div style={styles.english}>{word.english}</div>
+      <div style={styles.chinese}>{word.chinese}</div>
       <button style={{ ...styles.secondary, opacity: soundEnabled ? 1 : 0.7 }} onClick={onSpeak}>🔊 读一遍</button>
       <button style={styles.primary} onClick={onStart}>我记住了，开始练习</button>
     </motion.div>
@@ -42,7 +42,7 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 900,
     fontSize: 14,
   },
-  hero: { fontSize: 46 },
+  visualWrap: { display: 'grid', placeItems: 'center' },
   english: { fontSize: 36, fontWeight: 900, letterSpacing: 1 },
   chinese: { fontSize: 22, fontWeight: 800, color: '#636e72' },
   secondary: {

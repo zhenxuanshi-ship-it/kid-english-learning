@@ -1,15 +1,17 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { WordVisual } from '../common/WordVisual';
+import type { Word } from '../../types/word';
 
 interface WordCardProps {
   title: string;
   subtitle?: string;
-  emoji?: string;
+  word: Word;
   children?: ReactNode;
   status?: 'correct' | 'wrong' | null;
 }
 
-export function WordCard({ title, subtitle, emoji, children, status = null }: WordCardProps) {
+export function WordCard({ title, subtitle, word, children, status = null }: WordCardProps) {
   return (
     <motion.div
       style={{ ...styles.card, ...(status ? styles[status] : {}) }}
@@ -19,7 +21,7 @@ export function WordCard({ title, subtitle, emoji, children, status = null }: Wo
       <div style={styles.badge}>{status === 'correct' ? '太棒啦!' : status === 'wrong' ? '再试试～' : '今日单词'}</div>
       <div style={styles.emojiRow}>
         <span>🌟</span>
-        <span style={styles.icon}>{emoji ?? (status === 'correct' ? '🐣' : status === 'wrong' ? '🐻' : '🦊')}</span>
+        <WordVisual word={word} size="md" />
         <span>☁️</span>
       </div>
       <div style={styles.title}>{title}</div>
@@ -60,10 +62,6 @@ const styles: Record<string, CSSProperties> = {
     alignItems: 'center',
     fontSize: 24,
     opacity: 0.9,
-  },
-  icon: {
-    fontSize: 52,
-    lineHeight: 1,
   },
   title: {
     fontSize: 34,
