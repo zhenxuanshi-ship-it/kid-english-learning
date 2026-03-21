@@ -18,6 +18,7 @@ import type { GameMode } from '../types/question';
 
 export default function App() {
   const [screen, setScreen] = useState<'home' | 'learn' | 'summary'>('home');
+  const [completedTaskLabel, setCompletedTaskLabel] = useState<string | undefined>();
   const totalStars = useProgressStore((state) => state.totalStars);
   const currentMode = useProgressStore((state) => state.currentMode);
   const wordProgressMap = useProgressStore((state) => state.wordProgressMap);
@@ -45,20 +46,35 @@ export default function App() {
     hydrateSettings();
   }, [hydrate, hydrateSettings]);
 
+  const correctCount = useMemo(
+    () => game.completedWordIds.length - game.wrongWordIds.length + (game.result === 'correct' ? 1 : 0),
+    [game.completedWordIds.length, game.result, game.wrongWordIds.length],
+  );
+
+  const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
+  const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
+  const dailyPlan = useMemo(() => buildDailyPlan(stats), [stats]);
+
   useEffect(() => {
     if (!game.currentQuestion && !game.isLearningCard && screen === 'learn' && game.roundWordIds.length > 0) {
       if (activeDailyTaskKind) {
+        const completedTask = dailyPlan.tasks.find((task) => task.kind === activeDailyTaskKind);
         if (didCompleteDailyTask(activeDailyTaskKind, game.completedWordIds, game.roundStartStages)) {
           markDailyTaskDone(activeDailyTaskKind);
+          setCompletedTaskLabel(completedTask?.label);
         } else {
           setActiveDailyTask(undefined);
+          setCompletedTaskLabel(undefined);
         }
+      } else {
+        setCompletedTaskLabel(undefined);
       }
       setScreen('summary');
       setUsedLetterIndexes([]);
     }
   }, [
     activeDailyTaskKind,
+    dailyPlan.tasks,
     game.completedWordIds,
     game.currentQuestion,
     game.isLearningCard,
@@ -74,15 +90,6 @@ export default function App() {
       setUsedLetterIndexes([]);
     }
   }, [game.attemptCount, game.result, game.showAnswer, game.userInput.length, screen]);
-
-  const correctCount = useMemo(
-    () => game.completedWordIds.length - game.wrongWordIds.length + (game.result === 'correct' ? 1 : 0),
-    [game.completedWordIds.length, game.result, game.wrongWordIds.length],
-  );
-
-  const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
-  const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
-  const dailyPlan = useMemo(() => buildDailyPlan(stats), [stats]);
   const dailySummary = useMemo(() => buildDailySummary(completedDailyTaskKinds, stats), [completedDailyTaskKinds, stats]);
   const nextTaskRecommendation = useMemo(
     () => getNextTaskRecommendation(dailyPlan, completedDailyTaskKinds),
@@ -91,6 +98,7 @@ export default function App() {
   const reviewQueue = useMemo(() => buildReviewQueue(allWords, wordProgressMap).slice(0, 5), [wordProgressMap]);
 
   const handleStart = (useRecommendationCategory = false) => {
+    setCompletedTaskLabel(undefined);
     setActiveDailyTask(undefined);
     let startMode = currentMode;
     if (useRecommendationCategory && recommendation.suggestedCategory) {
@@ -106,6 +114,7 @@ export default function App() {
   };
 
   const handleStartReview = () => {
+    setCompletedTaskLabel(undefined);
     setActiveDailyTask(undefined);
     const reviewWordIds = reviewQueue.map((item) => item.wordId);
     if (reviewWordIds.length === 0) return;
@@ -115,6 +124,7 @@ export default function App() {
   };
 
   const handleStartTask = (task: { mode: GameMode; kind: 'new' | 'review' | 'practice' }) => {
+    setCompletedTaskLabel(undefined);
     setMode(task.mode);
     setActiveDailyTask(task.kind);
     game.startRound(task.mode);
@@ -123,6 +133,7 @@ export default function App() {
   };
 
   const handleRetryWrong = () => {
+    setCompletedTaskLabel(undefined);
     setActiveDailyTask(undefined);
     game.startRound(currentMode, game.wrongWordIds);
     setUsedLetterIndexes([]);
@@ -199,7 +210,9 @@ export default function App() {
             roundTotal={game.roundTotal}
             stars={game.stars}
             wrongWordIds={game.wrongWordIds}
+            completedTaskLabel={completedTaskLabel}
             onRestart={() => {
+              setCompletedTaskLabel(undefined);
               game.resetRound();
               setScreen('home');
             }}

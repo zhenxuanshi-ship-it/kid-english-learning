@@ -9,12 +9,13 @@ interface RoundSummaryProps {
   roundTotal: number;
   stars: number;
   wrongWordIds: number[];
+  completedTaskLabel?: string;
   onRestart: () => void;
   onRetryWrong: () => void;
   stats: LearningStats;
 }
 
-export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, onRestart, onRetryWrong, stats }: RoundSummaryProps) {
+export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, onRestart, onRetryWrong, stats }: RoundSummaryProps) {
   const wrongWords = wrongWordIds
     .map((id) => allWords.find((word) => word.id === id))
     .filter(Boolean);
@@ -27,6 +28,7 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, on
         <motion.div style={styles.scoreBubble} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}><strong>{correctCount}</strong><span>答对题数</span></motion.div>
         <motion.div style={{ ...styles.scoreBubble, ...styles.starBubble }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}><strong>⭐ {stars}</strong><span>本轮星星</span></motion.div>
       </div>
+      {completedTaskLabel ? <div style={styles.taskBadge}>✅ 已推进今日任务：{completedTaskLabel}</div> : null}
       {wrongWords.length > 0 ? (
         <div style={styles.listWrap}>
           <h3 style={styles.listTitle}>这些单词可以再练一练</h3>
@@ -70,6 +72,15 @@ const styles: Record<string, CSSProperties> = {
   starBubble: {
     background: '#fff3bd',
     color: '#7d5a00',
+  },
+  taskBadge: {
+    marginTop: 18,
+    padding: '12px 14px',
+    borderRadius: 18,
+    background: '#ecfff7',
+    color: '#157a6e',
+    fontWeight: 900,
+    textAlign: 'center',
   },
   listWrap: { marginTop: 20, fontSize: 16 },
   listTitle: { marginBottom: 12 },
