@@ -6,13 +6,15 @@ import { RoundSummary } from '../components/summary/RoundSummary';
 import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
-import { wordCategories } from '../data/words';
+import { allWords, wordCategories } from '../data/words';
+import { buildLearningStats } from '../lib/stats';
 import type { GameMode } from '../types/question';
 
 export default function App() {
   const [screen, setScreen] = useState<'home' | 'learn' | 'summary'>('home');
   const totalStars = useProgressStore((state) => state.totalStars);
   const currentMode = useProgressStore((state) => state.currentMode);
+  const wordProgressMap = useProgressStore((state) => state.wordProgressMap);
   const hydrate = useProgressStore((state) => state.hydrate);
   const setMode = useProgressStore((state) => state.setMode);
   const game = useGameStore();
@@ -49,6 +51,8 @@ export default function App() {
     () => game.completedWordIds.length - game.wrongWordIds.length + (game.result === 'correct' ? 1 : 0),
     [game.completedWordIds.length, game.result, game.wrongWordIds.length],
   );
+
+  const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
 
   const handleStart = () => {
     game.startRound(currentMode);
@@ -97,6 +101,7 @@ export default function App() {
             onCategoryChange={setSelectedCategory}
             onToggleAutoPlaySound={toggleAutoPlaySound}
             onToggleSoundEnabled={toggleSoundEnabled}
+            stats={stats}
           />
         ) : null}
 
@@ -124,6 +129,7 @@ export default function App() {
               setScreen('home');
             }}
             onRetryWrong={handleRetryWrong}
+            stats={stats}
           />
         ) : null}
       </div>

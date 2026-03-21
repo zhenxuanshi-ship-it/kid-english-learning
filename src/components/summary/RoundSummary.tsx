@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { allWords } from '../../data/words';
+import { StatsPanel } from '../common/StatsPanel';
+import type { LearningStats } from '../../lib/stats';
 
 interface RoundSummaryProps {
   correctCount: number;
@@ -9,9 +11,10 @@ interface RoundSummaryProps {
   wrongWordIds: number[];
   onRestart: () => void;
   onRetryWrong: () => void;
+  stats: LearningStats;
 }
 
-export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, onRestart, onRetryWrong }: RoundSummaryProps) {
+export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, onRestart, onRetryWrong, stats }: RoundSummaryProps) {
   const wrongWords = wrongWordIds
     .map((id) => allWords.find((word) => word.id === id))
     .filter(Boolean);
@@ -37,6 +40,7 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, on
         <p style={styles.text}>太棒了，这轮全对！你已经把这 5 题都拿下啦 ✨</p>
       )}
       <div style={styles.footer}>本轮一共 {roundTotal} 题，慢慢学也很厉害。</div>
+      <StatsPanel stats={stats} compact />
       <div style={styles.actions}>
         <button style={styles.primary} onClick={onRestart}>再来一轮</button>
         {wrongWordIds.length > 0 ? <button style={styles.secondary} onClick={onRetryWrong}>复习错题</button> : null}

@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { SettingsPanel } from '../components/common/SettingsPanel';
+import { StatsPanel } from '../components/common/StatsPanel';
+import type { LearningStats } from '../lib/stats';
 import type { GameMode } from '../types/question';
 
 interface HomePageProps {
@@ -17,6 +19,7 @@ interface HomePageProps {
   onCategoryChange: (category: string) => void;
   onToggleAutoPlaySound: () => void;
   onToggleSoundEnabled: () => void;
+  stats: LearningStats;
 }
 
 const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
@@ -39,6 +42,7 @@ export function HomePage({
   onCategoryChange,
   onToggleAutoPlaySound,
   onToggleSoundEnabled,
+  stats,
 }: HomePageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -73,6 +77,8 @@ export function HomePage({
       <motion.button style={styles.start} onClick={onStart} whileTap={{ scale: 0.97 }} whileHover={{ y: -2 }}>
         开始学习 🚀
       </motion.button>
+
+      <StatsPanel stats={stats} />
 
       <SettingsPanel
         roundSize={roundSize}
