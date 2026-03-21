@@ -9,4 +9,9 @@ describe('word resources', () => {
   it('includes a growing sample set of real image-backed words', () => {
     expect(allWords.filter((word) => Boolean(word.imageUrl)).length).toBeGreaterThanOrEqual(30);
   });
+
+  it('includes newly imported step-1 words from the Y2 plan', () => {
+    const importedWords = ['zebra', 'watermelon', 'crayon', 'classroom', 'umbrella', 'puddle'];
+    expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
+  });
 });

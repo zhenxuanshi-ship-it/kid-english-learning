@@ -150,6 +150,13 @@ export const allWords: Word[] = [
   { id: 106, english: 'cold', chinese: '冷', category: 'weather', level: 1, difficulty: 1, emoji: '🥶' },
   { id: 107, english: 'storm', chinese: '暴风雨', category: 'weather', level: 3, difficulty: 3, emoji: '⛈️' },
   { id: 108, english: 'rainbow', chinese: '彩虹', category: 'weather', level: 3, difficulty: 3, emoji: '🌈', imageUrl: rainbowImage },
+
+  { id: 109, english: 'zebra', chinese: '斑马', category: 'animals', level: 2, difficulty: 2, emoji: '🦓' },
+  { id: 110, english: 'watermelon', chinese: '西瓜', category: 'fruits', level: 2, difficulty: 2, emoji: '🍉' },
+  { id: 111, english: 'crayon', chinese: '蜡笔', category: 'school', level: 2, difficulty: 2, emoji: '🖍️' },
+  { id: 112, english: 'classroom', chinese: '教室', category: 'school', level: 2, difficulty: 2, emoji: '🏫' },
+  { id: 113, english: 'umbrella', chinese: '伞', category: 'weather', level: 2, difficulty: 2, emoji: '☂️' },
+  { id: 114, english: 'puddle', chinese: '水坑', category: 'weather', level: 2, difficulty: 2, emoji: '🫧' },
 ];
 
 export const wordCategories = Array.from(new Set(allWords.map((word) => word.category)));
