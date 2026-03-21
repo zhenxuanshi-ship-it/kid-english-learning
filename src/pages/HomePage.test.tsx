@@ -6,15 +6,10 @@ describe('HomePage', () => {
   const baseProps = {
     mode: 'e2c' as const,
     totalStars: 5,
-    roundSize: 5,
-    selectedCategory: 'all',
-    categories: ['animals', 'fruits'],
     categoryItems: [
       { category: 'animals', label: '动物', total: 15, learned: 6, mastered: 1, progressPercent: 40, featuredWord: 'cat', featuredChinese: '猫', featuredVisual: { id: 1, english: 'cat', chinese: '猫', category: 'animals', level: 1 as const, difficulty: 1, emoji: '🐱' }, tagline: '认识可爱小动物朋友', recommendation: '已经学了 6 个，再看看 cat' },
       { category: 'fruits', label: '水果', total: 10, learned: 2, mastered: 0, progressPercent: 20, featuredWord: 'apple', featuredChinese: '苹果', featuredVisual: { id: 16, english: 'apple', chinese: '苹果', category: 'fruits', level: 2 as const, difficulty: 2, emoji: '🍎' }, tagline: '一起逛逛水果乐园', recommendation: '已经学了 2 个，再看看 apple' },
     ],
-    autoPlaySound: false,
-    soundEnabled: false,
     stats: {
       totalWords: 100,
       learnedWords: 20,
@@ -34,7 +29,6 @@ describe('HomePage', () => {
       suggestedCategory: 'animals',
       suggestedMode: 'e2c' as const,
     },
-    reviewQueue: [],
     dailyPlan: {
       title: '今日学习任务',
       summary: 'summary',
@@ -58,26 +52,23 @@ describe('HomePage', () => {
     completedDailyTaskKinds: [],
     onModeChange: vi.fn(),
     onStart: vi.fn(),
-    onRoundSizeChange: vi.fn(),
-    onCategoryChange: vi.fn(),
-    onToggleAutoPlaySound: vi.fn(),
-    onToggleSoundEnabled: vi.fn(),
-    onStartReview: vi.fn(),
+    onOpenTopics: vi.fn(),
+    onOpenReview: vi.fn(),
     onStartTask: vi.fn(),
     onResetDailyTasks: vi.fn(),
   };
 
-  it('renders recommendation, daily plan and category gallery', () => {
+  it('renders a short home with task hub and quick entries', () => {
     render(<HomePage {...baseProps} />);
-    expect(screen.getByText('今日学习任务')).toBeInTheDocument();
-    expect(screen.getByText('➡️ 下一项推荐')).toBeInTheDocument();
-    expect(screen.getByText('🎒 主题入口')).toBeInTheDocument();
+    expect(screen.getByText('继续今日任务')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /主题学习/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /复习错题/ })).toBeInTheDocument();
   });
 
-  it('calls onStart when start button is clicked', () => {
-    const onStart = vi.fn();
-    render(<HomePage {...baseProps} onStart={onStart} />);
-    fireEvent.click(screen.getByRole('button', { name: /开始复习|学习新词|开始学习/ }));
-    expect(onStart).toHaveBeenCalled();
+  it('opens topics entry when topics shortcut is clicked', () => {
+    const onOpenTopics = vi.fn();
+    render(<HomePage {...baseProps} onOpenTopics={onOpenTopics} />);
+    fireEvent.click(screen.getByRole('button', { name: /主题学习/ }));
+    expect(onOpenTopics).toHaveBeenCalled();
   });
 });

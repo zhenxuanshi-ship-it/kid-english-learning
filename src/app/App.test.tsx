@@ -73,10 +73,11 @@ describe('App task flow integration', () => {
     expect(screen.getAllByRole('button', { name: '开始' }).length).toBeGreaterThan(0);
   });
 
-  it('applies recommendation category when user has not chosen a specific category', () => {
+  it('opens topic area with recommended category context when user has not chosen a specific category', () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole('button', { name: '切到这个主题' }));
-    expect(screen.getByRole('button', { name: /动物/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /主题学习/ }));
+    expect(screen.getByText('今日推荐主题')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '开始这个主题' })).toBeInTheDocument();
   });
 });

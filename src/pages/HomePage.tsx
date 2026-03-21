@@ -1,19 +1,14 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { CategoryGallery } from '../components/common/CategoryGallery';
 import { DailyPlanCard } from '../components/common/DailyPlanCard';
 import { DailySummaryCard } from '../components/common/DailySummaryCard';
 import { NextTaskBanner } from '../components/common/NextTaskBanner';
 import { RecommendationCard } from '../components/common/RecommendationCard';
-import { ReviewQueueCard } from '../components/common/ReviewQueueCard';
-import { SettingsPanel } from '../components/common/SettingsPanel';
-import { StatsPanel } from '../components/common/StatsPanel';
 import type { CategoryGalleryItem } from '../lib/categoryGallery';
 import type { DailyPlan } from '../lib/dailyPlan';
 import type { DailySummary } from '../lib/dailySummary';
 import type { NextTaskRecommendation } from '../lib/nextTask';
 import type { HomeRecommendation } from '../lib/recommendation';
-import type { ReviewWordItem } from '../lib/review';
 import type { LearningStats } from '../lib/stats';
 import type { GameMode } from '../types/question';
 
@@ -21,108 +16,80 @@ interface HomePageProps {
   mode: GameMode;
   onModeChange: (mode: GameMode) => void;
   onStart: (useRecommendationCategory?: boolean) => void;
+  onOpenTopics: () => void;
+  onOpenReview: () => void;
   totalStars: number;
-  roundSize: number;
-  selectedCategory: string;
-  categories: string[];
   categoryItems: CategoryGalleryItem[];
-  autoPlaySound: boolean;
-  soundEnabled: boolean;
-  onRoundSizeChange: (size: number) => void;
-  onCategoryChange: (category: string) => void;
-  onToggleAutoPlaySound: () => void;
-  onToggleSoundEnabled: () => void;
   stats: LearningStats;
   recommendation: HomeRecommendation;
-  reviewQueue: ReviewWordItem[];
   dailyPlan: DailyPlan;
   dailySummary: DailySummary;
   nextTaskRecommendation: NextTaskRecommendation;
   completedDailyTaskKinds: string[];
   newlyCompletedTaskKind?: string;
-  onStartReview: () => void;
   onStartTask: (task: DailyPlan['tasks'][number]) => void;
   onResetDailyTasks: () => void;
 }
 
-const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
-  { value: 'e2c', label: '英译中选择', emoji: '🌈', desc: '看英文，选中文', color: '#4ECDC4' },
-  { value: 'c2e', label: '中译英拼写', emoji: '✏️', desc: '看中文，拼英文', color: '#FF6B6B' },
-  { value: 'spell_blank', label: '留空补全', emoji: '🧩', desc: '补上缺失字母', color: '#FFE66D' },
-];
+const modeLabelMap: Record<GameMode, string> = {
+  e2c: '英译中选择',
+  c2e: '中译英拼写',
+  spell_blank: '留空补全',
+};
 
 export function HomePage({
   mode,
-  onModeChange,
   onStart,
+  onOpenTopics,
+  onOpenReview,
   totalStars,
-  roundSize,
-  selectedCategory,
-  categories,
   categoryItems,
-  autoPlaySound,
-  soundEnabled,
-  onRoundSizeChange,
-  onCategoryChange,
-  onToggleAutoPlaySound,
-  onToggleSoundEnabled,
   stats,
   recommendation,
-  reviewQueue,
   dailyPlan,
   dailySummary,
   nextTaskRecommendation,
   completedDailyTaskKinds,
   newlyCompletedTaskKind,
-  onStartReview,
   onStartTask,
   onResetDailyTasks,
 }: HomePageProps) {
+  const featuredTopic = categoryItems.find((item) => item.category === recommendation.suggestedCategory) ?? categoryItems[0];
+
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.heroCard}>
         <div style={styles.sparkles}>☁️ ⭐ ☁️</div>
-        <div style={styles.hero}>儿童英语单词学习</div>
-        <div style={styles.sub}>一轮 5 题，轻轻松松学单词</div>
-        <div style={styles.starPanel}>🌟 已经收集了 <strong>{totalStars}</strong> 颗星星</div>
-        <div style={styles.pathTip}>今天有 {stats.stageCounts.new} 个新词、{stats.stageCounts.review} 个待复习词</div>
+        <div style={styles.hero}>今天继续学一点点</div>
+        <div style={styles.sub}>把任务做清楚，比把页面堆很长更重要。</div>
+        <div style={styles.starPanel}>🌟 已收集 <strong>{totalStars}</strong> 颗星星</div>
+        <div style={styles.pathTip}>推荐方式：{modeLabelMap[mode]} · 新词 {stats.stageCounts.new} 个</div>
       </div>
 
-      <RecommendationCard recommendation={recommendation} onApplyCategory={onCategoryChange} />
-
-      <div style={styles.sectionTitle}>选择今天的学习模式</div>
-      <div style={styles.grid}>
-        {modes.map((item, index) => (
-          <motion.button
-            key={item.value}
-            style={{ ...styles.modeCard, ...(mode === item.value ? styles.active : {}), borderColor: mode === item.value ? item.color : 'transparent' }}
-            onClick={() => onModeChange(item.value)}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.06 }}
-          >
-            <div style={styles.modeHead}>
-              <div style={styles.emoji}>{item.emoji}</div>
-              <div style={{ ...styles.dot, background: item.color }} />
-            </div>
-            <div style={styles.modeLabel}>{item.label}</div>
-            <div style={styles.modeDesc}>{item.desc}</div>
-          </motion.button>
-        ))}
+      <div style={styles.primaryCard}>
+        <div style={styles.primaryHeader}>
+          <div>
+            <div style={styles.sectionKicker}>今日主线</div>
+            <div style={styles.primaryTitle}>继续今日任务</div>
+          </div>
+          <button style={styles.primaryButton} onClick={() => onStart(Boolean(recommendation.suggestedCategory))}>开始</button>
+        </div>
+        <NextTaskBanner recommendation={nextTaskRecommendation} highlight={Boolean(newlyCompletedTaskKind)} />
       </div>
-      <motion.button
-        style={styles.start}
-        onClick={() => onStart(Boolean(recommendation.suggestedCategory && selectedCategory === 'all'))}
-        whileTap={{ scale: 0.97 }}
-        whileHover={{ y: -2 }}
-      >
-        {recommendation.focus === 'review' ? '开始复习 🔁' : recommendation.focus === 'new' ? '学习新词 🆕' : '开始学习 🚀'}
-      </motion.button>
 
-      <StatsPanel stats={stats} />
-      <DailySummaryCard summary={dailySummary} />
-      <NextTaskBanner recommendation={nextTaskRecommendation} highlight={Boolean(newlyCompletedTaskKind)} />
+      <div style={styles.quickGrid}>
+        <button style={styles.quickCard} onClick={onOpenTopics}>
+          <div style={styles.quickEmoji}>🎒</div>
+          <div style={styles.quickTitle}>主题学习</div>
+          <div style={styles.quickDesc}>{featuredTopic ? `${featuredTopic.label} · ${featuredTopic.featuredChinese}` : '去挑一个主题'}</div>
+        </button>
+        <button style={styles.quickCard} onClick={onOpenReview}>
+          <div style={styles.quickEmoji}>🔁</div>
+          <div style={styles.quickTitle}>复习错题</div>
+          <div style={styles.quickDesc}>{stats.stageCounts.review > 0 ? `待复习 ${stats.stageCounts.review} 个` : '今天复习压力不大'}</div>
+        </button>
+      </div>
+
       <DailyPlanCard
         plan={dailyPlan}
         completedKinds={completedDailyTaskKinds}
@@ -130,26 +97,14 @@ export function HomePage({
         onStartTask={onStartTask}
         onReset={onResetDailyTasks}
       />
-      <CategoryGallery items={categoryItems} selectedCategory={selectedCategory} onSelect={onCategoryChange} />
-      <ReviewQueueCard items={reviewQueue} onStartReview={onStartReview} />
-
-      <SettingsPanel
-        roundSize={roundSize}
-        selectedCategory={selectedCategory}
-        categories={categories}
-        autoPlaySound={autoPlaySound}
-        soundEnabled={soundEnabled}
-        onRoundSizeChange={onRoundSizeChange}
-        onCategoryChange={onCategoryChange}
-        onToggleAutoPlaySound={onToggleAutoPlaySound}
-        onToggleSoundEnabled={onToggleSoundEnabled}
-      />
+      <DailySummaryCard summary={dailySummary} />
+      <RecommendationCard recommendation={recommendation} />
     </motion.div>
   );
 }
 
 const styles: Record<string, CSSProperties> = {
-  wrap: { display: 'grid', gap: 18 },
+  wrap: { display: 'grid', gap: 16 },
   heroCard: {
     background: 'linear-gradient(180deg, #fff7f3 0%, #ffffff 100%)',
     borderRadius: 30,
@@ -158,8 +113,8 @@ const styles: Record<string, CSSProperties> = {
     textAlign: 'center',
   },
   sparkles: { fontSize: 22, marginBottom: 10 },
-  hero: { fontSize: 38, fontWeight: 900, textAlign: 'center', lineHeight: 1.15 },
-  sub: { textAlign: 'center', color: '#636e72', fontSize: 18, marginTop: 8, fontWeight: 700 },
+  hero: { fontSize: 34, fontWeight: 900, lineHeight: 1.15 },
+  sub: { color: '#636e72', fontSize: 16, marginTop: 8, fontWeight: 700 },
   starPanel: {
     marginTop: 16,
     display: 'inline-block',
@@ -169,53 +124,41 @@ const styles: Record<string, CSSProperties> = {
     color: '#7d5a00',
     fontWeight: 800,
   },
-  pathTip: {
-    marginTop: 12,
-    color: '#6b7a80',
-    fontWeight: 800,
-    fontSize: 14,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 900,
-    color: '#5a6467',
-    marginLeft: 4,
-  },
-  grid: { display: 'grid', gap: 14 },
-  modeCard: {
-    minHeight: 94,
-    border: '3px solid transparent',
-    borderRadius: 24,
+  pathTip: { marginTop: 12, color: '#6b7a80', fontWeight: 800, fontSize: 14 },
+  primaryCard: {
     background: '#fff',
+    borderRadius: 24,
+    padding: 18,
+    display: 'grid',
+    gap: 12,
     boxShadow: '0 12px 28px rgba(0,0,0,0.08)',
-    fontSize: 18,
-    fontWeight: 800,
-    cursor: 'pointer',
-    padding: '16px 18px',
-    textAlign: 'left',
   },
-  active: {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 16px 32px rgba(0,0,0,0.1)',
-  },
-  modeHead: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  emoji: { fontSize: 30 },
-  dot: { width: 14, height: 14, borderRadius: 999 },
-  modeLabel: { marginTop: 8, fontSize: 19, fontWeight: 900 },
-  modeDesc: { marginTop: 4, color: '#7c8a90', fontSize: 14, fontWeight: 700 },
-  start: {
-    minHeight: 60,
+  primaryHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
+  sectionKicker: { fontSize: 12, fontWeight: 900, color: '#ff8e7b' },
+  primaryTitle: { fontSize: 24, fontWeight: 900 },
+  primaryButton: {
+    minWidth: 96,
+    minHeight: 48,
     border: 'none',
-    borderRadius: 20,
+    borderRadius: 16,
     background: 'linear-gradient(135deg, #ff6b6b, #ff8e7b)',
     color: '#fff',
-    fontSize: 22,
     fontWeight: 900,
-    cursor: 'pointer',
-    boxShadow: '0 16px 28px rgba(255, 107, 107, 0.3)',
+    fontSize: 18,
   },
+  quickGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
+  quickCard: {
+    minHeight: 120,
+    border: 'none',
+    borderRadius: 22,
+    background: '#fff',
+    boxShadow: '0 12px 28px rgba(0,0,0,0.08)',
+    padding: 16,
+    textAlign: 'left',
+    display: 'grid',
+    gap: 6,
+  },
+  quickEmoji: { fontSize: 28 },
+  quickTitle: { fontSize: 18, fontWeight: 900 },
+  quickDesc: { fontSize: 13, fontWeight: 700, color: '#6b7a80' },
 };

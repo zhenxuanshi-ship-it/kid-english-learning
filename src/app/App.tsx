@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { BottomNav, type NavTab } from '../components/common/BottomNav';
 import { HomePage } from '../pages/HomePage';
 import { LearnPage } from '../pages/LearnPage';
 import { RoundSummary } from '../components/summary/RoundSummary';
+import { ProfilePage } from '../pages/ProfilePage';
+import { ReviewPage } from '../pages/ReviewPage';
+import { TopicsPage } from '../pages/TopicsPage';
 import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -19,6 +23,7 @@ import type { GameMode } from '../types/question';
 
 export default function App() {
   const [screen, setScreen] = useState<'home' | 'learn' | 'summary'>('home');
+  const [navTab, setNavTab] = useState<NavTab>('home');
   const [completedTaskLabel, setCompletedTaskLabel] = useState<string | undefined>();
   const [completedTaskReward, setCompletedTaskReward] = useState<string | undefined>();
   const [newlyCompletedTaskKind, setNewlyCompletedTaskKind] = useState<string | undefined>();
@@ -176,33 +181,52 @@ export default function App() {
       <div style={styles.bgBlobA} />
       <div style={styles.bgBlobB} />
       <div style={styles.shell}>
-        {screen === 'home' ? (
+        {screen === 'home' && navTab === 'home' ? (
           <HomePage
             mode={currentMode}
             totalStars={totalStars}
-            roundSize={roundSize}
-            selectedCategory={selectedCategory}
-            categories={wordCategories}
             categoryItems={categoryItems}
-            autoPlaySound={autoPlaySound}
-            soundEnabled={soundEnabled}
             onModeChange={(mode: GameMode) => setMode(mode)}
             onStart={handleStart}
-            onRoundSizeChange={setRoundSize}
-            onCategoryChange={setSelectedCategory}
-            onToggleAutoPlaySound={toggleAutoPlaySound}
-            onToggleSoundEnabled={toggleSoundEnabled}
+            onOpenTopics={() => setNavTab('topics')}
+            onOpenReview={() => setNavTab('review')}
             stats={stats}
             recommendation={recommendation}
-            reviewQueue={reviewQueue}
             dailyPlan={dailyPlan}
             dailySummary={dailySummary}
             nextTaskRecommendation={nextTaskRecommendation}
             completedDailyTaskKinds={completedDailyTaskKinds}
             newlyCompletedTaskKind={newlyCompletedTaskKind}
-            onStartReview={handleStartReview}
             onStartTask={handleStartTask}
             onResetDailyTasks={resetDailyTasks}
+          />
+        ) : null}
+
+        {screen === 'home' && navTab === 'topics' ? (
+          <TopicsPage
+            items={categoryItems}
+            selectedCategory={selectedCategory === 'all' ? recommendation.suggestedCategory ?? categoryItems[0]?.category ?? 'animals' : selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            onStartTopic={() => handleStart(false)}
+          />
+        ) : null}
+
+        {screen === 'home' && navTab === 'review' ? (
+          <ReviewPage items={reviewQueue} onStartReview={handleStartReview} />
+        ) : null}
+
+        {screen === 'home' && navTab === 'profile' ? (
+          <ProfilePage
+            stats={stats}
+            roundSize={roundSize}
+            selectedCategory={selectedCategory}
+            categories={wordCategories}
+            autoPlaySound={autoPlaySound}
+            soundEnabled={soundEnabled}
+            onRoundSizeChange={setRoundSize}
+            onCategoryChange={setSelectedCategory}
+            onToggleAutoPlaySound={toggleAutoPlaySound}
+            onToggleSoundEnabled={toggleSoundEnabled}
           />
         ) : null}
 
@@ -241,6 +265,8 @@ export default function App() {
             stats={stats}
           />
         ) : null}
+
+        {screen === 'home' ? <BottomNav current={navTab} onChange={setNavTab} /> : null}
       </div>
     </main>
   );
