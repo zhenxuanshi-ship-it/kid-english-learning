@@ -5,14 +5,17 @@ import bananaImage from '../../assets/word-images/banana.svg';
 import birdImage from '../../assets/word-images/bird.svg';
 import bookImage from '../../assets/word-images/book.svg';
 import breadImage from '../../assets/word-images/bread.svg';
+import burgerImage from '../../assets/word-images/burger.svg';
 import catImage from '../../assets/word-images/cat.svg';
 import chairImage from '../../assets/word-images/chair.svg';
+import classroomImage from '../../assets/word-images/classroom.svg';
 import cloudImage from '../../assets/word-images/cloud.svg';
 import cowImage from '../../assets/word-images/cow.svg';
 import dogImage from '../../assets/word-images/dog.svg';
 import duckImage from '../../assets/word-images/duck.svg';
 import eggImage from '../../assets/word-images/egg.svg';
 import fishImage from '../../assets/word-images/fish.svg';
+import crayonImage from '../../assets/word-images/crayon.svg';
 import grapeImage from '../../assets/word-images/grape.svg';
 import handImage from '../../assets/word-images/hand.svg';
 import milkImage from '../../assets/word-images/milk.svg';
@@ -26,11 +29,16 @@ import rabbitImage from '../../assets/word-images/rabbit.svg';
 import rainbowImage from '../../assets/word-images/rainbow.svg';
 import rainImage from '../../assets/word-images/rain.svg';
 import riceImage from '../../assets/word-images/rice.svg';
+import puddleImage from '../../assets/word-images/puddle.svg';
 import schoolImage from '../../assets/word-images/school.svg';
 import shoeImage from '../../assets/word-images/shoe.svg';
+import stickerImage from '../../assets/word-images/sticker.svg';
 import sunImage from '../../assets/word-images/sun.svg';
 import teacherImage from '../../assets/word-images/teacher.svg';
+import umbrellaImage from '../../assets/word-images/umbrella.svg';
+import watermelonImage from '../../assets/word-images/watermelon.svg';
 import waterImage from '../../assets/word-images/water.svg';
+import zebraImage from '../../assets/word-images/zebra.svg';
 
 export const allWords: Word[] = [
   { id: 1, english: 'cat', chinese: '猫', category: 'animals', level: 1, difficulty: 1, emoji: '🐱', imageUrl: catImage },
@@ -151,14 +159,14 @@ export const allWords: Word[] = [
   { id: 107, english: 'storm', chinese: '暴风雨', category: 'weather', level: 3, difficulty: 3, emoji: '⛈️' },
   { id: 108, english: 'rainbow', chinese: '彩虹', category: 'weather', level: 3, difficulty: 3, emoji: '🌈', imageUrl: rainbowImage },
 
-  { id: 109, english: 'zebra', chinese: '斑马', category: 'animals', level: 2, difficulty: 2, emoji: '🦓' },
-  { id: 110, english: 'watermelon', chinese: '西瓜', category: 'fruits', level: 2, difficulty: 2, emoji: '🍉' },
-  { id: 111, english: 'crayon', chinese: '蜡笔', category: 'school', level: 2, difficulty: 2, emoji: '🖍️' },
-  { id: 112, english: 'classroom', chinese: '教室', category: 'school', level: 2, difficulty: 2, emoji: '🏫' },
-  { id: 113, english: 'umbrella', chinese: '伞', category: 'weather', level: 2, difficulty: 2, emoji: '☂️' },
-  { id: 114, english: 'puddle', chinese: '水坑', category: 'weather', level: 2, difficulty: 2, emoji: '🫧' },
-  { id: 115, english: 'burger', chinese: '汉堡', category: 'food', level: 2, difficulty: 2, emoji: '🍔' },
-  { id: 116, english: 'sticker', chinese: '贴纸', category: 'school', level: 2, difficulty: 2, emoji: '🏷️' },
+  { id: 109, english: 'zebra', chinese: '斑马', category: 'animals', level: 2, difficulty: 2, emoji: '🦓', imageUrl: zebraImage },
+  { id: 110, english: 'watermelon', chinese: '西瓜', category: 'fruits', level: 2, difficulty: 2, emoji: '🍉', imageUrl: watermelonImage },
+  { id: 111, english: 'crayon', chinese: '蜡笔', category: 'school', level: 2, difficulty: 2, emoji: '🖍️', imageUrl: crayonImage },
+  { id: 112, english: 'classroom', chinese: '教室', category: 'school', level: 2, difficulty: 2, emoji: '🏫', imageUrl: classroomImage },
+  { id: 113, english: 'umbrella', chinese: '伞', category: 'weather', level: 2, difficulty: 2, emoji: '☂️', imageUrl: umbrellaImage },
+  { id: 114, english: 'puddle', chinese: '水坑', category: 'weather', level: 2, difficulty: 2, emoji: '🫧', imageUrl: puddleImage },
+  { id: 115, english: 'burger', chinese: '汉堡', category: 'food', level: 2, difficulty: 2, emoji: '🍔', imageUrl: burgerImage },
+  { id: 116, english: 'sticker', chinese: '贴纸', category: 'school', level: 2, difficulty: 2, emoji: '🏷️', imageUrl: stickerImage },
 ];
 
 export const wordCategories = Array.from(new Set(allWords.map((word) => word.category)));

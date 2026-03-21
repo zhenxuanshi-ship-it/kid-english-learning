@@ -1,0 +1,15 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="24" fill="#F7F9FC"/>
+  <ellipse cx="64" cy="72" rx="34" ry="24" fill="white" stroke="#2F3A40" stroke-width="4"/>
+  <circle cx="87" cy="54" r="14" fill="white" stroke="#2F3A40" stroke-width="4"/>
+  <rect x="35" y="88" width="8" height="20" rx="4" fill="#2F3A40"/>
+  <rect x="53" y="92" width="8" height="16" rx="4" fill="#2F3A40"/>
+  <rect x="69" y="92" width="8" height="16" rx="4" fill="#2F3A40"/>
+  <rect x="87" y="88" width="8" height="20" rx="4" fill="#2F3A40"/>
+  <rect x="46" y="55" width="6" height="34" rx="3" fill="#2F3A40"/>
+  <rect x="60" y="51" width="6" height="40" rx="3" fill="#2F3A40"/>
+  <rect x="74" y="55" width="6" height="34" rx="3" fill="#2F3A40"/>
+  <rect x="88" y="60" width="5" height="26" rx="3" fill="#2F3A40"/>
+  <path d="M97 41L103 28L108 43" stroke="#2F3A40" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="91" cy="53" r="2.5" fill="#2F3A40"/>
+</svg>
