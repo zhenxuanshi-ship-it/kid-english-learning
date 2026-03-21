@@ -8,6 +8,7 @@ import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { allWords, wordCategories } from '../data/words';
 import { buildDailyPlan } from '../lib/dailyPlan';
+import { buildDailySummary } from '../lib/dailySummary';
 import { getNextTaskRecommendation } from '../lib/nextTask';
 import { getHomeRecommendation } from '../lib/recommendation';
 import { buildReviewQueue } from '../lib/review';
@@ -62,6 +63,7 @@ export default function App() {
   const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
   const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
   const dailyPlan = useMemo(() => buildDailyPlan(stats), [stats]);
+  const dailySummary = useMemo(() => buildDailySummary(completedDailyTaskKinds, stats), [completedDailyTaskKinds, stats]);
   const nextTaskRecommendation = useMemo(
     () => getNextTaskRecommendation(dailyPlan, completedDailyTaskKinds),
     [completedDailyTaskKinds, dailyPlan],
@@ -143,6 +145,7 @@ export default function App() {
             recommendation={recommendation}
             reviewQueue={reviewQueue}
             dailyPlan={dailyPlan}
+            dailySummary={dailySummary}
             nextTaskRecommendation={nextTaskRecommendation}
             completedDailyTaskKinds={completedDailyTaskKinds}
             onStartReview={handleStartReview}
