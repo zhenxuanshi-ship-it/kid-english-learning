@@ -1,10 +1,12 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { CategoryGallery } from '../components/common/CategoryGallery';
+import { DailyPlanCard } from '../components/common/DailyPlanCard';
 import { RecommendationCard } from '../components/common/RecommendationCard';
 import { ReviewQueueCard } from '../components/common/ReviewQueueCard';
 import { SettingsPanel } from '../components/common/SettingsPanel';
 import { StatsPanel } from '../components/common/StatsPanel';
+import type { DailyPlan } from '../lib/dailyPlan';
 import type { HomeRecommendation } from '../lib/recommendation';
 import type { ReviewWordItem } from '../lib/review';
 import type { LearningStats } from '../lib/stats';
@@ -27,7 +29,9 @@ interface HomePageProps {
   stats: LearningStats;
   recommendation: HomeRecommendation;
   reviewQueue: ReviewWordItem[];
+  dailyPlan: DailyPlan;
   onStartReview: () => void;
+  onStartTask: (mode: GameMode) => void;
 }
 
 const modes: Array<{ value: GameMode; label: string; emoji: string; desc: string; color: string }> = [
@@ -53,7 +57,9 @@ export function HomePage({
   stats,
   recommendation,
   reviewQueue,
+  dailyPlan,
   onStartReview,
+  onStartTask,
 }: HomePageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -98,6 +104,7 @@ export function HomePage({
       </motion.button>
 
       <StatsPanel stats={stats} />
+      <DailyPlanCard plan={dailyPlan} onStartTask={onStartTask} />
       <CategoryGallery categories={categories} selectedCategory={selectedCategory} onSelect={onCategoryChange} />
       <ReviewQueueCard items={reviewQueue} onStartReview={onStartReview} />
 

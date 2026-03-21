@@ -7,6 +7,7 @@ import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { allWords, wordCategories } from '../data/words';
+import { buildDailyPlan } from '../lib/dailyPlan';
 import { getHomeRecommendation } from '../lib/recommendation';
 import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
@@ -56,6 +57,7 @@ export default function App() {
 
   const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
   const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
+  const dailyPlan = useMemo(() => buildDailyPlan(stats), [stats]);
   const reviewQueue = useMemo(() => buildReviewQueue(allWords, wordProgressMap).slice(0, 5), [wordProgressMap]);
 
   const handleStart = (useRecommendationCategory = false) => {
@@ -76,6 +78,13 @@ export default function App() {
     const reviewWordIds = reviewQueue.map((item) => item.wordId);
     if (reviewWordIds.length === 0) return;
     game.startRound(currentMode, reviewWordIds);
+    setUsedLetterIndexes([]);
+    setScreen('learn');
+  };
+
+  const handleStartTask = (mode: GameMode) => {
+    setMode(mode);
+    game.startRound(mode);
     setUsedLetterIndexes([]);
     setScreen('learn');
   };
@@ -124,7 +133,9 @@ export default function App() {
             stats={stats}
             recommendation={recommendation}
             reviewQueue={reviewQueue}
+            dailyPlan={dailyPlan}
             onStartReview={handleStartReview}
+            onStartTask={handleStartTask}
           />
         ) : null}
 
