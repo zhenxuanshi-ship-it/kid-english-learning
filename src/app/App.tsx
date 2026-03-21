@@ -110,6 +110,8 @@ export default function App() {
             state={game}
             totalStars={totalStars}
             disabledLetterIndexes={usedLetterIndexes}
+            soundEnabled={soundEnabled}
+            autoPlaySound={autoPlaySound}
             onPickLetter={handlePickLetter}
             onDelete={handleDelete}
             onSelectOption={game.selectOption}

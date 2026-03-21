@@ -7,6 +7,7 @@ import { ChoiceOptions } from '../components/game/ChoiceOptions';
 import { LetterKeyboard } from '../components/game/LetterKeyboard';
 import { InputSlots } from '../components/game/InputSlots';
 import { CelebrationOverlay } from '../components/game/CelebrationOverlay';
+import { playErrorTone, playSuccessTone, speakWord } from '../lib/audio';
 import type { GameMode } from '../types/question';
 import type { GameState } from '../types/game';
 
@@ -14,6 +15,8 @@ interface LearnPageProps {
   state: GameState;
   totalStars: number;
   disabledLetterIndexes: number[];
+  soundEnabled: boolean;
+  autoPlaySound: boolean;
   onPickLetter: (letter: string, index: number) => void;
   onDelete: () => void;
   onSelectOption: (option: string) => void;
@@ -37,6 +40,8 @@ export function LearnPage({
   state,
   totalStars,
   disabledLetterIndexes,
+  soundEnabled,
+  autoPlaySound,
   onPickLetter,
   onDelete,
   onSelectOption,
@@ -45,13 +50,24 @@ export function LearnPage({
 }: LearnPageProps) {
   useEffect(() => {
     if (state.result === 'correct') {
+      playSuccessTone(soundEnabled);
+      if (autoPlaySound && state.currentWord?.english) {
+        const wordToSpeak = state.currentWord.english;
+        window.setTimeout(() => speakWord(wordToSpeak, soundEnabled), 120);
+      }
       const timer = window.setTimeout(() => {
         onNext();
       }, 900);
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [onNext, state.result, state.roundIndex]);
+  }, [autoPlaySound, onNext, soundEnabled, state.currentWord?.english, state.result, state.roundIndex]);
+
+  useEffect(() => {
+    if (state.feedbackMessage && !state.showAnswer && state.result !== 'correct' && state.attemptCount > 0) {
+      playErrorTone(soundEnabled);
+    }
+  }, [soundEnabled, state.attemptCount, state.feedbackMessage, state.result, state.showAnswer]);
 
   if (!state.currentQuestion || !state.currentWord) return null;
 
@@ -66,7 +82,16 @@ export function LearnPage({
       <HeaderBar stars={state.stars} modeLabel={modeLabelMap[state.mode]} totalStars={totalStars} />
       <div style={styles.progressRow}>
         <div style={styles.progressText}>第 {Math.min(state.roundIndex + 1, state.roundTotal)} / {state.roundTotal} 题</div>
-        <div style={styles.modeChip}>{mascotMap[state.mode]} {modeLabelMap[state.mode]}</div>
+        <div style={styles.rightTools}>
+          <button
+            type="button"
+            style={styles.soundButton}
+            onClick={() => speakWord(state.currentWord?.english ?? '', soundEnabled)}
+          >
+            🔊 读单词
+          </button>
+          <div style={styles.modeChip}>{mascotMap[state.mode]} {modeLabelMap[state.mode]}</div>
+        </div>
       </div>
       <AnimatePresence mode="wait">
         <motion.div
@@ -152,6 +177,24 @@ const styles: Record<string, CSSProperties> = {
     color: '#6b7a80',
     fontWeight: 800,
     fontSize: 15,
+  },
+  rightTools: {
+    display: 'flex',
+    gap: 8,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
+  },
+  soundButton: {
+    minHeight: 38,
+    padding: '0 12px',
+    border: 'none',
+    borderRadius: 999,
+    background: '#ffffff',
+    boxShadow: '0 8px 18px rgba(0,0,0,0.06)',
+    fontWeight: 800,
+    cursor: 'pointer',
+    color: '#49575c',
   },
   modeChip: {
     padding: '8px 12px',
