@@ -15,10 +15,14 @@ function getPriorityScore(progress?: SentenceProgress): number {
 
 export function getSentenceRecommendation(
   progressMap: Partial<Record<SentencePatternId, SentenceProgress>>,
+  preferredPatternIds: SentencePatternId[] = [],
 ): SentenceRecommendation {
+  const preferredSet = new Set(preferredPatternIds);
   const orderedPatterns = [...sentencePatterns].sort((a, b) => {
     const progressA = progressMap[a.id];
     const progressB = progressMap[b.id];
+    const preferredDiff = Number(preferredSet.has(b.id)) - Number(preferredSet.has(a.id));
+    if (preferredDiff !== 0) return preferredDiff;
     const scoreDiff = getPriorityScore(progressB) - getPriorityScore(progressA);
     if (scoreDiff !== 0) return scoreDiff;
     const lastA = progressA?.lastPracticedAt ?? 0;

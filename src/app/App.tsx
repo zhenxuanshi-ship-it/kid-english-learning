@@ -25,6 +25,7 @@ import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
 import { getSentencePattern } from '../lib/sentencePractice';
 import { getSentenceRecommendation } from '../lib/sentenceRecommendation';
+import { getSentencePatternIdsForCategory } from '../lib/sentenceCategoryLink';
 import { useSentenceGameStore } from '../store/sentenceGameStore';
 import { useSentenceProgressStore } from '../store/sentenceProgressStore';
 import { sentencePatterns } from '../data/sentences';
@@ -133,7 +134,19 @@ export default function App() {
     () => (pendingSentencePatternId ? getSentencePattern(pendingSentencePatternId) : undefined),
     [pendingSentencePatternId],
   );
-  const sentenceRecommendation = useMemo(() => getSentenceRecommendation(sentenceProgressMap), [sentenceProgressMap]);
+  const sentencePreferredPatternIds = useMemo(() => {
+    const homeCategory = recommendation.suggestedCategory;
+    const topicCategory = selectedCategory === 'all' ? recommendation.suggestedCategory : selectedCategory;
+    const preferred = new Set<SentencePatternId>([
+      ...getSentencePatternIdsForCategory(homeCategory),
+      ...getSentencePatternIdsForCategory(topicCategory),
+    ]);
+    return [...preferred];
+  }, [recommendation.suggestedCategory, selectedCategory]);
+  const sentenceRecommendation = useMemo(
+    () => getSentenceRecommendation(sentenceProgressMap, sentencePreferredPatternIds),
+    [sentencePreferredPatternIds, sentenceProgressMap],
+  );
   const nextSentencePattern = useMemo(() => {
     if (!sentenceGame.currentPatternId) return undefined;
     const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);

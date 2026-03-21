@@ -39,4 +39,9 @@ describe('sentenceRecommendation', () => {
 
     expect(result.continuePattern?.id).toBe('i_like');
   });
+
+  it('can prioritize category-linked sentence patterns', () => {
+    const result = getSentenceRecommendation({}, ['it_is']);
+    expect(result.orderedPatterns[0]?.id).toBe('it_is');
+  });
 });
