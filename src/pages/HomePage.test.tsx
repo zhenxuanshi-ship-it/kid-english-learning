@@ -9,6 +9,10 @@ describe('HomePage', () => {
     roundSize: 5,
     selectedCategory: 'all',
     categories: ['animals', 'fruits'],
+    categoryItems: [
+      { category: 'animals', label: '动物', total: 15, learned: 6, mastered: 1, progressPercent: 40, featuredWord: 'cat', featuredChinese: '猫' },
+      { category: 'fruits', label: '水果', total: 10, learned: 2, mastered: 0, progressPercent: 20, featuredWord: 'apple', featuredChinese: '苹果' },
+    ],
     autoPlaySound: false,
     soundEnabled: false,
     stats: {

@@ -77,6 +77,6 @@ describe('App task flow integration', () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole('button', { name: '切到这个主题' }));
-    expect(screen.getByRole('button', { name: '🐾 动物' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /🐾 动物/ })).toBeInTheDocument();
   });
 });

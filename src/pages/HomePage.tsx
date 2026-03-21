@@ -8,6 +8,7 @@ import { RecommendationCard } from '../components/common/RecommendationCard';
 import { ReviewQueueCard } from '../components/common/ReviewQueueCard';
 import { SettingsPanel } from '../components/common/SettingsPanel';
 import { StatsPanel } from '../components/common/StatsPanel';
+import type { CategoryGalleryItem } from '../lib/categoryGallery';
 import type { DailyPlan } from '../lib/dailyPlan';
 import type { DailySummary } from '../lib/dailySummary';
 import type { NextTaskRecommendation } from '../lib/nextTask';
@@ -24,6 +25,7 @@ interface HomePageProps {
   roundSize: number;
   selectedCategory: string;
   categories: string[];
+  categoryItems: CategoryGalleryItem[];
   autoPlaySound: boolean;
   soundEnabled: boolean;
   onRoundSizeChange: (size: number) => void;
@@ -57,6 +59,7 @@ export function HomePage({
   roundSize,
   selectedCategory,
   categories,
+  categoryItems,
   autoPlaySound,
   soundEnabled,
   onRoundSizeChange,
@@ -127,7 +130,7 @@ export function HomePage({
         onStartTask={onStartTask}
         onReset={onResetDailyTasks}
       />
-      <CategoryGallery categories={categories} selectedCategory={selectedCategory} onSelect={onCategoryChange} />
+      <CategoryGallery items={categoryItems} selectedCategory={selectedCategory} onSelect={onCategoryChange} />
       <ReviewQueueCard items={reviewQueue} onStartReview={onStartReview} />
 
       <SettingsPanel

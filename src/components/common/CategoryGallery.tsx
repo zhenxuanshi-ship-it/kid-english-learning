@@ -1,9 +1,9 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { getCategoryLabel } from '../../lib/category';
+import type { CategoryGalleryItem } from '../../lib/categoryGallery';
 
 interface CategoryGalleryProps {
-  categories: string[];
+  items: CategoryGalleryItem[];
   selectedCategory: string;
   onSelect: (category: string) => void;
 }
@@ -21,7 +21,7 @@ const categoryVisualMap: Record<string, { emoji: string; bg: string }> = {
   weather: { emoji: '🌤️', bg: '#F0FBFF' },
 };
 
-export function CategoryGallery({ categories, selectedCategory, onSelect }: CategoryGalleryProps) {
+export function CategoryGallery({ items, selectedCategory, onSelect }: CategoryGalleryProps) {
   return (
     <div style={styles.wrap}>
       <div style={styles.header}>
@@ -35,21 +35,26 @@ export function CategoryGallery({ categories, selectedCategory, onSelect }: Cate
       </div>
 
       <div style={styles.grid}>
-        {categories.map((category, index) => {
-          const meta = categoryVisualMap[category] ?? { emoji: '📘', bg: '#F7F9FC' };
-          const active = selectedCategory === category;
+        {items.map((item, index) => {
+          const meta = categoryVisualMap[item.category] ?? { emoji: '📘', bg: '#F7F9FC' };
+          const active = selectedCategory === item.category;
           return (
             <motion.button
-              key={category}
+              key={item.category}
               style={{ ...styles.card, background: meta.bg, ...(active ? styles.activeCard : {}) }}
-              onClick={() => onSelect(category)}
+              onClick={() => onSelect(item.category)}
               whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.03 }}
             >
               <div style={styles.emoji}>{meta.emoji}</div>
-              <div style={styles.label}>{getCategoryLabel(category)}</div>
+              <div style={styles.label}>{item.label}</div>
+              <div style={styles.progressText}>已学 {item.learned}/{item.total}</div>
+              <div style={styles.progressTrack}>
+                <div style={{ ...styles.progressFill, width: `${item.progressPercent}%` }} />
+              </div>
+              <div style={styles.featuredWord}>{item.featuredChinese} · {item.featuredWord}</div>
             </motion.button>
           );
         })}
@@ -109,4 +114,18 @@ const styles: Record<string, CSSProperties> = {
   },
   emoji: { fontSize: 30 },
   label: { fontWeight: 800, color: '#435055' },
+  progressText: { fontSize: 12, fontWeight: 800, color: '#617076' },
+  progressTrack: {
+    width: '100%',
+    height: 8,
+    borderRadius: 999,
+    background: 'rgba(255,255,255,0.8)',
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 999,
+    background: 'linear-gradient(135deg, #4ecdc4, #73ddd3)',
+  },
+  featuredWord: { fontSize: 12, fontWeight: 700, color: '#6b7a80' },
 };

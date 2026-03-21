@@ -7,6 +7,7 @@ import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { allWords, wordCategories } from '../data/words';
+import { buildCategoryGalleryItems } from '../lib/categoryGallery';
 import { buildDailyPlan } from '../lib/dailyPlan';
 import { buildDailySummary } from '../lib/dailySummary';
 import { didCompleteDailyTask } from '../lib/dailyTaskProgress';
@@ -56,6 +57,7 @@ export default function App() {
   const stats = useMemo(() => buildLearningStats(allWords, wordProgressMap), [wordProgressMap]);
   const recommendation = useMemo(() => getHomeRecommendation(stats), [stats]);
   const dailyPlan = useMemo(() => buildDailyPlan(stats), [stats]);
+  const categoryItems = useMemo(() => buildCategoryGalleryItems(wordCategories, stats), [stats]);
 
   useEffect(() => {
     if (!game.currentQuestion && !game.isLearningCard && screen === 'learn' && game.roundWordIds.length > 0) {
@@ -181,6 +183,7 @@ export default function App() {
             roundSize={roundSize}
             selectedCategory={selectedCategory}
             categories={wordCategories}
+            categoryItems={categoryItems}
             autoPlaySound={autoPlaySound}
             soundEnabled={soundEnabled}
             onModeChange={(mode: GameMode) => setMode(mode)}
