@@ -7,6 +7,6 @@ describe('word resources', () => {
   });
 
   it('includes a growing sample set of real image-backed words', () => {
-    expect(allWords.filter((word) => Boolean(word.imageUrl)).length).toBeGreaterThanOrEqual(20);
+    expect(allWords.filter((word) => Boolean(word.imageUrl)).length).toBeGreaterThanOrEqual(30);
   });
 });
