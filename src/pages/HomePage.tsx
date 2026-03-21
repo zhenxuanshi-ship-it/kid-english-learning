@@ -8,6 +8,7 @@ import type { DailySummary } from '../lib/dailySummary';
 import type { NextTaskRecommendation } from '../lib/nextTask';
 import type { HomeRecommendation } from '../lib/recommendation';
 import type { LearningStats } from '../lib/stats';
+import type { SentencePattern } from '../types/sentence';
 import type { GameMode } from '../types/question';
 
 interface HomePageProps {
@@ -16,6 +17,7 @@ interface HomePageProps {
   onStart: (useRecommendationCategory?: boolean) => void;
   onOpenTopics: () => void;
   onOpenReview: () => void;
+  onOpenSentencePractice: () => void;
   totalStars: number;
   categoryItems: CategoryGalleryItem[];
   stats: LearningStats;
@@ -23,6 +25,8 @@ interface HomePageProps {
   dailyPlan: DailyPlan;
   dailySummary: DailySummary;
   nextTaskRecommendation: NextTaskRecommendation;
+  sentenceRecommendedPattern?: SentencePattern;
+  sentenceContinuePattern?: SentencePattern;
   completedDailyTaskKinds: string[];
   newlyCompletedTaskKind?: string;
   onStartTask: (task: DailyPlan['tasks'][number]) => void;
@@ -40,6 +44,7 @@ export function HomePage({
   onStart,
   onOpenTopics,
   onOpenReview,
+  onOpenSentencePractice,
   totalStars,
   categoryItems,
   stats,
@@ -47,6 +52,8 @@ export function HomePage({
   dailyPlan,
   dailySummary,
   nextTaskRecommendation,
+  sentenceRecommendedPattern,
+  sentenceContinuePattern,
   completedDailyTaskKinds,
   newlyCompletedTaskKind,
   onStartTask,
@@ -74,6 +81,14 @@ export function HomePage({
         <div style={styles.summaryItem}><strong>{dailySummary.learnedWords}</strong><span>已学词</span></div>
         <div style={styles.summaryItem}><strong>{dailySummary.reviewWords}</strong><span>待复习</span></div>
       </div>
+
+      {(sentenceContinuePattern || sentenceRecommendedPattern) ? (
+        <button style={styles.sentenceCard} onClick={onOpenSentencePractice}>
+          <div style={styles.sentenceKicker}>{sentenceContinuePattern ? '🧩 继续句式练习' : '🧩 推荐句式练习'}</div>
+          <div style={styles.sentenceTitle}>{(sentenceContinuePattern ?? sentenceRecommendedPattern)?.title}</div>
+          <div style={styles.sentenceDesc}>{sentenceContinuePattern ? '继续上次没练完的句型。' : '把单词连成句子，更像真的会用英语。'}</div>
+        </button>
+      ) : null}
 
       <div style={styles.quickGrid}>
         <button style={styles.quickCard} onClick={onOpenTopics}>
@@ -157,6 +172,19 @@ const styles: Record<string, CSSProperties> = {
     color: '#66757b',
     fontWeight: 700,
   },
+  sentenceCard: {
+    border: 'none',
+    borderRadius: 18,
+    background: 'linear-gradient(135deg, #f4f1ff, #ffffff)',
+    boxShadow: '0 8px 18px rgba(124,92,255,0.08)',
+    padding: 14,
+    textAlign: 'left',
+    display: 'grid',
+    gap: 4,
+  },
+  sentenceKicker: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
+  sentenceTitle: { fontSize: 18, fontWeight: 900, color: '#433880' },
+  sentenceDesc: { fontSize: 13, fontWeight: 700, color: '#66757b' },
   quickGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 },
   quickCard: {
     minHeight: 96,

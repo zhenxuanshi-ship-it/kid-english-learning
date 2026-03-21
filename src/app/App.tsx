@@ -310,11 +310,14 @@ export default function App() {
             onStart={handleStart}
             onOpenTopics={() => setNavTab('topics')}
             onOpenReview={() => setNavTab('review')}
+            onOpenSentencePractice={handleOpenSentencePractice}
             stats={stats}
             recommendation={recommendation}
             dailyPlan={dailyPlan}
             dailySummary={dailySummary}
             nextTaskRecommendation={nextTaskRecommendation}
+            sentenceRecommendedPattern={sentenceRecommendation.recommendedPattern}
+            sentenceContinuePattern={sentenceRecommendation.continuePattern}
             completedDailyTaskKinds={completedDailyTaskKinds}
             newlyCompletedTaskKind={newlyCompletedTaskKind}
             onStartTask={handleStartTask}
@@ -326,6 +329,7 @@ export default function App() {
           <TopicsPage
             items={categoryItems}
             selectedCategory={selectedCategory === 'all' ? recommendation.suggestedCategory ?? categoryItems[0]?.category ?? 'animals' : selectedCategory}
+            sentenceRecommendedPattern={sentenceRecommendation.recommendedPattern}
             onSelectCategory={setSelectedCategory}
             onStartTopic={handleStartTopic}
             onOpenSentencePractice={handleOpenSentencePractice}

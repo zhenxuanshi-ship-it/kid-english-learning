@@ -2,16 +2,18 @@ import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { CategoryGallery } from '../components/common/CategoryGallery';
 import type { CategoryGalleryItem } from '../lib/categoryGallery';
+import type { SentencePattern } from '../types/sentence';
 
 interface TopicsPageProps {
   items: CategoryGalleryItem[];
   selectedCategory: string;
+  sentenceRecommendedPattern?: SentencePattern;
   onSelectCategory: (category: string) => void;
   onStartTopic: (category: string) => void;
   onOpenSentencePractice: () => void;
 }
 
-export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartTopic, onOpenSentencePractice }: TopicsPageProps) {
+export function TopicsPage({ items, selectedCategory, sentenceRecommendedPattern, onSelectCategory, onStartTopic, onOpenSentencePractice }: TopicsPageProps) {
   const selectedItem = items.find((item) => item.category === selectedCategory) ?? items[0];
 
   return (
@@ -19,9 +21,9 @@ export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartT
       <div style={styles.switchCard}>
         <div>
           <div style={styles.switchTitle}>🧩 句式练习</div>
-          <div style={styles.switchDesc}>先练小句子，再把单词连起来用。</div>
+          <div style={styles.switchDesc}>{sentenceRecommendedPattern ? `推荐句型：${sentenceRecommendedPattern.title}` : '先练小句子，再把单词连起来用。'}</div>
         </div>
-        <button style={styles.switchButton} onClick={onOpenSentencePractice}>进入句式练习</button>
+        <button style={styles.switchButton} onClick={onOpenSentencePractice}>{sentenceRecommendedPattern ? '去练推荐句型' : '进入句式练习'}</button>
       </div>
       {selectedItem ? (
         <div style={styles.hero}>
