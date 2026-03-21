@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { motion } from 'framer-motion';
 import type { DailyPlan } from '../../lib/dailyPlan';
 
 interface DailyPlanCardProps {
@@ -35,11 +36,18 @@ export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: Da
         {plan.tasks.map((task) => {
           const done = completedKinds.includes(task.kind);
           return (
-            <div key={`${task.kind}-${task.mode}`} style={{ ...styles.item, ...(done ? styles.itemDone : {}) }}>
+            <motion.div
+              key={`${task.kind}-${task.mode}`}
+              style={{ ...styles.item, ...(done ? styles.itemDone : {}) }}
+              initial={done ? { scale: 0.96, opacity: 0.88 } : false}
+              animate={done ? { scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
+              transition={{ duration: 0.22 }}
+            >
               <div style={styles.itemContent}>
                 <div style={styles.itemTitleRow}>
                   <div style={styles.itemTitle}>{kindEmojiMap[task.kind]} {task.label}</div>
                   {done ? <div style={styles.doneBadge}>🏅 已完成</div> : null}
+                  {done ? <div style={styles.donePlusOne}>+1 今日任务</div> : null}
                 </div>
                 <div style={styles.itemMeta}>约 {task.count} 个词 · 推荐模式 {task.mode}</div>
                 {done ? <div style={styles.rewardHint}>太棒啦，今天这项任务已经拿下啦！</div> : null}
@@ -47,7 +55,7 @@ export function DailyPlanCard({ plan, completedKinds, onStartTask, onReset }: Da
               <button style={{ ...styles.button, ...(done ? styles.buttonDone : {}) }} onClick={() => onStartTask(task)}>
                 {done ? '再来一轮' : '开始'}
               </button>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -116,6 +124,14 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: 999,
     background: '#fff6d8',
     color: '#9a6b00',
+    fontSize: 12,
+    fontWeight: 900,
+  },
+  donePlusOne: {
+    padding: '4px 8px',
+    borderRadius: 999,
+    background: '#ffe8f2',
+    color: '#d9487d',
     fontSize: 12,
     fontWeight: 900,
   },

@@ -33,6 +33,7 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, co
         <motion.div style={styles.taskCelebrate} initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2 }}>
           <div style={styles.confetti}>🎊 ✨ 🌟 ✨ 🎊</div>
           <div style={styles.taskBadge}>✅ 已推进今日任务：{completedTaskLabel}</div>
+          <div style={styles.rewardCount}>+1 今日任务</div>
           <div style={styles.rewardText}>{completedTaskReward ?? '今日任务 +1，继续冲呀！'}</div>
         </motion.div>
       ) : null}
@@ -97,6 +98,15 @@ const styles: Record<string, CSSProperties> = {
     background: '#ecfff7',
     color: '#157a6e',
     fontWeight: 900,
+    textAlign: 'center',
+  },
+  rewardCount: {
+    padding: '6px 12px',
+    borderRadius: 999,
+    background: '#ffe8f2',
+    color: '#d9487d',
+    fontWeight: 900,
+    fontSize: 13,
     textAlign: 'center',
   },
   rewardText: {

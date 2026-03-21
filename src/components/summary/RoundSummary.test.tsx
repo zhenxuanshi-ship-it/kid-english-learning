@@ -29,6 +29,7 @@ describe('RoundSummary', () => {
     );
 
     expect(screen.getByText(/已推进今日任务：认识新词/)).toBeInTheDocument();
+    expect(screen.getByText(/\+1 今日任务/)).toBeInTheDocument();
     expect(screen.getByText(/太棒啦/)).toBeInTheDocument();
   });
 });

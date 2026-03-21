@@ -18,6 +18,7 @@ describe('DailyPlanCard', () => {
     expect(screen.getByText(/先复习旧词/)).toBeInTheDocument();
     expect(screen.getByText(/认识新词/)).toBeInTheDocument();
     expect(screen.getByText(/已完成/)).toBeInTheDocument();
+    expect(screen.getByText(/\+1 今日任务/)).toBeInTheDocument();
     expect(screen.getByText(/今天这项任务已经拿下啦/)).toBeInTheDocument();
   });
 
