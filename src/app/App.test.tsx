@@ -80,4 +80,14 @@ describe('App task flow integration', () => {
     expect(screen.getByText('今日推荐主题')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '开始这个主题' })).toBeInTheDocument();
   });
+
+  it('opens sentence practice flow from topics', () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /主题学习/ }));
+    fireEvent.click(screen.getByRole('button', { name: '进入句式练习' }));
+    expect(screen.getByText('先学小句子')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /This is/ }));
+    expect(screen.getByText(/第 1 \/ 3 题/)).toBeInTheDocument();
+  });
 });

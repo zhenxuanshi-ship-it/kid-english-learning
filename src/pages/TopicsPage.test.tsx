@@ -16,6 +16,7 @@ describe('TopicsPage', () => {
         selectedCategory="fruits"
         onSelectCategory={vi.fn()}
         onStartTopic={onStartTopic}
+        onOpenSentencePractice={vi.fn()}
       />,
     );
 

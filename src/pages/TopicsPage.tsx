@@ -8,13 +8,21 @@ interface TopicsPageProps {
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
   onStartTopic: (category: string) => void;
+  onOpenSentencePractice: () => void;
 }
 
-export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartTopic }: TopicsPageProps) {
+export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartTopic, onOpenSentencePractice }: TopicsPageProps) {
   const selectedItem = items.find((item) => item.category === selectedCategory) ?? items[0];
 
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+      <div style={styles.switchCard}>
+        <div>
+          <div style={styles.switchTitle}>🧩 句式练习</div>
+          <div style={styles.switchDesc}>先练小句子，再把单词连起来用。</div>
+        </div>
+        <button style={styles.switchButton} onClick={onOpenSentencePractice}>进入句式练习</button>
+      </div>
       {selectedItem ? (
         <div style={styles.hero}>
           <div style={styles.kicker}>今日推荐主题</div>
@@ -32,6 +40,24 @@ export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartT
 
 const styles: Record<string, CSSProperties> = {
   wrap: { display: 'grid', gap: 14 },
+  switchCard: {
+    background: 'linear-gradient(135deg, #f7f5ff, #ffffff)',
+    borderRadius: 22,
+    padding: 16,
+    display: 'grid',
+    gap: 10,
+    boxShadow: '0 10px 22px rgba(124, 92, 255, 0.08)',
+  },
+  switchTitle: { fontSize: 18, fontWeight: 900, color: '#433880' },
+  switchDesc: { fontSize: 14, fontWeight: 700, color: '#66757b' },
+  switchButton: {
+    minHeight: 46,
+    border: 'none',
+    borderRadius: 16,
+    background: 'linear-gradient(135deg, #7c5cff, #9b83ff)',
+    color: '#fff',
+    fontWeight: 900,
+  },
   hero: {
     background: 'linear-gradient(135deg, #fff8f5, #ffffff)',
     borderRadius: 28,
