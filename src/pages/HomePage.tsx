@@ -71,8 +71,9 @@ export function HomePage({
           <div>
             <div style={styles.sectionKicker}>今日主线</div>
             <div style={styles.primaryTitle}>继续今日任务</div>
+            <div style={styles.primaryDesc}>{recommendation.title}</div>
           </div>
-          <button style={styles.primaryButton} onClick={() => onStart(Boolean(recommendation.suggestedCategory))}>开始</button>
+          <button style={styles.primaryButton} onClick={() => onStart(Boolean(recommendation.suggestedCategory))}>继续</button>
         </div>
         <NextTaskBanner recommendation={nextTaskRecommendation} highlight={Boolean(newlyCompletedTaskKind)} />
       </div>
@@ -136,6 +137,7 @@ const styles: Record<string, CSSProperties> = {
   primaryHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
   sectionKicker: { fontSize: 12, fontWeight: 900, color: '#ff8e7b' },
   primaryTitle: { fontSize: 24, fontWeight: 900 },
+  primaryDesc: { marginTop: 4, fontSize: 13, fontWeight: 700, color: '#6b7a80' },
   primaryButton: {
     minWidth: 96,
     minHeight: 48,

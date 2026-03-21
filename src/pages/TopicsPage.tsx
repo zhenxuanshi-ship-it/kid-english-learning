@@ -7,7 +7,7 @@ interface TopicsPageProps {
   items: CategoryGalleryItem[];
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
-  onStartTopic: () => void;
+  onStartTopic: (category: string) => void;
 }
 
 export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartTopic }: TopicsPageProps) {
@@ -21,7 +21,8 @@ export function TopicsPage({ items, selectedCategory, onSelectCategory, onStartT
           <div style={styles.title}>{selectedItem.label}</div>
           <div style={styles.desc}>{selectedItem.tagline}</div>
           <div style={styles.recommendation}>{selectedItem.recommendation}</div>
-          <button style={styles.primary} onClick={onStartTopic}>开始这个主题</button>
+          <div style={styles.featuredLine}>推荐起点：{selectedItem.featuredChinese} · {selectedItem.featuredWord}</div>
+          <button style={styles.primary} onClick={() => onStartTopic(selectedItem.category)}>开始这个主题</button>
         </div>
       ) : null}
       <CategoryGallery items={items} selectedCategory={selectedCategory} onSelect={onSelectCategory} />
@@ -43,6 +44,7 @@ const styles: Record<string, CSSProperties> = {
   title: { fontSize: 28, fontWeight: 900 },
   desc: { fontSize: 16, fontWeight: 800, color: '#56656b' },
   recommendation: { fontSize: 14, fontWeight: 700, color: '#6b7a80' },
+  featuredLine: { fontSize: 13, fontWeight: 800, color: '#ff8e7b' },
   primary: {
     marginTop: 6,
     minHeight: 52,

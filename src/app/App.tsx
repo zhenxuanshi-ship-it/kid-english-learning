@@ -128,6 +128,19 @@ export default function App() {
     setScreen('learn');
   };
 
+  const handleStartTopic = (category: string) => {
+    setCompletedTaskLabel(undefined);
+    setCompletedTaskReward(undefined);
+    setNewlyCompletedTaskKind(undefined);
+    setActiveDailyTask(undefined);
+    setSelectedCategory(category);
+    const startMode = recommendation.suggestedMode ?? currentMode;
+    setMode(startMode);
+    game.startRound(startMode);
+    setUsedLetterIndexes([]);
+    setScreen('learn');
+  };
+
   const handleStartReview = () => {
     setCompletedTaskLabel(undefined);
     setCompletedTaskReward(undefined);
@@ -207,7 +220,7 @@ export default function App() {
             items={categoryItems}
             selectedCategory={selectedCategory === 'all' ? recommendation.suggestedCategory ?? categoryItems[0]?.category ?? 'animals' : selectedCategory}
             onSelectCategory={setSelectedCategory}
-            onStartTopic={() => handleStart(false)}
+            onStartTopic={handleStartTopic}
           />
         ) : null}
 
