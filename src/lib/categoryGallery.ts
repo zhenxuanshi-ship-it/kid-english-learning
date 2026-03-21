@@ -34,7 +34,7 @@ export function buildCategoryGalleryItems(categories: string[], stats: LearningS
   return categories.map((category) => {
     const summary = stats.categoryBreakdown.find((item) => item.category === category);
     const words = allWords.filter((word) => word.category === category);
-    const featured = words[0];
+    const featured = [...words].sort((a, b) => b.id - a.id)[0] ?? words[0];
     const total = summary?.total ?? words.length;
     const learned = summary?.learned ?? 0;
     const mastered = summary?.mastered ?? 0;
