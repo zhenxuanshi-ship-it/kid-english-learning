@@ -15,6 +15,8 @@ describe('buildLearningStats', () => {
     expect(stats.masteredWords).toBe(1);
     expect(stats.wrongWords).toBe(1);
     expect(stats.accuracyRate).toBe(67);
+    expect(stats.stageCounts.mastered).toBeGreaterThanOrEqual(1);
+    expect(stats.stageCounts.review).toBeGreaterThanOrEqual(1);
   });
 
   it('includes category breakdown', () => {

@@ -1,4 +1,4 @@
-import type { WordProgress } from '../features/progress/types';
+import type { LearningStage, WordProgress } from '../features/progress/types';
 import type { Word } from '../types/word';
 
 export interface LearningStats {
@@ -7,6 +7,7 @@ export interface LearningStats {
   masteredWords: number;
   wrongWords: number;
   accuracyRate: number;
+  stageCounts: Record<LearningStage, number>;
   categoryBreakdown: Array<{
     category: string;
     total: number;
@@ -21,6 +22,13 @@ export function buildLearningStats(words: Word[], wordProgressMap: Record<number
   let wrongWords = 0;
   let totalCorrect = 0;
   let totalWrong = 0;
+  const stageCounts: Record<LearningStage, number> = {
+    new: 0,
+    learning: 0,
+    practicing: 0,
+    review: 0,
+    mastered: 0,
+  };
 
   Object.values(wordProgressMap).forEach((progress) => {
     if (progress.seenCount > 0) learnedIds.add(progress.wordId);
@@ -37,9 +45,11 @@ export function buildLearningStats(words: Word[], wordProgressMap: Record<number
 
   words.forEach((word) => {
     const current = categoryMap.get(word.category) ?? { total: 0, learned: 0, mastered: 0 };
+    const progress = wordProgressMap[word.id];
     current.total += 1;
     if (learnedIds.has(word.id)) current.learned += 1;
-    if (wordProgressMap[word.id]?.mastered) current.mastered += 1;
+    if (progress?.mastered) current.mastered += 1;
+    stageCounts[progress?.learningStage ?? 'new'] += 1;
     categoryMap.set(word.category, current);
   });
 
@@ -49,6 +59,7 @@ export function buildLearningStats(words: Word[], wordProgressMap: Record<number
     masteredWords,
     wrongWords,
     accuracyRate,
+    stageCounts,
     categoryBreakdown: Array.from(categoryMap.entries()).map(([category, value]) => ({
       category,
       ...value,

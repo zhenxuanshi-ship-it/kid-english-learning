@@ -51,6 +51,7 @@ export function HomePage({
         <div style={styles.hero}>儿童英语单词学习</div>
         <div style={styles.sub}>一轮 5 题，轻轻松松学单词</div>
         <div style={styles.starPanel}>🌟 已经收集了 <strong>{totalStars}</strong> 颗星星</div>
+        <div style={styles.pathTip}>今天有 {stats.stageCounts.new} 个新词、{stats.stageCounts.review} 个待复习词</div>
       </div>
 
       <div style={styles.sectionTitle}>选择今天的学习模式</div>
@@ -115,6 +116,12 @@ const styles: Record<string, CSSProperties> = {
     background: '#fff2b8',
     color: '#7d5a00',
     fontWeight: 800,
+  },
+  pathTip: {
+    marginTop: 12,
+    color: '#6b7a80',
+    fontWeight: 800,
+    fontSize: 14,
   },
   sectionTitle: {
     fontSize: 18,
