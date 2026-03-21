@@ -33,4 +33,9 @@ describe('createRound', () => {
     expect(round[0]).toBe(1);
     expect(round[1]).toBe(2);
   });
+
+  it('prefers newer unseen words within the same stage', () => {
+    const round = createPriorityRound(allWords, {}, 3, 'animals');
+    expect(round[0]).toBe(109);
+  });
 });

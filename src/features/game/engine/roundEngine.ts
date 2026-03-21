@@ -20,7 +20,14 @@ export function createPriorityRound(
   const sorted = [...picked].sort((a, b) => {
     const stageA = wordProgressMap[a.id]?.learningStage ?? 'new';
     const stageB = wordProgressMap[b.id]?.learningStage ?? 'new';
-    return getStagePriority(stageA) - getStagePriority(stageB);
+    const stageDiff = getStagePriority(stageA) - getStagePriority(stageB);
+    if (stageDiff !== 0) return stageDiff;
+
+    const seenA = wordProgressMap[a.id]?.seenCount ?? 0;
+    const seenB = wordProgressMap[b.id]?.seenCount ?? 0;
+    if (seenA !== seenB) return seenA - seenB;
+
+    return b.id - a.id;
   });
 
   return sorted.slice(0, Math.min(size, sorted.length)).map((word) => word.id);
