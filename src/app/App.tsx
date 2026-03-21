@@ -25,6 +25,7 @@ import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
 import { getSentencePattern } from '../lib/sentencePractice';
 import { getHomeSentenceSpotlight, getSentenceRecommendation, getSummarySentenceSpotlight, getTopicSentenceSpotlight } from '../lib/sentenceRecommendation';
+import { ensurePersistentStorage, type StorageDiagnostics } from '../lib/runtime';
 import { getSentencePatternIdsForCategory } from '../lib/sentenceCategoryLink';
 import { useSentenceGameStore } from '../store/sentenceGameStore';
 import { useSentenceProgressStore } from '../store/sentenceProgressStore';
@@ -40,6 +41,11 @@ export default function App() {
   const [newlyCompletedTaskKind, setNewlyCompletedTaskKind] = useState<string | undefined>();
   const [sentenceCorrectCount, setSentenceCorrectCount] = useState(0);
   const [pendingSentencePatternId, setPendingSentencePatternId] = useState<SentencePatternId | undefined>();
+  const [storageDiagnostics, setStorageDiagnostics] = useState<StorageDiagnostics>({
+    localStorageAvailable: true,
+    persistenceSupported: false,
+    persistenceGranted: false,
+  });
   const totalStars = useProgressStore((state) => state.totalStars);
   const currentMode = useProgressStore((state) => state.currentMode);
   const wordProgressMap = useProgressStore((state) => state.wordProgressMap);
@@ -69,6 +75,13 @@ export default function App() {
     hydrate();
     hydrateSettings();
     hydrateSentenceProgress();
+    ensurePersistentStorage().then(setStorageDiagnostics).catch(() => {
+      setStorageDiagnostics({
+        localStorageAvailable: false,
+        persistenceSupported: false,
+        persistenceGranted: false,
+      });
+    });
   }, [hydrate, hydrateSettings, hydrateSentenceProgress]);
 
   const correctCount = useMemo(
@@ -373,6 +386,7 @@ export default function App() {
             categories={wordCategories}
             autoPlaySound={autoPlaySound}
             soundEnabled={soundEnabled}
+            storageDiagnostics={storageDiagnostics}
             onRoundSizeChange={setRoundSize}
             onCategoryChange={setSelectedCategory}
             onToggleAutoPlaySound={toggleAutoPlaySound}

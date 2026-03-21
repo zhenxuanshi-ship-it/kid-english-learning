@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { SettingsPanel } from '../components/common/SettingsPanel';
 import { StatsPanel } from '../components/common/StatsPanel';
 import type { LearningStats } from '../lib/stats';
-import { APP_ENV, APP_VERSION } from '../lib/runtime';
+import { APP_ENV, APP_VERSION, type StorageDiagnostics } from '../lib/runtime';
 
 interface ProfilePageProps {
   stats: LearningStats;
@@ -12,6 +12,7 @@ interface ProfilePageProps {
   categories: string[];
   autoPlaySound: boolean;
   soundEnabled: boolean;
+  storageDiagnostics: StorageDiagnostics;
   onRoundSizeChange: (size: number) => void;
   onCategoryChange: (category: string) => void;
   onToggleAutoPlaySound: () => void;
@@ -26,6 +27,11 @@ export function ProfilePage(props: ProfilePageProps) {
         <div style={styles.releaseTitle}>🚀 版本信息</div>
         <div style={styles.releaseText}>版本：{APP_VERSION}</div>
         <div style={styles.releaseText}>环境：{APP_ENV}</div>
+        <div style={styles.releaseDivider} />
+        <div style={styles.releaseTitle}>💾 存储状态</div>
+        <div style={styles.releaseText}>localStorage：{props.storageDiagnostics.localStorageAvailable ? '可用' : '不可用'}</div>
+        <div style={styles.releaseText}>持久存储支持：{props.storageDiagnostics.persistenceSupported ? '支持' : '不支持'}</div>
+        <div style={styles.releaseText}>持久存储授权：{props.storageDiagnostics.persistenceGranted ? '已授权' : '未授权 / 未支持'}</div>
       </div>
       <SettingsPanel
         roundSize={props.roundSize}
@@ -54,4 +60,5 @@ const styles: Record<string, CSSProperties> = {
   },
   releaseTitle: { fontSize: 16, fontWeight: 900, color: '#384349' },
   releaseText: { fontSize: 13, fontWeight: 700, color: '#66757b' },
+  releaseDivider: { height: 1, background: '#edf1f3', margin: '4px 0' },
 };
