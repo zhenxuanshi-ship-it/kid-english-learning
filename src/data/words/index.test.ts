@@ -14,4 +14,9 @@ describe('word resources', () => {
     const importedWords = ['zebra', 'watermelon', 'crayon', 'classroom', 'umbrella', 'puddle'];
     expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
   });
+
+  it('includes newly imported missing step-2 words from the Y2 plan', () => {
+    const importedWords = ['burger', 'sticker'];
+    expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
+  });
 });
