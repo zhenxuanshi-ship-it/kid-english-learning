@@ -6,6 +6,12 @@ interface ReviewQueueCardProps {
   onStartReview?: () => void;
 }
 
+const priorityLabelMap = {
+  high: '高优先',
+  medium: '中优先',
+  light: '轻复习',
+} as const;
+
 export function ReviewQueueCard({ items, onStartReview }: ReviewQueueCardProps) {
   if (items.length === 0) {
     return (
@@ -28,7 +34,7 @@ export function ReviewQueueCard({ items, onStartReview }: ReviewQueueCardProps) 
             <div style={styles.rank}>{index + 1}</div>
             <div style={styles.main}>
               <div style={styles.wordLine}>{item.chinese} · {item.english}</div>
-              <div style={styles.meta}>错 {item.wrongCount} 次 · 当前阶段 {item.learningStage}</div>
+              <div style={styles.meta}>错 {item.wrongCount} 次 · 当前阶段 {item.learningStage} · {priorityLabelMap[item.priorityLabel]}</div>
             </div>
           </div>
         ))}
