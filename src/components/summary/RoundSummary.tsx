@@ -11,12 +11,17 @@ interface RoundSummaryProps {
   wrongWordIds: number[];
   completedTaskLabel?: string;
   completedTaskReward?: string;
+  nextTaskLabel?: string;
   onRestart: () => void;
   onRetryWrong: () => void;
+  onGoHome: () => void;
+  onGoTopics: () => void;
+  onGoReview: () => void;
+  onGoNextTask?: () => void;
   stats: LearningStats;
 }
 
-export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, completedTaskReward, onRestart, onRetryWrong, stats }: RoundSummaryProps) {
+export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, completedTaskLabel, completedTaskReward, nextTaskLabel, onRestart, onRetryWrong, onGoHome, onGoTopics, onGoReview, onGoNextTask, stats }: RoundSummaryProps) {
   const wrongWords = wrongWordIds
     .map((id) => allWords.find((word) => word.id === id))
     .filter(Boolean);
@@ -54,6 +59,15 @@ export function RoundSummary({ correctCount, roundTotal, stars, wrongWordIds, co
       <div style={styles.actions}>
         <button style={styles.primary} onClick={onRestart}>再来一轮</button>
         {wrongWordIds.length > 0 ? <button style={styles.secondary} onClick={onRetryWrong}>复习错题</button> : null}
+      </div>
+      <div style={styles.navBlock}>
+        <div style={styles.navTitle}>下一步去哪？</div>
+        <div style={styles.navGrid}>
+          {onGoNextTask && nextTaskLabel ? <button style={styles.navButton} onClick={onGoNextTask}>继续下一项：{nextTaskLabel}</button> : null}
+          <button style={styles.navButton} onClick={onGoHome}>回首页</button>
+          <button style={styles.navButton} onClick={onGoTopics}>去主题页</button>
+          <button style={styles.navButton} onClick={onGoReview}>去复习页</button>
+        </div>
       </div>
     </motion.div>
   );
@@ -128,6 +142,25 @@ const styles: Record<string, CSSProperties> = {
   text: { fontSize: 18, margin: '18px 0 8px', textAlign: 'center' },
   footer: { textAlign: 'center', color: '#7c8a90', marginTop: 16, fontWeight: 700 },
   actions: { display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 20 },
+  navBlock: {
+    marginTop: 18,
+    display: 'grid',
+    gap: 10,
+    background: '#fff',
+    borderRadius: 20,
+    padding: 16,
+    boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
+  },
+  navTitle: { fontWeight: 900, fontSize: 16 },
+  navGrid: { display: 'grid', gap: 10 },
+  navButton: {
+    minHeight: 48,
+    border: 'none',
+    borderRadius: 16,
+    background: '#f7f9fc',
+    fontWeight: 800,
+    color: '#4f5d63',
+  },
   primary: {
     flex: 1,
     minHeight: 56,

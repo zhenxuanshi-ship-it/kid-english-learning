@@ -174,6 +174,33 @@ export default function App() {
     setScreen('learn');
   };
 
+  const handleGoHome = () => {
+    game.resetRound();
+    setScreen('home');
+    setNavTab('home');
+  };
+
+  const handleGoTopics = () => {
+    game.resetRound();
+    setScreen('home');
+    setNavTab('topics');
+  };
+
+  const handleGoReview = () => {
+    game.resetRound();
+    setScreen('home');
+    setNavTab('review');
+  };
+
+  const handleGoNextTask = () => {
+    const nextTask = dailyPlan.tasks.find((task) => !completedDailyTaskKinds.includes(task.kind));
+    if (!nextTask) {
+      handleGoHome();
+      return;
+    }
+    handleStartTask(nextTask);
+  };
+
   const handlePickLetter = (letter: string, index: number) => {
     game.inputLetter(letter);
     setUsedLetterIndexes((prev) => [...prev, index]);
@@ -267,6 +294,7 @@ export default function App() {
             wrongWordIds={game.wrongWordIds}
             completedTaskLabel={completedTaskLabel}
             completedTaskReward={completedTaskReward}
+            nextTaskLabel={nextTaskRecommendation.nextLabel}
             onRestart={() => {
               setCompletedTaskLabel(undefined);
               setCompletedTaskReward(undefined);
@@ -275,6 +303,10 @@ export default function App() {
               setScreen('home');
             }}
             onRetryWrong={handleRetryWrong}
+            onGoHome={handleGoHome}
+            onGoTopics={handleGoTopics}
+            onGoReview={handleGoReview}
+            onGoNextTask={nextTaskRecommendation.nextLabel ? handleGoNextTask : undefined}
             stats={stats}
           />
         ) : null}
