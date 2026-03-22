@@ -1,4 +1,4 @@
-export type SentencePatternId = 'this_is' | 'i_like' | 'i_have' | 'it_is' | 'what_is_this' | 'whos_this' | 'how_are_you';
+export type SentencePatternId = 'this_is' | 'i_like' | 'i_have' | 'it_is' | 'what_is_this' | 'whos_this' | 'how_are_you' | 'where_is' | 'what_color' | 'is_it_or' | 'what_can' | 'i_love';
 export type SentenceExerciseMode = 'choose_word' | 'match_sentence' | 'reorder_words';
 
 export interface SentencePattern {

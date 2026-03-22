@@ -14,6 +14,21 @@ import angryImage from '../../assets/word-images/angry.svg';
 import happyImage from '../../assets/word-images/happy.svg';
 import hungryImage from '../../assets/word-images/hungry.svg';
 import sadImage from '../../assets/word-images/sad.svg';
+import beautifulImage from '../../assets/word-images/beautiful.svg';
+import bigImage from '../../assets/word-images/big.svg';
+import eatImage from '../../assets/word-images/eat.svg';
+import hardImage from '../../assets/word-images/hard.svg';
+import jumpImage from '../../assets/word-images/jump.svg';
+import livingImage from '../../assets/word-images/living-room.svg';
+import longImage from '../../assets/word-images/long.svg';
+import playImage from '../../assets/word-images/play.svg';
+import runImage from '../../assets/word-images/run.svg';
+import shortImage from '../../assets/word-images/short.svg';
+import singImage from '../../assets/word-images/sing.svg';
+import sleepImage from '../../assets/word-images/sleep.svg';
+import smallImage from '../../assets/word-images/small.svg';
+import softImage from '../../assets/word-images/soft.svg';
+import sofaImage from '../../assets/word-images/sofa.svg';
 import type { Word } from '../../types/word';
 import appleImage from '../../assets/word-images/apple.svg';
 import bagImage from '../../assets/word-images/bag.svg';
@@ -149,6 +164,22 @@ export const allWords: Word[] = [
   { id: 153, english: 'sad', chinese: '伤心', category: 'emotions', level: 2, difficulty: 2, emoji: '😢', imageUrl: sadImage },
   { id: 154, english: 'angry', chinese: '生气', category: 'emotions', level: 3, difficulty: 3, emoji: '😠', imageUrl: angryImage },
   { id: 155, english: 'hungry', chinese: '饿', category: 'emotions', level: 2, difficulty: 2, emoji: '🤤', imageUrl: hungryImage },
+
+  { id: 160, english: 'sofa', chinese: '沙发', category: 'home', level: 2, difficulty: 2, emoji: '🛋️', imageUrl: sofaImage },
+  { id: 161, english: 'living room', chinese: '客厅', category: 'home', level: 2, difficulty: 2, emoji: '🏠', imageUrl: livingImage },
+  { id: 162, english: 'big', chinese: '大的', category: 'adjectives', level: 2, difficulty: 2, emoji: '🔴', imageUrl: bigImage },
+  { id: 163, english: 'small', chinese: '小的', category: 'adjectives', level: 2, difficulty: 2, emoji: '🔵', imageUrl: smallImage },
+  { id: 164, english: 'soft', chinese: '软的', category: 'adjectives', level: 2, difficulty: 2, emoji: '🧸', imageUrl: softImage },
+  { id: 165, english: 'hard', chinese: '硬的', category: 'adjectives', level: 3, difficulty: 3, emoji: '🪨', imageUrl: hardImage },
+  { id: 166, english: 'long', chinese: '长的', category: 'adjectives', level: 2, difficulty: 2, emoji: '📏', imageUrl: longImage },
+  { id: 167, english: 'short', chinese: '短的', category: 'adjectives', level: 2, difficulty: 2, emoji: '📐', imageUrl: shortImage },
+  { id: 168, english: 'beautiful', chinese: '漂亮的', category: 'adjectives', level: 3, difficulty: 3, emoji: '🌸', imageUrl: beautifulImage },
+  { id: 169, english: 'jump', chinese: '跳', category: 'actions', level: 2, difficulty: 2, emoji: '🦘', imageUrl: jumpImage },
+  { id: 170, english: 'run', chinese: '跑', category: 'actions', level: 2, difficulty: 2, emoji: '🏃', imageUrl: runImage },
+  { id: 171, english: 'eat', chinese: '吃', category: 'actions', level: 1, difficulty: 1, emoji: '🍽️', imageUrl: eatImage },
+  { id: 172, english: 'sleep', chinese: '睡觉', category: 'actions', level: 2, difficulty: 2, emoji: '😴', imageUrl: sleepImage },
+  { id: 173, english: 'play', chinese: '玩', category: 'actions', level: 1, difficulty: 1, emoji: '🎮', imageUrl: playImage },
+  { id: 174, english: 'sing', chinese: '唱歌', category: 'actions', level: 2, difficulty: 2, emoji: '🎤', imageUrl: singImage },
 
   { id: 56, english: 'book', chinese: '书', category: 'school', level: 1, difficulty: 1, emoji: '📘', imageUrl: bookImage },
   { id: 57, english: 'pen', chinese: '钢笔', category: 'school', level: 1, difficulty: 1, emoji: '🖊️', imageUrl: penImage },
