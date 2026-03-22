@@ -19,4 +19,9 @@ describe('word resources', () => {
     const importedWords = ['burger', 'sticker'];
     expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
   });
+
+  it('continues importing remaining safe Y2 words into the word bank', () => {
+    const importedWords = ['paper', 'scissors', 'card', 'pizza', 'jacket', 'raincoat'];
+    expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
+  });
 });
