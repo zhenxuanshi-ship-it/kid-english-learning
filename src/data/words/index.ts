@@ -177,6 +177,20 @@ export const allWords: Word[] = [
   { id: 124, english: 'gift', chinese: '礼物', category: 'celebrations', level: 1, difficulty: 1, emoji: '🎁' },
   { id: 125, english: 'slide', chinese: '滑梯', category: 'playground', level: 1, difficulty: 1, emoji: '🛝' },
   { id: 126, english: 'swing', chinese: '秋千', category: 'playground', level: 1, difficulty: 1, emoji: '🪢' },
+  { id: 127, english: 'tomato', chinese: '番茄', category: 'food', level: 1, difficulty: 1, emoji: '🍅' },
+  { id: 128, english: 'carrot', chinese: '胡萝卜', category: 'food', level: 1, difficulty: 1, emoji: '🥕' },
+  { id: 129, english: 'potato', chinese: '土豆', category: 'food', level: 1, difficulty: 1, emoji: '🥔' },
+  { id: 130, english: 'fries', chinese: '薯条', category: 'food', level: 2, difficulty: 2, emoji: '🍟' },
+  { id: 131, english: 'pie', chinese: '派', category: 'food', level: 2, difficulty: 2, emoji: '🥧' },
+  { id: 132, english: 'sandwich', chinese: '三明治', category: 'food', level: 2, difficulty: 2, emoji: '🥪' },
+  { id: 133, english: 'salad', chinese: '沙拉', category: 'food', level: 2, difficulty: 2, emoji: '🥗' },
+  { id: 134, english: 'soup', chinese: '汤', category: 'food', level: 2, difficulty: 2, emoji: '🍲' },
+  { id: 135, english: 'tea', chinese: '茶', category: 'food', level: 2, difficulty: 2, emoji: '🍵' },
+  { id: 136, english: 'bowl', chinese: '碗', category: 'food', level: 1, difficulty: 1, emoji: '🥣' },
+  { id: 137, english: 'spoon', chinese: '勺子', category: 'food', level: 1, difficulty: 1, emoji: '🥄' },
+  { id: 138, english: 'cup', chinese: '杯子', category: 'food', level: 1, difficulty: 1, emoji: '☕' },
+  { id: 139, english: 'plate', chinese: '盘子', category: 'food', level: 1, difficulty: 1, emoji: '🍽️' },
+  { id: 140, english: 'fork', chinese: '叉子', category: 'food', level: 1, difficulty: 1, emoji: '🍴' },
 ];
 
 export const wordCategories = Array.from(new Set(allWords.map((word) => word.category)));

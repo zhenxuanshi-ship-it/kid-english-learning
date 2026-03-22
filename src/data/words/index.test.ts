@@ -30,6 +30,11 @@ describe('word resources', () => {
     expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
   });
 
+  it('imports the first Y2 food pack into the word bank', () => {
+    const importedWords = ['tomato', 'carrot', 'potato', 'fries', 'pie', 'sandwich', 'salad', 'soup', 'tea', 'bowl', 'spoon', 'cup', 'plate', 'fork'];
+    expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
+  });
+
   it('absorbs remaining Y2 plural or spacing variants as aliases without duplicating the core bank', () => {
     expect(allWords.find((word) => word.english === 'grape')?.sourceAliases).toContain('grapes');
     expect(allWords.find((word) => word.english === 'eye')?.sourceAliases).toContain('eyes');
