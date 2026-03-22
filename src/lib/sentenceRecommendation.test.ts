@@ -69,6 +69,31 @@ describe('sentenceRecommendation', () => {
     expect(pattern?.id).toBe('it_is');
   });
 
+  it('prioritizes review-stage sentence patterns over fresher ones', () => {
+    const result = getSentenceRecommendation({
+      i_like: {
+        patternId: 'i_like',
+        seenCount: 2,
+        correctCount: 1,
+        wrongCount: 2,
+        mastered: false,
+        stage: 'review',
+        lastPracticedAt: 100,
+      },
+      this_is: {
+        patternId: 'this_is',
+        seenCount: 0,
+        correctCount: 0,
+        wrongCount: 0,
+        mastered: false,
+        stage: 'new',
+        lastPracticedAt: 200,
+      },
+    });
+
+    expect(result.recommendedPattern?.id).toBe('i_like');
+  });
+
   it('summary spotlight prefers linked patterns right after a round', () => {
     const pattern = getSummarySentenceSpotlight({}, ['this_is']);
     expect(pattern?.id).toBe('this_is');

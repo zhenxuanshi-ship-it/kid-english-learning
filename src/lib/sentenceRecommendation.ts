@@ -7,10 +7,26 @@ export interface SentenceRecommendation {
   orderedPatterns: SentencePattern[];
 }
 
+function getStageWeight(progress?: SentenceProgress): number {
+  if (!progress) return 300;
+  switch (progress.stage) {
+    case 'review':
+      return 1200;
+    case 'learning':
+      return 800;
+    case 'new':
+      return 500;
+    case 'mastered':
+      return -200;
+    default:
+      return 0;
+  }
+}
+
 function getPriorityScore(progress?: SentenceProgress): number {
   if (!progress) return 1000;
   if (progress.mastered) return -100;
-  return progress.wrongCount * 100 + progress.seenCount * 10 - progress.correctCount * 20;
+  return getStageWeight(progress) + progress.wrongCount * 100 + progress.seenCount * 10 - progress.correctCount * 20;
 }
 
 function buildOrderedPatterns(
@@ -37,7 +53,13 @@ function getContinuePattern(progressMap: Partial<Record<SentencePatternId, Sente
       const progress = progressMap[pattern.id];
       return progress && !progress.mastered && progress.seenCount > 0;
     })
-    .sort((a, b) => (progressMap[b.id]?.lastPracticedAt ?? 0) - (progressMap[a.id]?.lastPracticedAt ?? 0))[0];
+    .sort((a, b) => {
+      const progressA = progressMap[a.id];
+      const progressB = progressMap[b.id];
+      const scoreDiff = getPriorityScore(progressB) - getPriorityScore(progressA);
+      if (scoreDiff !== 0) return scoreDiff;
+      return (progressB?.lastPracticedAt ?? 0) - (progressA?.lastPracticedAt ?? 0);
+    })[0];
 }
 
 function getFirstUnmastered(
