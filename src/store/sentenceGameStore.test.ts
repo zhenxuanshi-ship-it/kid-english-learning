@@ -25,7 +25,7 @@ describe('sentenceGameStore', () => {
 
   it('checks choose-word answers', () => {
     useSentenceGameStore.getState().startRound('this_is');
-    useSentenceGameStore.getState().selectAnswer('cat');
+    useSentenceGameStore.getState().selectAnswer('mom');
     expect(useSentenceGameStore.getState().isCorrect).toBe(true);
   });
 

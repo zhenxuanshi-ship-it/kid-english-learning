@@ -26,9 +26,9 @@ describe('sentencePractice', () => {
     const iLike = getSentenceExercises('i_like').map((item) => item.english).join(' ');
     const iHave = getSentenceExercises('i_have').map((item) => item.english).join(' ');
 
-    expect(thisIs).toContain('zebra');
+    expect(thisIs).toContain('mom');
     expect(iLike).toContain('sandwich');
-    expect(iHave).toContain('sticker');
+    expect(iHave).toContain('brother');
   });
 
   it('links sentence keywords back to canonical word-bank entries', () => {
