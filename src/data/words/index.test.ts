@@ -25,6 +25,11 @@ describe('word resources', () => {
     expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
   });
 
+  it('adds the next safe celebratory and playground Y2 words', () => {
+    const importedWords = ['balloon', 'gift', 'slide', 'swing'];
+    expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
+  });
+
   it('absorbs remaining Y2 plural or spacing variants as aliases without duplicating the core bank', () => {
     expect(allWords.find((word) => word.english === 'grape')?.sourceAliases).toContain('grapes');
     expect(allWords.find((word) => word.english === 'eye')?.sourceAliases).toContain('eyes');
