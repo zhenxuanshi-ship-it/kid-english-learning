@@ -1,4 +1,51 @@
-export function speakWord(text: string, enabled = true, rate = 0.92): void {
+let cachedVoices: SpeechSynthesisVoice[] = [];
+
+export function loadVoices(): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    if (cachedVoices.length > 0) {
+      resolve(cachedVoices);
+      return;
+    }
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      resolve([]);
+      return;
+    }
+    const onVoicesChanged = () => {
+      cachedVoices = window.speechSynthesis!.getVoices();
+      window.speechSynthesis!.removeEventListener('voiceschanged', onVoicesChanged);
+      resolve(cachedVoices);
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', onVoicesChanged);
+    // Some browsers fire voiceschanged synchronously on first call
+    const initial = window.speechSynthesis.getVoices();
+    if (initial.length > 0) {
+      cachedVoices = initial;
+      resolve(cachedVoices);
+    }
+  });
+}
+
+// Voice quality tiers — higher index = more natural-sounding
+// macOS: Alex (natural) > Samantha > Karen > default
+// Windows: David > Zira > default
+// Prefer voices with explicit quality signals in the name
+const VOICE_PREFERENCE = [
+  'Alex',
+  'Samantha',
+  'Karen',
+  'Moira',
+  'Tessa',
+  'Fiona',
+  'Serena',
+  'Daniel',
+  'Google UK English Female',
+  'Google UK English Male',
+  'Google US English',
+  'Microsoft Zira',
+  'Microsoft David',
+];
+
+export function speakWord(text: string, enabled = true, rate = 0.95): void {
   if (!enabled || typeof window === 'undefined' || !('speechSynthesis' in window) || !text) return;
 
   const synth = window.speechSynthesis;
@@ -7,19 +54,55 @@ export function speakWord(text: string, enabled = true, rate = 0.92): void {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'en-US';
   utterance.rate = rate;
-  utterance.pitch = 1.1;
-  utterance.volume = 0.95;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
 
-  const voices = synth.getVoices();
-  const preferred = voices.find((voice) => voice.lang.toLowerCase().startsWith('en'));
-  if (preferred) utterance.voice = preferred;
+  const voice = pickBestVoice(cachedVoices);
+  if (voice) {
+    utterance.voice = voice;
+  } else {
+    // No voices cached yet — load async and retry immediately with cached
+    loadVoices().then((voices) => {
+      const best = pickBestVoice(voices);
+      if (best) {
+        utterance.voice = best;
+      }
+      synth.speak(utterance);
+    });
+    return;
+  }
 
   synth.speak(utterance);
 }
 
+function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
+  if (!voices.length) return undefined;
+
+  // 1. Exact match on preferred names
+  for (const name of VOICE_PREFERENCE) {
+    const match = voices.find((v) => v.name === name || v.localService);
+    if (match) return match;
+  }
+
+  // 2. Partial match (preferred name contains)
+  for (const name of VOICE_PREFERENCE) {
+    const match = voices.find((v) => v.name.includes(name));
+    if (match) return match;
+  }
+
+  // 3. Prefer local (offline) voices over remote
+  const local = voices.find((v) => v.localService);
+  if (local) return local;
+
+  // 4. Any English voice
+  return voices.find((v) => v.lang.toLowerCase().startsWith('en')) ?? voices[0];
+}
+
 export function playSuccessTone(enabled = true): void {
   if (!enabled || typeof window === 'undefined') return;
-  const AudioContextRef = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const AudioContextRef =
+    window.AudioContext ||
+    (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextRef) return;
 
   const ctx = new AudioContextRef();
@@ -54,7 +137,9 @@ export function playSuccessTone(enabled = true): void {
 
 export function playErrorTone(enabled = true): void {
   if (!enabled || typeof window === 'undefined') return;
-  const AudioContextRef = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const AudioContextRef =
+    window.AudioContext ||
+    (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextRef) return;
 
   const ctx = new AudioContextRef();

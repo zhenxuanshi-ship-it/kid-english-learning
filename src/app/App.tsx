@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { loadVoices } from '../lib/audio';
 import { BottomNav, type NavTab } from '../components/common/BottomNav';
 import { HomePage } from '../pages/HomePage';
 import { LearnPage } from '../pages/LearnPage';
@@ -34,6 +35,11 @@ import type { SentencePatternId } from '../types/sentence';
 import type { GameMode } from '../types/question';
 
 export default function App() {
+  // Pre-load TTS voices on app start so first pronunciation has no delay
+  useEffect(() => {
+    void loadVoices();
+  }, []);
+
   const [screen, setScreen] = useState<'home' | 'learn' | 'summary' | 'sentenceHub' | 'sentenceCard' | 'sentenceLearn' | 'sentenceSummary'>('home');
   const [navTab, setNavTab] = useState<NavTab>('home');
   const [completedTaskLabel, setCompletedTaskLabel] = useState<string | undefined>();
