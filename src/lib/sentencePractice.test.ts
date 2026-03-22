@@ -27,7 +27,7 @@ describe('sentencePractice', () => {
     const iHave = getSentenceExercises('i_have').map((item) => item.english).join(' ');
 
     expect(thisIs).toContain('zebra');
-    expect(iLike).toContain('watermelon');
+    expect(iLike).toContain('sandwich');
     expect(iHave).toContain('sticker');
   });
 

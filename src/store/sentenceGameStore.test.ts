@@ -33,7 +33,7 @@ describe('sentenceGameStore', () => {
     useSentenceGameStore.getState().startRound('i_like');
     useSentenceGameStore.getState().nextExercise();
     useSentenceGameStore.getState().nextExercise();
-    useSentenceGameStore.getState().arrangeTokens(['I', 'like', 'watermelon']);
+    useSentenceGameStore.getState().arrangeTokens(['I', 'like', 'soup']);
     expect(useSentenceGameStore.getState().isCorrect).toBe(true);
   });
 
