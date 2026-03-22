@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
+import { WordVisual } from '../components/common/WordVisual';
 import type { SentenceExercise } from '../types/sentence';
+import type { Word } from '../types/word';
 
 interface SentenceLearnPageProps {
   exercise: SentenceExercise | null;
@@ -8,6 +10,7 @@ interface SentenceLearnPageProps {
   roundTotal: number;
   selectedAnswer?: string;
   arrangedTokens: string[];
+  linkedWords: Word[];
   isCorrect?: boolean;
   onSelectAnswer: (answer: string) => void;
   onArrangeTokens: (tokens: string[]) => void;
@@ -21,6 +24,7 @@ export function SentenceLearnPage({
   roundTotal,
   selectedAnswer,
   arrangedTokens,
+  linkedWords,
   isCorrect,
   onSelectAnswer,
   onArrangeTokens,
@@ -42,6 +46,21 @@ export function SentenceLearnPage({
         <div style={styles.mascot}>🪄 跟着句子小精灵，一步步来</div>
         <div style={styles.prompt}>{exercise.prompt ?? '完成这个小句子'}</div>
         <div style={styles.chinese}>{exercise.chinese}</div>
+
+        {linkedWords.length > 0 ? (
+          <div style={styles.linkedWordsCard}>
+            <div style={styles.linkedWordsTitle}>这句用到了这些词</div>
+            <div style={styles.linkedWordsGrid}>
+              {linkedWords.map((word) => (
+                <div key={word.id} style={styles.linkedWordItem}>
+                  <WordVisual word={word} size="sm" />
+                  <div style={styles.linkedWordEnglish}>{word.english}</div>
+                  <div style={styles.linkedWordChinese}>{word.chinese}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         {(exercise.mode === 'choose_word' || exercise.mode === 'match_sentence') && exercise.options ? (
           <div style={styles.options}>
@@ -122,6 +141,19 @@ const styles: Record<string, CSSProperties> = {
   mascot: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
   prompt: { fontSize: 22, fontWeight: 900, color: '#374349' },
   chinese: { fontSize: 14, fontWeight: 700, color: '#66757b' },
+  linkedWordsCard: {
+    background: '#fff',
+    borderRadius: 18,
+    padding: 12,
+    display: 'grid',
+    gap: 10,
+    boxShadow: '0 8px 16px rgba(0,0,0,0.04)',
+  },
+  linkedWordsTitle: { fontSize: 13, fontWeight: 900, color: '#5a4bcc' },
+  linkedWordsGrid: { display: 'flex', flexWrap: 'wrap', gap: 10 },
+  linkedWordItem: { width: 72, display: 'grid', gap: 4, justifyItems: 'center', textAlign: 'center' },
+  linkedWordEnglish: { fontSize: 12, fontWeight: 900, color: '#384349' },
+  linkedWordChinese: { fontSize: 11, fontWeight: 700, color: '#7b8890' },
   options: { display: 'grid', gap: 8 },
   option: {
     minHeight: 48,

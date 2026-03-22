@@ -23,7 +23,7 @@ import { getNextTaskRecommendation } from '../lib/nextTask';
 import { getHomeRecommendation } from '../lib/recommendation';
 import { buildReviewQueue } from '../lib/review';
 import { buildLearningStats } from '../lib/stats';
-import { getSentencePattern } from '../lib/sentencePractice';
+import { getSentenceLinkedWords, getSentencePattern } from '../lib/sentencePractice';
 import { getHomeSentenceSpotlight, getSentenceRecommendation, getSummarySentenceSpotlight, getTopicSentenceSpotlight } from '../lib/sentenceRecommendation';
 import { ensurePersistentStorage, type StorageDiagnostics } from '../lib/runtime';
 import { getSentencePatternIdsForCategory } from '../lib/sentenceCategoryLink';
@@ -173,6 +173,10 @@ export default function App() {
     const currentIndex = sentencePatterns.findIndex((pattern) => pattern.id === sentenceGame.currentPatternId);
     return currentIndex >= 0 ? sentencePatterns[currentIndex + 1] : undefined;
   }, [sentenceGame.currentPatternId]);
+  const currentSentenceLinkedWords = useMemo(
+    () => (sentenceGame.currentExercise ? getSentenceLinkedWords(sentenceGame.currentExercise) : []),
+    [sentenceGame.currentExercise],
+  );
   const summarySentenceSuggestion = useMemo(
     () => getSummarySentenceSpotlight(sentenceProgressMap, sentencePreferredPatternIds),
     [sentencePreferredPatternIds, sentenceProgressMap],
@@ -435,6 +439,7 @@ export default function App() {
             roundTotal={sentenceGame.round.length}
             selectedAnswer={sentenceGame.selectedAnswer}
             arrangedTokens={sentenceGame.arrangedTokens}
+            linkedWords={currentSentenceLinkedWords}
             isCorrect={sentenceGame.isCorrect}
             onSelectAnswer={handleSentenceAnswer}
             onArrangeTokens={handleSentenceArrange}
