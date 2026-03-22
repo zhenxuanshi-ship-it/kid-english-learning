@@ -5,7 +5,7 @@ const categorySentenceMap: Partial<Record<string, SentencePatternId[]>> = {
   fruits: ['i_like', 'this_is'],
   colors: ['it_is', 'this_is'],
   numbers: ['i_have', 'what_is_this'],
-  family: ['this_is', 'i_have'],
+  family: ['this_is', 'i_have', 'whos_this'],
   school: ['i_have', 'this_is'],
   food: ['i_like', 'what_is_this'],
   body: ['i_have', 'it_is'],

@@ -31,8 +31,13 @@ export const sentencePatterns: SentencePattern[] = [
     description: '认识“这是什么？”这种问答句。',
     examples: ['What is this?', 'It is a dog.'],
   },
+  {
+    id: 'whos_this',
+    title: "Who's this?",
+    description: '认识"这是谁？"这种问答句。',
+    examples: ["Who's this? This is my mom.", "Who's this? This is my grandma."],
+  },
 ];
-
 export const sentenceExercises: SentenceExercise[] = [
   {
     id: 'this-is-choose-cat',
@@ -193,5 +198,38 @@ export const sentenceExercises: SentenceExercise[] = [
     tokens: ['dog', 'a', 'It', 'is'],
     answer: ['It', 'is', 'a', 'dog'],
     imageWordId: 2,
+  },
+
+  {
+    id: 'whos-this-choose-mom',
+    patternId: 'whos_this',
+    mode: 'choose_word',
+    english: "This is my mom.",
+    chinese: '这是我的妈妈。',
+    prompt: "Who's this? This is my ___ .",
+    options: ['mom', 'house', 'run'],
+    answer: 'mom',
+    imageWordId: 48,
+  },
+  {
+    id: 'whos-this-match-grandma',
+    patternId: 'whos_this',
+    mode: 'match_sentence',
+    english: "Who's this? This is my grandma.",
+    chinese: '这是谁？这是我的奶奶。',
+    prompt: '选出意思对的句子',
+    options: ["Who's this? This is my grandma.", "I like grandma.", "This is a grandma."],
+    answer: "Who's this? This is my grandma.",
+    imageWordId: 53,
+  },
+  {
+    id: 'whos-this-order-grandpa',
+    patternId: 'whos_this',
+    mode: 'reorder_words',
+    english: "This is my grandpa.",
+    chinese: '这是我的爷爷。',
+    tokens: ['grandpa', 'my', 'This', 'is'],
+    answer: ['This', 'is', 'my', 'grandpa'],
+    imageWordId: 54,
   },
 ];
