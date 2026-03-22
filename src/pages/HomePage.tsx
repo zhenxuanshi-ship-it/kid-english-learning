@@ -8,7 +8,7 @@ import type { DailySummary } from '../lib/dailySummary';
 import type { NextTaskRecommendation } from '../lib/nextTask';
 import type { HomeRecommendation } from '../lib/recommendation';
 import type { LearningStats } from '../lib/stats';
-import type { SentencePattern } from '../types/sentence';
+import type { SentenceLearningStage, SentencePattern } from '../types/sentence';
 import type { GameMode } from '../types/question';
 import { trackEvent } from '../lib/telemetry';
 
@@ -28,6 +28,7 @@ interface HomePageProps {
   nextTaskRecommendation: NextTaskRecommendation;
   sentenceRecommendedPattern?: SentencePattern;
   sentenceContinuePattern?: SentencePattern;
+  sentenceStageSummary: Record<SentenceLearningStage, number>;
   completedDailyTaskKinds: string[];
   newlyCompletedTaskKind?: string;
   onStartTask: (task: DailyPlan['tasks'][number]) => void;
@@ -55,6 +56,7 @@ export function HomePage({
   nextTaskRecommendation,
   sentenceRecommendedPattern,
   sentenceContinuePattern,
+  sentenceStageSummary,
   completedDailyTaskKinds,
   newlyCompletedTaskKind,
   onStartTask,
@@ -100,6 +102,16 @@ export function HomePage({
           <div style={styles.sentenceDesc}>{sentenceContinuePattern ? '先把上次练到一半的句型接着完成。' : '今天先练一个最该上的句型。'}</div>
         </button>
       ) : null}
+
+      <div style={styles.sentenceStatusCard}>
+        <div style={styles.sentenceStatusTitle}>🧩 今天句型进度</div>
+        <div style={styles.sentenceStatusGrid}>
+          <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.new}</strong><span>新句型</span></div>
+          <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.learning}</strong><span>练习中</span></div>
+          <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.review}</strong><span>待复习</span></div>
+          <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.mastered}</strong><span>已掌握</span></div>
+        </div>
+      </div>
 
       <div style={styles.quickGrid}>
         <button style={styles.quickCard} onClick={onOpenTopics}>
@@ -196,6 +208,27 @@ const styles: Record<string, CSSProperties> = {
   sentenceKicker: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
   sentenceTitle: { fontSize: 18, fontWeight: 900, color: '#433880' },
   sentenceDesc: { fontSize: 13, fontWeight: 700, color: '#66757b' },
+  sentenceStatusCard: {
+    background: '#fff',
+    borderRadius: 18,
+    padding: 12,
+    boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
+    display: 'grid',
+    gap: 8,
+  },
+  sentenceStatusTitle: { fontSize: 14, fontWeight: 900, color: '#433880' },
+  sentenceStatusGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 },
+  sentenceStatusItem: {
+    background: '#f8f7ff',
+    borderRadius: 14,
+    padding: '10px 6px',
+    display: 'grid',
+    gap: 2,
+    textAlign: 'center',
+    fontSize: 11,
+    color: '#66757b',
+    fontWeight: 700,
+  },
   quickGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 },
   quickCard: {
     minHeight: 96,

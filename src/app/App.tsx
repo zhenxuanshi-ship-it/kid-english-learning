@@ -181,6 +181,14 @@ export default function App() {
     () => getSummarySentenceSpotlight(sentenceProgressMap, sentencePreferredPatternIds),
     [sentencePreferredPatternIds, sentenceProgressMap],
   );
+  const sentenceStageSummary = useMemo(() => {
+    const summary = { new: 0, learning: 0, review: 0, mastered: 0 };
+    sentencePatterns.forEach((pattern) => {
+      const stage = sentenceProgressMap[pattern.id]?.stage ?? 'new';
+      summary[stage] += 1;
+    });
+    return summary;
+  }, [sentenceProgressMap]);
 
   const handleStart = (useRecommendationCategory = false) => {
     setCompletedTaskLabel(undefined);
@@ -360,6 +368,7 @@ export default function App() {
             nextTaskRecommendation={nextTaskRecommendation}
             sentenceRecommendedPattern={homeSentenceSpotlight}
             sentenceContinuePattern={sentenceRecommendation.continuePattern}
+            sentenceStageSummary={sentenceStageSummary}
             completedDailyTaskKinds={completedDailyTaskKinds}
             newlyCompletedTaskKind={newlyCompletedTaskKind}
             onStartTask={handleStartTask}

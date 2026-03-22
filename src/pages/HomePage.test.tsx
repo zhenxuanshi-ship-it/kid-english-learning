@@ -51,6 +51,7 @@ describe('HomePage', () => {
     },
     sentenceRecommendedPattern: { id: 'i_like' as const, title: 'I like ...', description: '认识“我喜欢……”这种句子。', examples: ['I like apples.', 'I like dogs.'] },
     sentenceContinuePattern: undefined,
+    sentenceStageSummary: { new: 2, learning: 1, review: 1, mastered: 1 },
     completedDailyTaskKinds: [],
     onModeChange: vi.fn(),
     onStart: vi.fn(),
