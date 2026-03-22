@@ -1,3 +1,15 @@
+import bathroomImage from '../../assets/word-images/bathroom.svg';
+import bedroomImage from '../../assets/word-images/bedroom.svg';
+import bedImage from '../../assets/word-images/bed.svg';
+import couchImage from '../../assets/word-images/couch.svg';
+import doorImage from '../../assets/word-images/door.svg';
+import gardenImage from '../../assets/word-images/garden.svg';
+import houseImage from '../../assets/word-images/house.svg';
+import kitchenImage from '../../assets/word-images/kitchen.svg';
+import lampImage from '../../assets/word-images/lamp.svg';
+import stairsImage from '../../assets/word-images/stairs.svg';
+import tableImage from '../../assets/word-images/table.svg';
+import windowImage from '../../assets/word-images/window.svg';
 import type { Word } from '../../types/word';
 import appleImage from '../../assets/word-images/apple.svg';
 import bagImage from '../../assets/word-images/bag.svg';
@@ -115,6 +127,19 @@ export const allWords: Word[] = [
   { id: 53, english: 'grandma', chinese: '奶奶/外婆', category: 'family', level: 3, difficulty: 4, emoji: '👵', imageUrl: grandmaImage },
   { id: 54, english: 'grandpa', chinese: '爷爷/外公', category: 'family', level: 3, difficulty: 4, emoji: '👴', imageUrl: grandpaImage },
   { id: 55, english: 'family', chinese: '家庭', category: 'family', level: 3, difficulty: 4, emoji: '👨‍👩‍👧‍👦', imageUrl: familyImage },
+
+  { id: 140, english: 'house', chinese: '房子', category: 'home', level: 2, difficulty: 2, emoji: '🏠', imageUrl: houseImage },
+  { id: 141, english: 'bed', chinese: '床', category: 'home', level: 1, difficulty: 1, emoji: '🛏️', imageUrl: bedImage },
+  { id: 142, english: 'bedroom', chinese: '卧室', category: 'home', level: 2, difficulty: 2, emoji: '🛌', imageUrl: bedroomImage },
+  { id: 143, english: 'bathroom', chinese: '浴室', category: 'home', level: 2, difficulty: 2, emoji: '🚿', imageUrl: bathroomImage },
+  { id: 144, english: 'kitchen', chinese: '厨房', category: 'home', level: 2, difficulty: 2, emoji: '🍳', imageUrl: kitchenImage },
+  { id: 145, english: 'door', chinese: '门', category: 'home', level: 1, difficulty: 1, emoji: '🚪', imageUrl: doorImage },
+  { id: 146, english: 'window', chinese: '窗户', category: 'home', level: 1, difficulty: 1, emoji: '🪟', imageUrl: windowImage },
+  { id: 147, english: 'table', chinese: '桌子', category: 'home', level: 1, difficulty: 1, emoji: '🪑', imageUrl: tableImage },
+  { id: 148, english: 'couch', chinese: '沙发', category: 'home', level: 2, difficulty: 2, emoji: '🛋️', imageUrl: couchImage },
+  { id: 149, english: 'lamp', chinese: '台灯', category: 'home', level: 2, difficulty: 2, emoji: '💡', imageUrl: lampImage },
+  { id: 150, english: 'stairs', chinese: '楼梯', category: 'home', level: 3, difficulty: 3, emoji: '🪜', imageUrl: stairsImage },
+  { id: 151, english: 'garden', chinese: '花园', category: 'home', level: 3, difficulty: 3, emoji: '🌳', imageUrl: gardenImage },
 
   { id: 56, english: 'book', chinese: '书', category: 'school', level: 1, difficulty: 1, emoji: '📘', imageUrl: bookImage },
   { id: 57, english: 'pen', chinese: '钢笔', category: 'school', level: 1, difficulty: 1, emoji: '🖊️', imageUrl: penImage },
