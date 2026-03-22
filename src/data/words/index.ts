@@ -5,6 +5,7 @@ import bananaImage from '../../assets/word-images/banana.svg';
 import birdImage from '../../assets/word-images/bird.svg';
 import bookImage from '../../assets/word-images/book.svg';
 import breadImage from '../../assets/word-images/bread.svg';
+import brotherImage from '../../assets/word-images/brother.svg';
 import bowlImage from '../../assets/word-images/bowl.svg';
 import burgerImage from '../../assets/word-images/burger.svg';
 import carrotImage from '../../assets/word-images/carrot.svg';
@@ -19,7 +20,10 @@ import duckImage from '../../assets/word-images/duck.svg';
 import eggImage from '../../assets/word-images/egg.svg';
 import fishImage from '../../assets/word-images/fish.svg';
 import forkImage from '../../assets/word-images/fork.svg';
+import familyImage from '../../assets/word-images/family.svg';
 import crayonImage from '../../assets/word-images/crayon.svg';
+import grandmaImage from '../../assets/word-images/grandma.svg';
+import grandpaImage from '../../assets/word-images/grandpa.svg';
 import grapeImage from '../../assets/word-images/grape.svg';
 import handImage from '../../assets/word-images/hand.svg';
 import milkImage from '../../assets/word-images/milk.svg';
@@ -45,6 +49,7 @@ import sunImage from '../../assets/word-images/sun.svg';
 import teacherImage from '../../assets/word-images/teacher.svg';
 import teaImage from '../../assets/word-images/tea.svg';
 import tomatoImage from '../../assets/word-images/tomato.svg';
+import sisterImage from '../../assets/word-images/sister.svg';
 import umbrellaImage from '../../assets/word-images/umbrella.svg';
 import watermelonImage from '../../assets/word-images/watermelon.svg';
 import waterImage from '../../assets/word-images/water.svg';
@@ -105,11 +110,11 @@ export const allWords: Word[] = [
   { id: 48, english: 'mom', chinese: '妈妈', category: 'family', level: 1, difficulty: 1, emoji: '👩' },
   { id: 49, english: 'dad', chinese: '爸爸', category: 'family', level: 1, difficulty: 1, emoji: '👨' },
   { id: 50, english: 'baby', chinese: '宝宝', category: 'family', level: 1, difficulty: 1, emoji: '👶' },
-  { id: 51, english: 'brother', chinese: '哥哥/弟弟', category: 'family', level: 3, difficulty: 3, emoji: '👦' },
-  { id: 52, english: 'sister', chinese: '姐姐/妹妹', category: 'family', level: 3, difficulty: 3, emoji: '👧' },
-  { id: 53, english: 'grandma', chinese: '奶奶/外婆', category: 'family', level: 3, difficulty: 4, emoji: '👵' },
-  { id: 54, english: 'grandpa', chinese: '爷爷/外公', category: 'family', level: 3, difficulty: 4, emoji: '👴' },
-  { id: 55, english: 'family', chinese: '家庭', category: 'family', level: 3, difficulty: 4, emoji: '👨‍👩‍👧‍👦' },
+  { id: 51, english: 'brother', chinese: '哥哥/弟弟', category: 'family', level: 3, difficulty: 3, emoji: '👦', imageUrl: brotherImage },
+  { id: 52, english: 'sister', chinese: '姐姐/妹妹', category: 'family', level: 3, difficulty: 3, emoji: '👧', imageUrl: sisterImage },
+  { id: 53, english: 'grandma', chinese: '奶奶/外婆', category: 'family', level: 3, difficulty: 4, emoji: '👵', imageUrl: grandmaImage },
+  { id: 54, english: 'grandpa', chinese: '爷爷/外公', category: 'family', level: 3, difficulty: 4, emoji: '👴', imageUrl: grandpaImage },
+  { id: 55, english: 'family', chinese: '家庭', category: 'family', level: 3, difficulty: 4, emoji: '👨‍👩‍👧‍👦', imageUrl: familyImage },
 
   { id: 56, english: 'book', chinese: '书', category: 'school', level: 1, difficulty: 1, emoji: '📘', imageUrl: bookImage },
   { id: 57, english: 'pen', chinese: '钢笔', category: 'school', level: 1, difficulty: 1, emoji: '🖊️', imageUrl: penImage },
@@ -204,3 +209,4 @@ export const allWords: Word[] = [
 ];
 
 export const wordCategories = Array.from(new Set(allWords.map((word) => word.category)));
+
