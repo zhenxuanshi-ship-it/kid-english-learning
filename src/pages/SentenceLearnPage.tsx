@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { WordVisual } from '../components/common/WordVisual';
 import type { SentenceExercise } from '../types/sentence';
@@ -31,6 +31,8 @@ export function SentenceLearnPage({
   onUndoArrange,
   onNext,
 }: SentenceLearnPageProps) {
+  const [focusedWord, setFocusedWord] = useState<Word | null>(null);
+
   if (!exercise) return null;
 
   const showNext = typeof isCorrect === 'boolean';
@@ -52,11 +54,11 @@ export function SentenceLearnPage({
             <div style={styles.linkedWordsTitle}>这句用到了这些词</div>
             <div style={styles.linkedWordsGrid}>
               {linkedWords.map((word) => (
-                <div key={word.id} style={styles.linkedWordItem}>
+                <button key={word.id} style={styles.linkedWordItem} onClick={() => setFocusedWord(word)}>
                   <WordVisual word={word} size="sm" />
                   <div style={styles.linkedWordEnglish}>{word.english}</div>
                   <div style={styles.linkedWordChinese}>{word.chinese}</div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -113,6 +115,21 @@ export function SentenceLearnPage({
 
         {showNext ? <div style={{ ...styles.feedback, ...(isCorrect ? styles.feedbackOk : styles.feedbackBad) }}>{isCorrect ? '答对啦！你的小句子拼好了 🌟' : `差一点点，再看看：${exercise.english}`}</div> : null}
 
+        {focusedWord ? (
+          <div style={styles.focusCard}>
+            <div style={styles.focusTitle}>这个词你刚刚在句子里见过</div>
+            <div style={styles.focusBody}>
+              <WordVisual word={focusedWord} size="md" />
+              <div style={styles.focusMeta}>
+                <div style={styles.focusEnglish}>{focusedWord.english}</div>
+                <div style={styles.focusChinese}>{focusedWord.chinese}</div>
+                <div style={styles.focusCategory}>分类：{focusedWord.category}</div>
+              </div>
+            </div>
+            <button style={styles.focusClose} onClick={() => setFocusedWord(null)}>收起这个词</button>
+          </div>
+        ) : null}
+
         <button style={{ ...styles.next, opacity: showNext ? 1 : 0.5 }} disabled={!showNext} onClick={onNext}>下一题 ➜</button>
       </div>
     </motion.div>
@@ -151,9 +168,40 @@ const styles: Record<string, CSSProperties> = {
   },
   linkedWordsTitle: { fontSize: 13, fontWeight: 900, color: '#5a4bcc' },
   linkedWordsGrid: { display: 'flex', flexWrap: 'wrap', gap: 10 },
-  linkedWordItem: { width: 72, display: 'grid', gap: 4, justifyItems: 'center', textAlign: 'center' },
+  linkedWordItem: {
+    width: 72,
+    display: 'grid',
+    gap: 4,
+    justifyItems: 'center',
+    textAlign: 'center',
+    border: 'none',
+    background: 'transparent',
+    padding: 0,
+  },
   linkedWordEnglish: { fontSize: 12, fontWeight: 900, color: '#384349' },
   linkedWordChinese: { fontSize: 11, fontWeight: 700, color: '#7b8890' },
+  focusCard: {
+    background: '#fff',
+    borderRadius: 18,
+    padding: 14,
+    display: 'grid',
+    gap: 10,
+    boxShadow: '0 10px 20px rgba(0,0,0,0.06)',
+  },
+  focusTitle: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
+  focusBody: { display: 'flex', alignItems: 'center', gap: 12 },
+  focusMeta: { display: 'grid', gap: 4 },
+  focusEnglish: { fontSize: 18, fontWeight: 900, color: '#384349' },
+  focusChinese: { fontSize: 14, fontWeight: 800, color: '#66757b' },
+  focusCategory: { fontSize: 12, fontWeight: 700, color: '#7b8890' },
+  focusClose: {
+    minHeight: 40,
+    border: '1px solid #ece8ff',
+    borderRadius: 14,
+    background: '#fff',
+    color: '#5a4bcc',
+    fontWeight: 800,
+  },
   options: { display: 'grid', gap: 8 },
   option: {
     minHeight: 48,
