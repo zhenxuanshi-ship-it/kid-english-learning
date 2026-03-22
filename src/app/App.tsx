@@ -513,6 +513,7 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid',
     placeItems: 'center',
     padding: 12,
+    paddingBottom: 80,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -543,5 +544,7 @@ const styles: Record<string, CSSProperties> = {
     maxWidth: 520,
     display: 'grid',
     gap: 12,
+    overflowY: 'auto',
+    paddingBottom: 8,
   },
 };

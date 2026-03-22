@@ -32,17 +32,22 @@ export function BottomNav({ current, onChange }: BottomNavProps) {
 
 const styles: Record<string, CSSProperties> = {
   bar: {
-    position: 'sticky',
+    position: 'fixed',
     bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
     display: 'grid',
     gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
     gap: 6,
     background: 'rgba(255,255,255,0.96)',
     backdropFilter: 'blur(12px)',
-    borderRadius: 16,
-    padding: 6,
-    boxShadow: '0 10px 24px rgba(0,0,0,0.08)',
-    border: '1px solid rgba(0,0,0,0.04)',
+    borderRadius: '16px 16px 0 0',
+    padding: '6px 8px calc(6px + env(safe-area-inset-bottom))',
+    boxShadow: '0 -4px 20px rgba(0,0,0,0.08)',
+    borderTop: '1px solid rgba(0,0,0,0.06)',
+    maxWidth: 480,
+    margin: '0 auto',
   },
   tab: {
     minHeight: 52,
