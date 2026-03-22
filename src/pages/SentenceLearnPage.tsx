@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { WordVisual } from '../components/common/WordVisual';
+import { speakWord } from '../lib/audio';
 import type { SentenceExercise } from '../types/sentence';
 import type { Word } from '../types/word';
 
@@ -11,6 +12,7 @@ interface SentenceLearnPageProps {
   selectedAnswer?: string;
   arrangedTokens: string[];
   linkedWords: Word[];
+  soundEnabled: boolean;
   isCorrect?: boolean;
   onSelectAnswer: (answer: string) => void;
   onArrangeTokens: (tokens: string[]) => void;
@@ -25,6 +27,7 @@ export function SentenceLearnPage({
   selectedAnswer,
   arrangedTokens,
   linkedWords,
+  soundEnabled,
   isCorrect,
   onSelectAnswer,
   onArrangeTokens,
@@ -126,7 +129,10 @@ export function SentenceLearnPage({
                 <div style={styles.focusCategory}>分类：{focusedWord.category}</div>
               </div>
             </div>
-            <button style={styles.focusClose} onClick={() => setFocusedWord(null)}>收起这个词</button>
+            <div style={styles.focusActions}>
+              <button style={styles.focusSpeak} onClick={() => speakWord(focusedWord.english, soundEnabled)}>🔊 读这个词</button>
+              <button style={styles.focusClose} onClick={() => setFocusedWord(null)}>收起这个词</button>
+            </div>
           </div>
         ) : null}
 
@@ -194,6 +200,15 @@ const styles: Record<string, CSSProperties> = {
   focusEnglish: { fontSize: 18, fontWeight: 900, color: '#384349' },
   focusChinese: { fontSize: 14, fontWeight: 800, color: '#66757b' },
   focusCategory: { fontSize: 12, fontWeight: 700, color: '#7b8890' },
+  focusActions: { display: 'grid', gap: 8 },
+  focusSpeak: {
+    minHeight: 42,
+    border: 'none',
+    borderRadius: 14,
+    background: 'linear-gradient(135deg, #7c5cff, #9b83ff)',
+    color: '#fff',
+    fontWeight: 900,
+  },
   focusClose: {
     minHeight: 40,
     border: '1px solid #ece8ff',

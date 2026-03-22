@@ -440,6 +440,7 @@ export default function App() {
             selectedAnswer={sentenceGame.selectedAnswer}
             arrangedTokens={sentenceGame.arrangedTokens}
             linkedWords={currentSentenceLinkedWords}
+            soundEnabled={soundEnabled}
             isCorrect={sentenceGame.isCorrect}
             onSelectAnswer={handleSentenceAnswer}
             onArrangeTokens={handleSentenceArrange}
