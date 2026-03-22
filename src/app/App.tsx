@@ -483,8 +483,10 @@ export default function App() {
             pattern={currentSentencePattern}
             correctCount={sentenceCorrectCount}
             roundTotal={sentenceGame.round.length}
+            stage={currentSentencePattern?.id ? sentenceProgressMap[currentSentencePattern.id]?.stage : undefined}
             nextPatternTitle={nextSentencePattern?.title}
-            onRestart={() => sentenceGame.currentPatternId ? handleStartSentencePattern(sentenceGame.currentPatternId) : handleOpenSentencePractice()}
+            onRestart={() => currentSentencePattern?.id ? handleStartSentencePattern(currentSentencePattern.id) : handleOpenSentencePractice()}
+            onGoReviewPattern={currentSentencePattern?.id ? () => handleStartSentencePattern(currentSentencePattern.id) : undefined}
             onGoNextPattern={nextSentencePattern ? () => handleStartSentencePattern(nextSentencePattern.id) : undefined}
             onGoTopics={handleGoTopics}
           />
