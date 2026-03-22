@@ -5,16 +5,20 @@ import bananaImage from '../../assets/word-images/banana.svg';
 import birdImage from '../../assets/word-images/bird.svg';
 import bookImage from '../../assets/word-images/book.svg';
 import breadImage from '../../assets/word-images/bread.svg';
+import bowlImage from '../../assets/word-images/bowl.svg';
 import burgerImage from '../../assets/word-images/burger.svg';
+import carrotImage from '../../assets/word-images/carrot.svg';
 import catImage from '../../assets/word-images/cat.svg';
 import chairImage from '../../assets/word-images/chair.svg';
 import classroomImage from '../../assets/word-images/classroom.svg';
 import cloudImage from '../../assets/word-images/cloud.svg';
 import cowImage from '../../assets/word-images/cow.svg';
+import cupImage from '../../assets/word-images/cup.svg';
 import dogImage from '../../assets/word-images/dog.svg';
 import duckImage from '../../assets/word-images/duck.svg';
 import eggImage from '../../assets/word-images/egg.svg';
 import fishImage from '../../assets/word-images/fish.svg';
+import forkImage from '../../assets/word-images/fork.svg';
 import crayonImage from '../../assets/word-images/crayon.svg';
 import grapeImage from '../../assets/word-images/grape.svg';
 import handImage from '../../assets/word-images/hand.svg';
@@ -25,16 +29,22 @@ import pearImage from '../../assets/word-images/pear.svg';
 import penImage from '../../assets/word-images/pen.svg';
 import pencilImage from '../../assets/word-images/pencil.svg';
 import pigImage from '../../assets/word-images/pig.svg';
+import plateImage from '../../assets/word-images/plate.svg';
+import potatoImage from '../../assets/word-images/potato.svg';
 import rabbitImage from '../../assets/word-images/rabbit.svg';
 import rainbowImage from '../../assets/word-images/rainbow.svg';
 import rainImage from '../../assets/word-images/rain.svg';
 import riceImage from '../../assets/word-images/rice.svg';
 import puddleImage from '../../assets/word-images/puddle.svg';
+import sandwichImage from '../../assets/word-images/sandwich.svg';
 import schoolImage from '../../assets/word-images/school.svg';
 import shoeImage from '../../assets/word-images/shoe.svg';
+import soupImage from '../../assets/word-images/soup.svg';
 import stickerImage from '../../assets/word-images/sticker.svg';
 import sunImage from '../../assets/word-images/sun.svg';
 import teacherImage from '../../assets/word-images/teacher.svg';
+import teaImage from '../../assets/word-images/tea.svg';
+import tomatoImage from '../../assets/word-images/tomato.svg';
 import umbrellaImage from '../../assets/word-images/umbrella.svg';
 import watermelonImage from '../../assets/word-images/watermelon.svg';
 import waterImage from '../../assets/word-images/water.svg';
@@ -177,20 +187,20 @@ export const allWords: Word[] = [
   { id: 124, english: 'gift', chinese: '礼物', category: 'celebrations', level: 1, difficulty: 1, emoji: '🎁' },
   { id: 125, english: 'slide', chinese: '滑梯', category: 'playground', level: 1, difficulty: 1, emoji: '🛝' },
   { id: 126, english: 'swing', chinese: '秋千', category: 'playground', level: 1, difficulty: 1, emoji: '🪢' },
-  { id: 127, english: 'tomato', chinese: '番茄', category: 'food', level: 1, difficulty: 1, emoji: '🍅' },
-  { id: 128, english: 'carrot', chinese: '胡萝卜', category: 'food', level: 1, difficulty: 1, emoji: '🥕' },
-  { id: 129, english: 'potato', chinese: '土豆', category: 'food', level: 1, difficulty: 1, emoji: '🥔' },
+  { id: 127, english: 'tomato', chinese: '番茄', category: 'food', level: 1, difficulty: 1, emoji: '🍅', imageUrl: tomatoImage },
+  { id: 128, english: 'carrot', chinese: '胡萝卜', category: 'food', level: 1, difficulty: 1, emoji: '🥕', imageUrl: carrotImage },
+  { id: 129, english: 'potato', chinese: '土豆', category: 'food', level: 1, difficulty: 1, emoji: '🥔', imageUrl: potatoImage },
   { id: 130, english: 'fries', chinese: '薯条', category: 'food', level: 2, difficulty: 2, emoji: '🍟' },
   { id: 131, english: 'pie', chinese: '派', category: 'food', level: 2, difficulty: 2, emoji: '🥧' },
-  { id: 132, english: 'sandwich', chinese: '三明治', category: 'food', level: 2, difficulty: 2, emoji: '🥪' },
+  { id: 132, english: 'sandwich', chinese: '三明治', category: 'food', level: 2, difficulty: 2, emoji: '🥪', imageUrl: sandwichImage },
   { id: 133, english: 'salad', chinese: '沙拉', category: 'food', level: 2, difficulty: 2, emoji: '🥗' },
-  { id: 134, english: 'soup', chinese: '汤', category: 'food', level: 2, difficulty: 2, emoji: '🍲' },
-  { id: 135, english: 'tea', chinese: '茶', category: 'food', level: 2, difficulty: 2, emoji: '🍵' },
-  { id: 136, english: 'bowl', chinese: '碗', category: 'food', level: 1, difficulty: 1, emoji: '🥣' },
+  { id: 134, english: 'soup', chinese: '汤', category: 'food', level: 2, difficulty: 2, emoji: '🍲', imageUrl: soupImage },
+  { id: 135, english: 'tea', chinese: '茶', category: 'food', level: 2, difficulty: 2, emoji: '🍵', imageUrl: teaImage },
+  { id: 136, english: 'bowl', chinese: '碗', category: 'food', level: 1, difficulty: 1, emoji: '🥣', imageUrl: bowlImage },
   { id: 137, english: 'spoon', chinese: '勺子', category: 'food', level: 1, difficulty: 1, emoji: '🥄' },
-  { id: 138, english: 'cup', chinese: '杯子', category: 'food', level: 1, difficulty: 1, emoji: '☕' },
-  { id: 139, english: 'plate', chinese: '盘子', category: 'food', level: 1, difficulty: 1, emoji: '🍽️' },
-  { id: 140, english: 'fork', chinese: '叉子', category: 'food', level: 1, difficulty: 1, emoji: '🍴' },
+  { id: 138, english: 'cup', chinese: '杯子', category: 'food', level: 1, difficulty: 1, emoji: '☕', imageUrl: cupImage },
+  { id: 139, english: 'plate', chinese: '盘子', category: 'food', level: 1, difficulty: 1, emoji: '🍽️', imageUrl: plateImage },
+  { id: 140, english: 'fork', chinese: '叉子', category: 'food', level: 1, difficulty: 1, emoji: '🍴', imageUrl: forkImage },
 ];
 
 export const wordCategories = Array.from(new Set(allWords.map((word) => word.category)));
