@@ -8,4 +8,5 @@ export interface Word {
   emoji?: string;
   imageUrl?: string;
   audioUrl?: string;
+  sourceAliases?: string[];
 }

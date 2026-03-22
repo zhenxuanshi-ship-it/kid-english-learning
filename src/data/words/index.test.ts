@@ -24,4 +24,16 @@ describe('word resources', () => {
     const importedWords = ['paper', 'scissors', 'card', 'pizza', 'jacket', 'raincoat'];
     expect(importedWords.every((english) => allWords.some((word) => word.english === english))).toBe(true);
   });
+
+  it('absorbs remaining Y2 plural or spacing variants as aliases without duplicating the core bank', () => {
+    expect(allWords.find((word) => word.english === 'grape')?.sourceAliases).toContain('grapes');
+    expect(allWords.find((word) => word.english === 'eye')?.sourceAliases).toContain('eyes');
+    expect(allWords.find((word) => word.english === 'hand')?.sourceAliases).toContain('hands');
+    expect(allWords.find((word) => word.english === 'foot')?.sourceAliases).toContain('feet');
+    expect(allWords.find((word) => word.english === 'ear')?.sourceAliases).toContain('ears');
+    expect(allWords.find((word) => word.english === 'noodle')?.sourceAliases).toContain('noodles');
+    expect(allWords.find((word) => word.english === 'icecream')?.sourceAliases).toContain('ice cream');
+    expect(allWords.find((word) => word.english === 'shoe')?.sourceAliases).toContain('shoes');
+    expect(allWords.find((word) => word.english === 'sock')?.sourceAliases).toContain('socks');
+  });
 });
