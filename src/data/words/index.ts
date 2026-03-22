@@ -165,7 +165,7 @@ export const allWords: Word[] = [
   { id: 112, english: 'classroom', chinese: '教室', category: 'school', level: 2, difficulty: 2, emoji: '🏫', imageUrl: classroomImage },
   { id: 113, english: 'umbrella', chinese: '伞', category: 'weather', level: 2, difficulty: 2, emoji: '☂️', imageUrl: umbrellaImage },
   { id: 114, english: 'puddle', chinese: '水坑', category: 'weather', level: 2, difficulty: 2, emoji: '🫧', imageUrl: puddleImage },
-  { id: 115, english: 'burger', chinese: '汉堡', category: 'food', level: 2, difficulty: 2, emoji: '🍔', imageUrl: burgerImage },
+  { id: 115, english: 'burger', chinese: '汉堡', category: 'food', level: 2, difficulty: 2, emoji: '🍔', imageUrl: burgerImage, sourceAliases: ['burgers'] },
   { id: 116, english: 'sticker', chinese: '贴纸', category: 'school', level: 2, difficulty: 2, emoji: '🏷️', imageUrl: stickerImage },
   { id: 117, english: 'paper', chinese: '纸', category: 'school', level: 1, difficulty: 1, emoji: '📄' },
   { id: 118, english: 'scissors', chinese: '剪刀', category: 'school', level: 2, difficulty: 2, emoji: '✂️' },

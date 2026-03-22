@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createSentenceRound, getSentenceExercises, getSentencePattern } from './sentencePractice';
+import { createSentenceRound, getSentenceExercises, getSentenceLinkedWords, getSentencePattern } from './sentencePractice';
 
 describe('sentencePractice', () => {
   it('returns sentence pattern metadata', () => {
@@ -29,5 +29,12 @@ describe('sentencePractice', () => {
     expect(thisIs).toContain('zebra');
     expect(iLike).toContain('watermelon');
     expect(iHave).toContain('sticker');
+  });
+
+  it('links sentence keywords back to canonical word-bank entries', () => {
+    const exercise = getSentenceExercises('i_like')[0];
+    const linkedWords = getSentenceLinkedWords(exercise).map((word) => word.english);
+
+    expect(linkedWords).toContain('burger');
   });
 });

@@ -35,5 +35,6 @@ describe('word resources', () => {
     expect(allWords.find((word) => word.english === 'icecream')?.sourceAliases).toContain('ice cream');
     expect(allWords.find((word) => word.english === 'shoe')?.sourceAliases).toContain('shoes');
     expect(allWords.find((word) => word.english === 'sock')?.sourceAliases).toContain('socks');
+    expect(allWords.find((word) => word.english === 'burger')?.sourceAliases).toContain('burgers');
   });
 });
