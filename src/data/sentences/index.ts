@@ -37,6 +37,12 @@ export const sentencePatterns: SentencePattern[] = [
     description: '认识"这是谁？"这种问答句。',
     examples: ["Who's this? This is my mom.", "Who's this? This is my grandma."],
   },
+  {
+    id: 'how_are_you',
+    title: 'How are you?',
+    description: '认识"你好吗？"这种问候句。',
+    examples: ['How are you today? I am happy.', 'Are you hungry? Yes, I am.'],
+  },
 ];
 export const sentenceExercises: SentenceExercise[] = [
   {
@@ -231,5 +237,38 @@ export const sentenceExercises: SentenceExercise[] = [
     tokens: ['grandpa', 'my', 'This', 'is'],
     answer: ['This', 'is', 'my', 'grandpa'],
     imageWordId: 54,
+  },
+  {
+    id: 'how-are-you-choose-happy',
+    patternId: 'how_are_you',
+    mode: 'choose_word',
+    english: 'How are you today? I am happy.',
+    chinese: '你今天好吗？我很开心。',
+    prompt: 'How are you today? I am ___ .',
+    options: ['happy', 'house', 'run'],
+    answer: 'happy',
+    imageWordId: 152,
+  },
+  {
+    id: 'how-are-you-match-sad',
+    patternId: 'how_are_you',
+    mode: 'match_sentence',
+    english: 'How are you today? I am sad.',
+    chinese: '你今天好吗？我很伤心。',
+    prompt: '选出意思对的句子',
+    options: ['How are you today? I am sad.', 'I like sad.', 'This is sad.'],
+    answer: 'How are you today? I am sad.',
+    imageWordId: 153,
+  },
+  {
+    id: 'how-are-you-order-angry',
+    patternId: 'how_are_you',
+    mode: 'reorder_words',
+    english: 'Are you hungry? Yes, I am.',
+    chinese: '你饿了吗？是的，我饿了。',
+    prompt: 'Are you hungry? Yes, I ___ .',
+    tokens: ['am', 'hungry', 'I', 'Yes'],
+    answer: ['Yes', 'I', 'am'],
+    imageWordId: 155,
   },
 ];

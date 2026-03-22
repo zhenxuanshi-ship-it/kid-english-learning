@@ -10,6 +10,10 @@ import lampImage from '../../assets/word-images/lamp.svg';
 import stairsImage from '../../assets/word-images/stairs.svg';
 import tableImage from '../../assets/word-images/table.svg';
 import windowImage from '../../assets/word-images/window.svg';
+import angryImage from '../../assets/word-images/angry.svg';
+import happyImage from '../../assets/word-images/happy.svg';
+import hungryImage from '../../assets/word-images/hungry.svg';
+import sadImage from '../../assets/word-images/sad.svg';
 import type { Word } from '../../types/word';
 import appleImage from '../../assets/word-images/apple.svg';
 import bagImage from '../../assets/word-images/bag.svg';
@@ -140,6 +144,11 @@ export const allWords: Word[] = [
   { id: 149, english: 'lamp', chinese: '台灯', category: 'home', level: 2, difficulty: 2, emoji: '💡', imageUrl: lampImage },
   { id: 150, english: 'stairs', chinese: '楼梯', category: 'home', level: 3, difficulty: 3, emoji: '🪜', imageUrl: stairsImage },
   { id: 151, english: 'garden', chinese: '花园', category: 'home', level: 3, difficulty: 3, emoji: '🌳', imageUrl: gardenImage },
+
+  { id: 152, english: 'happy', chinese: '开心', category: 'emotions', level: 2, difficulty: 2, emoji: '😊', imageUrl: happyImage },
+  { id: 153, english: 'sad', chinese: '伤心', category: 'emotions', level: 2, difficulty: 2, emoji: '😢', imageUrl: sadImage },
+  { id: 154, english: 'angry', chinese: '生气', category: 'emotions', level: 3, difficulty: 3, emoji: '😠', imageUrl: angryImage },
+  { id: 155, english: 'hungry', chinese: '饿', category: 'emotions', level: 2, difficulty: 2, emoji: '🤤', imageUrl: hungryImage },
 
   { id: 56, english: 'book', chinese: '书', category: 'school', level: 1, difficulty: 1, emoji: '📘', imageUrl: bookImage },
   { id: 57, english: 'pen', chinese: '钢笔', category: 'school', level: 1, difficulty: 1, emoji: '🖊️', imageUrl: penImage },

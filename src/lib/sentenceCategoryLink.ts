@@ -11,6 +11,7 @@ const categorySentenceMap: Partial<Record<string, SentencePatternId[]>> = {
   body: ['i_have', 'it_is'],
   clothes: ['this_is', 'it_is'],
   weather: ['it_is', 'what_is_this'],
+  emotions: ['how_are_you'],
 };
 
 export function getSentencePatternIdsForCategory(category?: string): SentencePatternId[] {
