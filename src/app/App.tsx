@@ -420,6 +420,8 @@ export default function App() {
             orderedPatterns={sentenceRecommendation.orderedPatterns}
             recommendedPattern={sentenceRecommendation.recommendedPattern}
             continuePattern={sentenceRecommendation.continuePattern}
+            reviewPattern={sentenceRecommendation.reviewPattern}
+            reviewCount={sentenceRecommendation.reviewCount}
             onStartPattern={handleStartSentencePattern}
           />
         ) : null}

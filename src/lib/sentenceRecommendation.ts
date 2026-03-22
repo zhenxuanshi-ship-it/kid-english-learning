@@ -4,6 +4,8 @@ import type { SentencePattern, SentencePatternId, SentenceProgress } from '../ty
 export interface SentenceRecommendation {
   continuePattern?: SentencePattern;
   recommendedPattern?: SentencePattern;
+  reviewPattern?: SentencePattern;
+  reviewCount: number;
   orderedPatterns: SentencePattern[];
 }
 
@@ -69,6 +71,10 @@ function getFirstUnmastered(
   return orderedPatterns.find((pattern) => !progressMap[pattern.id]?.mastered) ?? orderedPatterns[0];
 }
 
+function getReviewPatterns(progressMap: Partial<Record<SentencePatternId, SentenceProgress>>): SentencePattern[] {
+  return sentencePatterns.filter((pattern) => progressMap[pattern.id]?.stage === 'review');
+}
+
 export function getSentenceRecommendation(
   progressMap: Partial<Record<SentencePatternId, SentenceProgress>>,
   preferredPatternIds: SentencePatternId[] = [],
@@ -76,10 +82,13 @@ export function getSentenceRecommendation(
   const orderedPatterns = buildOrderedPatterns(progressMap, preferredPatternIds);
   const continuePattern = getContinuePattern(progressMap);
   const recommendedPattern = getFirstUnmastered(orderedPatterns, progressMap);
+  const reviewPatterns = getReviewPatterns(progressMap);
 
   return {
     continuePattern,
     recommendedPattern,
+    reviewPattern: reviewPatterns[0],
+    reviewCount: reviewPatterns.length,
     orderedPatterns,
   };
 }

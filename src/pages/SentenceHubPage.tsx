@@ -7,10 +7,12 @@ interface SentenceHubPageProps {
   orderedPatterns: SentencePattern[];
   recommendedPattern?: SentencePattern;
   continuePattern?: SentencePattern;
+  reviewPattern?: SentencePattern;
+  reviewCount: number;
   onStartPattern: (patternId: SentencePatternId) => void;
 }
 
-export function SentenceHubPage({ progressMap, orderedPatterns, recommendedPattern, continuePattern, onStartPattern }: SentenceHubPageProps) {
+export function SentenceHubPage({ progressMap, orderedPatterns, recommendedPattern, continuePattern, reviewPattern, reviewCount, onStartPattern }: SentenceHubPageProps) {
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.hero}>
@@ -24,6 +26,15 @@ export function SentenceHubPage({ progressMap, orderedPatterns, recommendedPatte
           <div style={styles.recommendKicker}>继续上次句型</div>
           <div style={styles.recommendTitle}>{continuePattern.title}</div>
           <button style={styles.recommendButton} onClick={() => onStartPattern(continuePattern.id)}>继续练习</button>
+        </div>
+      ) : null}
+
+      {reviewPattern ? (
+        <div style={styles.reviewEntryCard}>
+          <div style={styles.reviewEntryKicker}>句型复习入口</div>
+          <div style={styles.recommendTitle}>{reviewPattern.title}</div>
+          <div style={styles.reviewEntryDesc}>现在有 {reviewCount} 个句型待复习，先把容易忘的捡回来。</div>
+          <button style={styles.reviewEntryButton} onClick={() => onStartPattern(reviewPattern.id)}>先复习这个句型</button>
         </div>
       ) : null}
 
@@ -83,6 +94,24 @@ const styles: Record<string, CSSProperties> = {
     padding: 14,
     display: 'grid',
     gap: 6,
+  },
+  reviewEntryCard: {
+    background: 'linear-gradient(135deg, #fff7e8, #ffffff)',
+    borderRadius: 20,
+    padding: 14,
+    display: 'grid',
+    gap: 8,
+    border: '1px solid #ffe0b2',
+  },
+  reviewEntryKicker: { fontSize: 12, fontWeight: 900, color: '#b36b00' },
+  reviewEntryDesc: { fontSize: 13, fontWeight: 700, color: '#8a6b3f' },
+  reviewEntryButton: {
+    minHeight: 42,
+    border: 'none',
+    borderRadius: 14,
+    background: '#ffb85c',
+    color: '#5a3c00',
+    fontWeight: 900,
   },
   recommendKicker: { fontSize: 12, fontWeight: 900, opacity: 0.9 },
   recommendTitle: { fontSize: 20, fontWeight: 900 },

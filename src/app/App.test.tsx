@@ -61,6 +61,7 @@ function seedSentenceProgressState() {
         correctCount: 1,
         wrongCount: 2,
         mastered: false,
+        stage: 'review',
         lastPracticedAt: 200,
       },
       this_is: {
@@ -69,6 +70,7 @@ function seedSentenceProgressState() {
         correctCount: 3,
         wrongCount: 0,
         mastered: true,
+        stage: 'mastered',
         lastPracticedAt: 100,
       },
     }),
@@ -113,6 +115,7 @@ describe('App task flow integration', () => {
     fireEvent.click(screen.getByRole('button', { name: /去练推荐句型|去练主题相关句型|进入句式练习/ }));
     expect(screen.getByText('先学小句子')).toBeInTheDocument();
     expect(screen.getByText('继续上次句型')).toBeInTheDocument();
+    expect(screen.getByText('句型复习入口')).toBeInTheDocument();
     expect(screen.getByText('推荐先练')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /I like/ }));
     expect(screen.getByText(/先认识这个句型/)).toBeInTheDocument();
