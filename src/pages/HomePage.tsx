@@ -63,6 +63,11 @@ export function HomePage({
   onResetDailyTasks,
 }: HomePageProps) {
   const featuredTopic = categoryItems.find((item) => item.category === recommendation.suggestedCategory) ?? categoryItems[0];
+  const sentenceAction = sentenceStageSummary.review > 0
+    ? { title: '先去复习句型', desc: `有 ${sentenceStageSummary.review} 个句型待复习`, source: 'review' }
+    : sentenceStageSummary.learning > 0 || sentenceContinuePattern
+      ? { title: '继续上次句型', desc: '把练习中的句型再巩固一下', source: 'continue' }
+      : { title: '开始新句型', desc: `还有 ${sentenceStageSummary.new} 个新句型可以学`, source: 'new' };
 
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -103,15 +108,30 @@ export function HomePage({
         </button>
       ) : null}
 
-      <div style={styles.sentenceStatusCard}>
-        <div style={styles.sentenceStatusTitle}>🧩 今天句型进度</div>
+      <button
+        style={styles.sentenceStatusCard}
+        onClick={() => {
+          trackEvent('home_sentence_status_click', {
+            action: sentenceAction.source,
+            reviewCount: sentenceStageSummary.review,
+            learningCount: sentenceStageSummary.learning,
+            newCount: sentenceStageSummary.new,
+          });
+          onOpenSentencePractice();
+        }}
+      >
+        <div style={styles.sentenceStatusHeader}>
+          <div style={styles.sentenceStatusTitle}>🧩 今天句型进度</div>
+          <div style={styles.sentenceStatusCta}>{sentenceAction.title}</div>
+        </div>
+        <div style={styles.sentenceStatusSub}>{sentenceAction.desc}</div>
         <div style={styles.sentenceStatusGrid}>
           <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.new}</strong><span>新句型</span></div>
           <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.learning}</strong><span>练习中</span></div>
           <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.review}</strong><span>待复习</span></div>
           <div style={styles.sentenceStatusItem}><strong>{sentenceStageSummary.mastered}</strong><span>已掌握</span></div>
         </div>
-      </div>
+      </button>
 
       <div style={styles.quickGrid}>
         <button style={styles.quickCard} onClick={onOpenTopics}>
@@ -210,13 +230,18 @@ const styles: Record<string, CSSProperties> = {
   sentenceDesc: { fontSize: 13, fontWeight: 700, color: '#66757b' },
   sentenceStatusCard: {
     background: '#fff',
+    border: 'none',
     borderRadius: 18,
     padding: 12,
     boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
     display: 'grid',
     gap: 8,
+    textAlign: 'left',
   },
+  sentenceStatusHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   sentenceStatusTitle: { fontSize: 14, fontWeight: 900, color: '#433880' },
+  sentenceStatusCta: { fontSize: 12, fontWeight: 900, color: '#7c5cff' },
+  sentenceStatusSub: { fontSize: 12, fontWeight: 700, color: '#66757b' },
   sentenceStatusGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 },
   sentenceStatusItem: {
     background: '#f8f7ff',

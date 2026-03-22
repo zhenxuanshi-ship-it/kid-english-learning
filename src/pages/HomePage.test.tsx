@@ -65,6 +65,7 @@ describe('HomePage', () => {
   it('renders a short home with task hub and quick entries', () => {
     render(<HomePage {...baseProps} />);
     expect(screen.getByText('继续今日任务')).toBeInTheDocument();
+    expect(screen.getByText('先去复习句型')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /主题学习/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /复习错题/ })).toBeInTheDocument();
   });
