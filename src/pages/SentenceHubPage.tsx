@@ -42,7 +42,7 @@ export function SentenceHubPage({ progressMap, orderedPatterns, recommendedPatte
             <button key={pattern.id} style={styles.card} onClick={() => onStartPattern(pattern.id)}>
               <div style={styles.cardTopRow}>
                 <div style={styles.cardTitle}>{pattern.title}</div>
-                {progress?.mastered ? <div style={{ ...styles.statusBadge, ...styles.masteredBadge }}>已掌握</div> : progress?.seenCount ? <div style={styles.statusBadge}>已练 {progress.seenCount} 次</div> : null}
+                {progress?.mastered ? <div style={{ ...styles.statusBadge, ...styles.masteredBadge }}>已掌握</div> : progress?.stage === 'review' ? <div style={{ ...styles.statusBadge, ...styles.reviewBadge }}>待复习</div> : progress?.stage === 'learning' ? <div style={styles.statusBadge}>练习中</div> : progress?.seenCount ? <div style={styles.statusBadge}>已练 {progress.seenCount} 次</div> : <div style={styles.statusBadge}>新句型</div>}
               </div>
               <div style={styles.cardDesc}>{pattern.description}</div>
               <div style={styles.examples}>例如：{pattern.examples.join(' / ')}</div>
@@ -110,6 +110,7 @@ const styles: Record<string, CSSProperties> = {
   cardTitle: { fontSize: 20, fontWeight: 900, color: '#3f4b50' },
   statusBadge: { padding: '6px 10px', borderRadius: 999, background: '#f2eeff', color: '#5a4bcc', fontSize: 12, fontWeight: 900 },
   masteredBadge: { background: '#e8fff7', color: '#157a6e' },
+  reviewBadge: { background: '#fff4df', color: '#9a6500' },
   cardDesc: { fontSize: 14, fontWeight: 700, color: '#66757b' },
   examples: { fontSize: 13, fontWeight: 700, color: '#7c5cff' },
   progressLine: { fontSize: 12, fontWeight: 800, color: '#7b8890' },

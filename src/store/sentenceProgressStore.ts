@@ -18,7 +18,15 @@ function createDefaultProgress(patternId: SentencePatternId): SentenceProgress {
     correctCount: 0,
     wrongCount: 0,
     mastered: false,
+    stage: 'new',
   };
+}
+
+function getSentenceStage(correctCount: number, wrongCount: number): SentenceProgress['stage'] {
+  if (correctCount >= 3) return 'mastered';
+  if (wrongCount >= 2) return 'review';
+  if (correctCount >= 1 || wrongCount >= 1) return 'learning';
+  return 'new';
 }
 
 export const useSentenceProgressStore = create<SentenceProgressState>((set, get) => ({
@@ -34,6 +42,7 @@ export const useSentenceProgressStore = create<SentenceProgressState>((set, get)
       [patternId]: {
         ...current,
         seenCount: current.seenCount + 1,
+        stage: current.seenCount + 1 > 0 && current.stage === 'new' ? 'learning' : current.stage,
         lastPracticedAt: Date.now(),
       },
     };
@@ -42,11 +51,15 @@ export const useSentenceProgressStore = create<SentenceProgressState>((set, get)
   },
   recordResult: (patternId, isCorrect) => {
     const current = get().progressMap[patternId] ?? createDefaultProgress(patternId);
+    const correctCount = current.correctCount + (isCorrect ? 1 : 0);
+    const wrongCount = current.wrongCount + (isCorrect ? 0 : 1);
+    const stage = getSentenceStage(correctCount, wrongCount);
     const next: SentenceProgress = {
       ...current,
-      correctCount: current.correctCount + (isCorrect ? 1 : 0),
-      wrongCount: current.wrongCount + (isCorrect ? 0 : 1),
-      mastered: current.correctCount + (isCorrect ? 1 : 0) >= 3,
+      correctCount,
+      wrongCount,
+      mastered: stage === 'mastered',
+      stage,
       lastPracticedAt: Date.now(),
     };
     const progressMap = { ...get().progressMap, [patternId]: next };

@@ -21,11 +21,14 @@ export interface SentenceExercise {
   imageWordId?: number;
 }
 
+export type SentenceLearningStage = 'new' | 'learning' | 'review' | 'mastered';
+
 export interface SentenceProgress {
   patternId: SentencePatternId;
   seenCount: number;
   correctCount: number;
   wrongCount: number;
   mastered: boolean;
+  stage: SentenceLearningStage;
   lastPracticedAt?: number;
 }

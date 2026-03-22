@@ -10,6 +10,7 @@ describe('sentenceProgressStore', () => {
   it('records seen count', () => {
     useSentenceProgressStore.getState().recordSeen('this_is');
     expect(useSentenceProgressStore.getState().progressMap.this_is?.seenCount).toBe(1);
+    expect(useSentenceProgressStore.getState().progressMap.this_is?.stage).toBe('learning');
   });
 
   it('records correct result and mastery', () => {
@@ -17,5 +18,12 @@ describe('sentenceProgressStore', () => {
     useSentenceProgressStore.getState().recordResult('i_like', true);
     useSentenceProgressStore.getState().recordResult('i_like', true);
     expect(useSentenceProgressStore.getState().progressMap.i_like?.mastered).toBe(true);
+    expect(useSentenceProgressStore.getState().progressMap.i_like?.stage).toBe('mastered');
+  });
+
+  it('marks a sentence pattern for review after repeated mistakes', () => {
+    useSentenceProgressStore.getState().recordResult('it_is', false);
+    useSentenceProgressStore.getState().recordResult('it_is', false);
+    expect(useSentenceProgressStore.getState().progressMap.it_is?.stage).toBe('review');
   });
 });

@@ -10,6 +10,7 @@ describe('sentenceRecommendation', () => {
         correctCount: 3,
         wrongCount: 0,
         mastered: true,
+        stage: 'mastered',
         lastPracticedAt: 100,
       },
     });
@@ -25,6 +26,7 @@ describe('sentenceRecommendation', () => {
         correctCount: 1,
         wrongCount: 2,
         mastered: false,
+        stage: 'review',
         lastPracticedAt: 200,
       },
       i_have: {
@@ -33,6 +35,7 @@ describe('sentenceRecommendation', () => {
         correctCount: 0,
         wrongCount: 1,
         mastered: false,
+        stage: 'learning',
         lastPracticedAt: 100,
       },
     });
@@ -53,6 +56,7 @@ describe('sentenceRecommendation', () => {
         correctCount: 1,
         wrongCount: 1,
         mastered: false,
+        stage: 'learning',
         lastPracticedAt: 200,
       },
     }, ['it_is']);
