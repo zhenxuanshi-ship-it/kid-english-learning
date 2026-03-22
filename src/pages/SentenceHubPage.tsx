@@ -13,12 +13,31 @@ interface SentenceHubPageProps {
 }
 
 export function SentenceHubPage({ progressMap, orderedPatterns, recommendedPattern, continuePattern, reviewPattern, reviewCount, onStartPattern }: SentenceHubPageProps) {
+  const summary = orderedPatterns.reduce(
+    (acc, pattern) => {
+      const stage = progressMap[pattern.id]?.stage ?? 'new';
+      acc[stage] += 1;
+      return acc;
+    },
+    { new: 0, learning: 0, review: 0, mastered: 0 },
+  );
+
   return (
     <motion.div style={styles.wrap} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.hero}>
         <div style={styles.kicker}>句式练习</div>
         <div style={styles.title}>先学小句子</div>
         <div style={styles.desc}>像搭积木一样，把学过的单词连成完整句子。</div>
+      </div>
+
+      <div style={styles.summaryCard}>
+        <div style={styles.summaryTitle}>句型学习状态</div>
+        <div style={styles.summaryGrid}>
+          <div style={styles.summaryItem}><strong>{summary.new}</strong><span>新句型</span></div>
+          <div style={styles.summaryItem}><strong>{summary.learning}</strong><span>练习中</span></div>
+          <div style={styles.summaryItem}><strong>{summary.review}</strong><span>待复习</span></div>
+          <div style={styles.summaryItem}><strong>{summary.mastered}</strong><span>已掌握</span></div>
+        </div>
       </div>
 
       {continuePattern ? (
@@ -80,6 +99,27 @@ const styles: Record<string, CSSProperties> = {
   kicker: { fontSize: 13, fontWeight: 900, color: '#7c5cff' },
   title: { fontSize: 26, fontWeight: 900 },
   desc: { fontSize: 14, fontWeight: 700, color: '#66757b' },
+  summaryCard: {
+    background: '#fff',
+    borderRadius: 20,
+    padding: 14,
+    display: 'grid',
+    gap: 10,
+    boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
+  },
+  summaryTitle: { fontSize: 14, fontWeight: 900, color: '#433880' },
+  summaryGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 },
+  summaryItem: {
+    background: '#f8f7ff',
+    borderRadius: 14,
+    padding: '10px 8px',
+    display: 'grid',
+    gap: 2,
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#66757b',
+    fontWeight: 700,
+  },
   recommendCard: {
     background: 'linear-gradient(135deg, #7c5cff, #9b83ff)',
     borderRadius: 22,
