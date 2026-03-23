@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { loadVoices } from '../lib/audio';
 import { supabase } from '../lib/supabase/client';
+import { getChildren, createChild } from '../lib/supabase/children';
 import { BottomNav, type NavTab } from '../components/common/BottomNav';
 import { AuthPage } from '../pages/AuthPage';
 import { HomePage } from '../pages/HomePage';
@@ -80,6 +81,8 @@ export default function App() {
   const [usedLetterIndexes, setUsedLetterIndexes] = useState<number[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
+  const [children, setChildren] = useState<Array<{ id: string; name: string; avatar_emoji: string | null }>>([]);
+  const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
 
   // Check auth state on mount
   useEffect(() => {
@@ -96,6 +99,23 @@ export default function App() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Load children when authenticated
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const loadChildren = async () => {
+      try {
+        const data = await getChildren();
+        setChildren(data);
+        if (data.length > 0 && !selectedChildId) {
+          setSelectedChildId(data[0].id);
+        }
+      } catch (err) {
+        console.error('Failed to load children:', err);
+      }
+    };
+    void loadChildren();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     hydrate();
@@ -432,6 +452,14 @@ export default function App() {
             autoPlaySound={autoPlaySound}
             soundEnabled={soundEnabled}
             storageDiagnostics={storageDiagnostics}
+            children={children}
+            selectedChildId={selectedChildId}
+            onSelectChild={setSelectedChildId}
+            onAddChild={async (name, emoji) => {
+              const newChild = await createChild(name, emoji);
+              setChildren((prev) => [...prev, newChild]);
+              setSelectedChildId(newChild.id);
+            }}
             onRoundSizeChange={setRoundSize}
             onCategoryChange={setSelectedCategory}
             onToggleAutoPlaySound={toggleAutoPlaySound}
