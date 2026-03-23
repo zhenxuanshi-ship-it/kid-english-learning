@@ -16,6 +16,7 @@ import { SentenceHubPage } from '../pages/SentenceHubPage';
 import { SentenceLearnPage } from '../pages/SentenceLearnPage';
 import { SentenceSummaryPage } from '../pages/SentenceSummaryPage';
 import { SentencePatternCardPage } from '../pages/SentencePatternCardPage';
+import { ReportPage } from '../pages/ReportPage';
 import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -443,6 +444,14 @@ export default function App() {
 
         {screen === 'home' && navTab === 'review' ? (
           <ReviewPage items={reviewQueue} onStartReview={handleStartReview} />
+        ) : null}
+
+        {screen === 'home' && navTab === 'report' ? (
+          <ReportPage
+            children={children}
+            selectedChildId={selectedChildId}
+            onSelectChild={(id) => { setSelectedChildId(id); setCurrentChildId(id); }}
+          />
         ) : null}
 
         {screen === 'home' && navTab === 'profile' ? (
