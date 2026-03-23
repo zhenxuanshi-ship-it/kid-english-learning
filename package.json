@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "VITE_SKIP_SUPABASE_CHECK=true VITE_APP_VERSION=$npm_package_version tsc -b && VITE_SKIP_SUPABASE_CHECK=true VITE_APP_VERSION=$npm_package_version vite build",
+    "build": "VITE_APP_VERSION=$npm_package_version tsc -b && VITE_APP_VERSION=$npm_package_version vite build",
     "preview": "vite preview",
     "test": "vitest run"
   },
