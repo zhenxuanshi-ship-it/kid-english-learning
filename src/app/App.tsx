@@ -15,8 +15,8 @@ import { TopicsPage } from '../pages/TopicsPage';
 import { SentenceHubPage } from '../pages/SentenceHubPage';
 import { SentenceLearnPage } from '../pages/SentenceLearnPage';
 import { SentenceSummaryPage } from '../pages/SentenceSummaryPage';
-import { SentencePatternCardPage } from '../pages/SentencePatternCardPage';
 import { ReportPage } from '../pages/ReportPage';
+import { SentencePatternCardPage } from '../pages/SentencePatternCardPage';
 import { useProgressStore } from '../store/progressStore';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -85,6 +85,7 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [children, setChildren] = useState<Array<{ id: string; name: string; avatar_emoji: string | null }>>([]);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+  const [showReport, setShowReport] = useState(false);
 
   // Check auth state on mount
   useEffect(() => {
@@ -446,37 +447,39 @@ export default function App() {
           <ReviewPage items={reviewQueue} onStartReview={handleStartReview} />
         ) : null}
 
-        {screen === 'home' && navTab === 'report' ? (
-          <ReportPage
-            children={children}
-            selectedChildId={selectedChildId}
-            onSelectChild={(id) => { setSelectedChildId(id); setCurrentChildId(id); }}
-          />
-        ) : null}
-
         {screen === 'home' && navTab === 'profile' ? (
-          <ProfilePage
-            stats={stats}
-            roundSize={roundSize}
-            selectedCategory={selectedCategory}
-            categories={wordCategories}
-            autoPlaySound={autoPlaySound}
-            soundEnabled={soundEnabled}
-            storageDiagnostics={storageDiagnostics}
-            children={children}
-            selectedChildId={selectedChildId}
-            onSelectChild={(id) => { setSelectedChildId(id); setCurrentChildId(id); }}
-            onAddChild={async (name, emoji) => {
-              const newChild = await createChild(name, emoji);
-              setChildren((prev) => [...prev, newChild]);
-              setSelectedChildId(newChild.id);
-              setCurrentChildId(newChild.id);
-            }}
-            onRoundSizeChange={setRoundSize}
-            onCategoryChange={setSelectedCategory}
-            onToggleAutoPlaySound={toggleAutoPlaySound}
-            onToggleSoundEnabled={toggleSoundEnabled}
-          />
+          showReport ? (
+            <ReportPage
+              children={children}
+              selectedChildId={selectedChildId}
+              onSelectChild={(id) => { setSelectedChildId(id); setCurrentChildId(id); setShowReport(false); }}
+              onBack={() => setShowReport(false)}
+            />
+          ) : (
+            <ProfilePage
+              stats={stats}
+              roundSize={roundSize}
+              selectedCategory={selectedCategory}
+              categories={wordCategories}
+              autoPlaySound={autoPlaySound}
+              soundEnabled={soundEnabled}
+              storageDiagnostics={storageDiagnostics}
+              children={children}
+              selectedChildId={selectedChildId}
+              onSelectChild={(id) => { setSelectedChildId(id); setCurrentChildId(id); }}
+              onAddChild={async (name, emoji) => {
+                const newChild = await createChild(name, emoji);
+                setChildren((prev) => [...prev, newChild]);
+                setSelectedChildId(newChild.id);
+                setCurrentChildId(newChild.id);
+              }}
+              onRoundSizeChange={setRoundSize}
+              onCategoryChange={setSelectedCategory}
+              onToggleAutoPlaySound={toggleAutoPlaySound}
+              onToggleSoundEnabled={toggleSoundEnabled}
+              onOpenReport={() => setShowReport(true)}
+            />
+          )
         ) : null}
 
         {screen === 'learn' ? (

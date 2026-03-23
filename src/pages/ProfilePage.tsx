@@ -23,6 +23,7 @@ interface ProfilePageProps {
   onCategoryChange: (category: string) => void;
   onToggleAutoPlaySound: () => void;
   onToggleSoundEnabled: () => void;
+  onOpenReport?: () => void;
 }
 
 export function ProfilePage(props: ProfilePageProps) {
@@ -72,6 +73,19 @@ export function ProfilePage(props: ProfilePageProps) {
       )}
 
       <StatsPanel stats={props.stats} />
+
+      {/* 家长报告入口 */}
+      <button style={styles.reportCard} onClick={props.onOpenReport}>
+        <div style={styles.reportCardLeft}>
+          <span style={styles.reportCardEmoji}>📊</span>
+          <div>
+            <div style={styles.reportCardTitle}>家长报告</div>
+            <div style={styles.reportCardSub}>查看学习进度与报告</div>
+          </div>
+        </div>
+        <span style={styles.reportCardArrow}>›</span>
+      </button>
+
       <SettingsPanel
         roundSize={props.roundSize}
         selectedCategory={props.selectedCategory}
@@ -160,4 +174,26 @@ const styles: Record<string, CSSProperties> = {
   releaseTitle: { fontSize: 16, fontWeight: 900, color: '#384349' },
   releaseText: { fontSize: 13, fontWeight: 700, color: '#66757b' },
   releaseDivider: { height: 1, background: '#edf1f3', margin: '4px 0' },
+  reportCard: {
+    background: '#fff',
+    borderRadius: 20,
+    padding: '16px 20px',
+    boxShadow: '0 8px 18px rgba(0,0,0,0.05)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    border: 'none',
+    width: '100%',
+    cursor: 'pointer',
+    transition: 'transform 0.15s',
+  },
+  reportCardLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 14,
+  },
+  reportCardEmoji: { fontSize: 28 },
+  reportCardTitle: { fontSize: 16, fontWeight: 800, color: '#2d3748' },
+  reportCardSub: { fontSize: 13, color: '#718096', marginTop: 2 },
+  reportCardArrow: { fontSize: 24, color: '#c0c8d0', fontWeight: 300 },
 };

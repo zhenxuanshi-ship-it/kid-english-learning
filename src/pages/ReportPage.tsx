@@ -10,9 +10,10 @@ interface ReportPageProps {
   children: Array<{ id: string; name: string; avatar_emoji: string | null }>;
   selectedChildId: string | null;
   onSelectChild: (id: string) => void;
+  onBack?: () => void;
 }
 
-export function ReportPage({ children, selectedChildId, onSelectChild }: ReportPageProps) {
+export function ReportPage({ children, selectedChildId, onSelectChild, onBack }: ReportPageProps) {
   const [summary, setSummary] = useState<ChildSummary[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +32,9 @@ export function ReportPage({ children, selectedChildId, onSelectChild }: ReportP
 
       {/* 标题 */}
       <div style={styles.header}>
+        {onBack && (
+          <button style={styles.backBtn} onClick={onBack}>‹</button>
+        )}
         <span style={styles.headerEmoji}>📊</span>
         <span style={styles.headerTitle}>家长报告</span>
       </div>
@@ -146,6 +150,15 @@ const styles: Record<string, CSSProperties> = {
     alignItems: 'center',
     gap: 8,
     padding: '4px 0',
+  },
+  backBtn: {
+    fontSize: 28,
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    color: '#2d3748',
+    padding: '0 4px',
+    lineHeight: 1,
   },
   headerEmoji: { fontSize: 24 },
   headerTitle: { fontSize: 22, fontWeight: 900, color: '#2d3748' },

@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 
-export type NavTab = 'home' | 'topics' | 'review' | 'report' | 'profile';
+export type NavTab = 'home' | 'topics' | 'review' | 'profile';
 
 interface BottomNavProps {
   current: NavTab;
@@ -11,7 +11,6 @@ const tabs: Array<{ key: NavTab; label: string; emoji: string }> = [
   { key: 'home', label: '首页', emoji: '🏠' },
   { key: 'topics', label: '主题', emoji: '🎒' },
   { key: 'review', label: '复习', emoji: '🔁' },
-  { key: 'report', label: '报告', emoji: '📊' },
   { key: 'profile', label: '我的', emoji: '⭐' },
 ];
 

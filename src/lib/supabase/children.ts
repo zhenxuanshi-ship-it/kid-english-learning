@@ -16,9 +16,12 @@ export async function getChildren(): Promise<Child[]> {
 }
 
 export async function createChild(name: string, avatarEmoji = '👦') {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
   const { data, error } = await supabase
     .from('children')
-    .insert({ name, avatar_emoji: avatarEmoji })
+    .insert({ name, avatar_emoji: avatarEmoji, parent_id: user.id })
     .select()
     .single();
   if (error) throw error;
