@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { loadVoices } from '../lib/audio';
 import { supabase } from '../lib/supabase/client';
 import { getChildren, createChild } from '../lib/supabase/children';
+import { setCurrentChildId } from '../lib/supabase/currentChild';
 import { BottomNav, type NavTab } from '../components/common/BottomNav';
 import { AuthPage } from '../pages/AuthPage';
 import { HomePage } from '../pages/HomePage';
@@ -109,6 +110,7 @@ export default function App() {
         setChildren(data);
         if (data.length > 0 && !selectedChildId) {
           setSelectedChildId(data[0].id);
+          setCurrentChildId(data[0].id);
         }
       } catch (err) {
         console.error('Failed to load children:', err);
@@ -454,11 +456,12 @@ export default function App() {
             storageDiagnostics={storageDiagnostics}
             children={children}
             selectedChildId={selectedChildId}
-            onSelectChild={setSelectedChildId}
+            onSelectChild={(id) => { setSelectedChildId(id); setCurrentChildId(id); }}
             onAddChild={async (name, emoji) => {
               const newChild = await createChild(name, emoji);
               setChildren((prev) => [...prev, newChild]);
               setSelectedChildId(newChild.id);
+              setCurrentChildId(newChild.id);
             }}
             onRoundSizeChange={setRoundSize}
             onCategoryChange={setSelectedCategory}

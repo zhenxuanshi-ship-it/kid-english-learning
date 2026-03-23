@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { readJson, writeJson } from '../lib/storage';
 import type { SentencePatternId, SentenceProgress } from '../types/sentence';
+import { upsertSentenceProgress } from '../lib/supabase/children';
+import { getCurrentChildId } from '../lib/supabase/currentChild';
 
 const STORAGE_KEY = 'kids-english-sentence-progress';
 
@@ -64,6 +66,11 @@ export const useSentenceProgressStore = create<SentenceProgressState>((set, get)
     };
     const progressMap = { ...get().progressMap, [patternId]: next };
     set({ progressMap });
+    // Sync to Supabase (fire-and-forget)
+    const childId = getCurrentChildId();
+    if (childId) {
+      void upsertSentenceProgress(childId, patternId, isCorrect).catch(console.error);
+    }
     writeJson(STORAGE_KEY, progressMap);
   },
 }));

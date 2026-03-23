@@ -3,6 +3,9 @@ import { readJson, writeJson } from '../lib/storage';
 import type { UserProgress, WordProgress } from '../features/progress/types';
 import type { GameMode } from '../types/question';
 import { getInitialLearningStage, getNextLearningStage } from '../features/game/engine/learningRules';
+import { upsertWordProgress } from '../lib/supabase/children';
+import { getCurrentChildId } from '../lib/supabase/currentChild';
+import { allWords } from '../data/words';
 
 const STORAGE_KEY = 'kids-english-progress';
 
@@ -114,6 +117,14 @@ export const useProgressStore = create<ProgressStore>((set, get) => ({
       [wordId]: nextProgress,
     };
     set({ wordProgressMap });
+    // Sync to Supabase (fire-and-forget, non-blocking)
+    const childId = getCurrentChildId();
+    if (childId) {
+      const word = allWords.find((w) => w.id === wordId);
+      if (word) {
+        void upsertWordProgress(childId, word.english, word.category, isCorrect).catch(console.error);
+      }
+    }
     writeJson(STORAGE_KEY, {
       totalStars: get().totalStars,
       currentMode: get().currentMode,
