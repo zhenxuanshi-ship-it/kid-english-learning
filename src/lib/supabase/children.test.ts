@@ -3,7 +3,7 @@
  * Simplified to avoid real API calls.
  */
 
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('supabase children API', () => {
   // Note: Full integration tests require actual Supabase instance with RLS disabled
