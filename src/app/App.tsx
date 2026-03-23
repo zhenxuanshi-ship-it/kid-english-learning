@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { loadVoices } from '../lib/audio';
+import { supabase } from '../lib/supabase/client';
 import { BottomNav, type NavTab } from '../components/common/BottomNav';
+import { AuthPage } from '../pages/AuthPage';
 import { HomePage } from '../pages/HomePage';
 import { LearnPage } from '../pages/LearnPage';
 import { RoundSummary } from '../components/summary/RoundSummary';
@@ -76,6 +78,24 @@ export default function App() {
   const markDailyTaskDone = useSettingsStore((state) => state.markDailyTaskDone);
   const resetDailyTasks = useSettingsStore((state) => state.resetDailyTasks);
   const [usedLetterIndexes, setUsedLetterIndexes] = useState<number[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Check auth state on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+      setAuthLoading(false);
+    };
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     hydrate();
@@ -357,7 +377,13 @@ export default function App() {
       <div style={styles.bgBlobA} />
       <div style={styles.bgBlobB} />
       <div style={styles.shell}>
-        {screen === 'home' && navTab === 'home' ? (
+        {authLoading ? (
+          <div style={{ textAlign: 'center', padding: 40, color: '#718096' }}>加载中...</div>
+        ) : !isAuthenticated ? (
+          <AuthPage onLoginSuccess={() => setIsAuthenticated(true)} />
+        ) : (
+          <>
+            {screen === 'home' && navTab === 'home' ? (
           <HomePage
             mode={currentMode}
             totalStars={totalStars}
@@ -508,6 +534,8 @@ export default function App() {
         ) : null}
 
         {screen === 'home' ? <BottomNav current={navTab} onChange={setNavTab} /> : null}
+          </>
+        )}
       </div>
     </main>
   );
