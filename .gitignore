@@ -17,3 +17,8 @@ memory/
 runtime-homepage*.jpg
 
 .openclaw/
+
+# Supabase
+.env
+.env.local
+.env.production
