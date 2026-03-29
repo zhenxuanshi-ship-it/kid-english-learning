@@ -20,9 +20,15 @@ const createLocalStorageMock = () => {
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
 });
 
 Object.defineProperty(globalThis, 'localStorage', {
   value: createLocalStorageMock(),
+  writable: true,
+});
+
+Object.defineProperty(globalThis, 'alert', {
+  value: vi.fn(),
   writable: true,
 });

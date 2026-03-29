@@ -4,6 +4,8 @@ import { initTelemetry, captureError, trackEvent } from './telemetry';
 describe('telemetry', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'info').mockImplementation(() => {});
   });
 
   it('initTelemetry does not throw', () => {

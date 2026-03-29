@@ -2,12 +2,24 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 
-// Mock Supabase auth in tests — simulate a logged-in session (resolve immediately)
+// Mock Supabase client in tests — simulate a logged-in session and empty children list
 vi.mock('../lib/supabase/client', () => {
   const mockSession = { user: { id: 'test-id' } };
   const getSession = () => Promise.resolve({ data: { session: mockSession } });
   const onAuthStateChange = () => ({ data: { subscription: { unsubscribe: () => {} } } });
-  return { supabase: { auth: { getSession, onAuthStateChange } } };
+  const from = () => ({
+    select: () => ({
+      order: () => Promise.resolve({ data: [], error: null }),
+      eq: () => ({
+        single: () => Promise.resolve({ data: null, error: { code: 'PGRST116' } }),
+        order: () => Promise.resolve({ data: [], error: null }),
+      }),
+    }),
+    insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+    update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }) }),
+    delete: () => ({ eq: () => Promise.resolve({ error: null }) }),
+  });
+  return { supabase: { auth: { getSession, onAuthStateChange, getUser: () => Promise.resolve({ data: { user: mockSession.user } }) }, from } };
 });
 
 function seedProgressState() {
